@@ -1,0 +1,50 @@
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+               http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+               http://www.springframework.org/schema/context 
+               http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+               http://www.springframework.org/schema/security                
+               http://www.springframework.org/schema/security/spring-security.xsd">
+	
+	<!-- <http auto-config="true">
+		<intercept-url pattern="/main*" access="ROLE_ADMIN" />
+		<form-login login-page="/login" default-target-url="/login"
+		authentication-failure-url="/loginError"/>
+		<form-login 
+		    login-page="/login" 
+		    default-target-url="/welcomeLab" 
+			authentication-failure-url="/login?error" 
+			username-parameter="username"
+			password-parameter="password" />
+		<logout logout-success-url="/login?logout" />
+	</http> -->
+	
+	<!-- <beans:bean id="springLoginFilter" class="com.diagonline.web.filters.SpringLoginFilter" autowire="byName">
+	</beans:bean>
+	<beans:bean id="sessionUtil" class="com.diagonline.web.utils.SessionUtil" autowire="byName">
+	</beans:bean> -->
+	
+	<context:component-scan base-package="com.diagonline.web.filters,com.diagonline.web.utils" />
+	
+	<!-- <http use-expressions="true"> -->
+	<!-- <http auto-config="true">
+		<intercept-url pattern="/**" access="isAuthenticated()" />
+		<intercept-url pattern="/**" access="ROLE_USER" />
+		<form-login login-page="/diagonline-web/login" default-target-url="/welcomePage.jsp"  authentication-failure-url="/login?error" 
+					username-parameter="username" password-parameter="password"/>
+		<logout logout-url="/logout" logout-success-url="/index"/>
+	</http>
+
+	<authentication-manager>
+		<authentication-provider ref="loginAuthenticationProvider"/>
+		<authentication-provider>
+			<user-service>
+				<user name="nagesh" password="chauhan@123" authorities="ROLE_ADMIN" />
+			</user-service>
+		</authentication-provider>
+	</authentication-manager> -->
+
+</beans:beans>  
