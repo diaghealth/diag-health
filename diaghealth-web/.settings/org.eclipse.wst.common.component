@@ -5,13 +5,13 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
-        <dependent-module archiveName="diagonline-repository-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/diaghealth-repository/diaghealth-repository">
+        <dependent-module archiveName="diaghealth-repository-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/diaghealth-repository/diaghealth-repository">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="diagonline-entities-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/diaghealth-entities/diaghealth-entities">
+        <dependent-module archiveName="diaghealth-entities-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/diaghealth-entities/diaghealth-entities">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="diagonline-core-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/diaghealth-core/diaghealth-core">
+        <dependent-module archiveName="diaghealth-core-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/diaghealth-core/diaghealth-core">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/diaghealth-web/target/classes"/>

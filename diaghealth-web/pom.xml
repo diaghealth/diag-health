@@ -2,14 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.diagonline</groupId>
-		<artifactId>diagonline-master</artifactId>
+		<groupId>com.diaghealth</groupId>
+		<artifactId>diaghealth-master</artifactId>
 		<version>CURRENT</version>
 	</parent>
-	<artifactId>diagonline-web</artifactId>
+	<artifactId>diaghealth-web</artifactId>
 	<packaging>war</packaging>
-	<version>${diagonline.common.version}</version>
-	<name>diagonline-web Maven Webapp</name>
+	<version>${diaghealth.common.version}</version>
+	<name>diaghealth-web Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
 	<repositories>
@@ -224,23 +224,23 @@
 		
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>diagonline-repository</artifactId>
-			<version>${diagonline.common.version}</version>
+			<artifactId>diaghealth-repository</artifactId>
+			<version>${diaghealth.common.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>diagonline-entities</artifactId>
-			<version>${diagonline.common.version}</version>
+			<artifactId>diaghealth-entities</artifactId>
+			<version>${diaghealth.common.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>diagonline-core</artifactId>
-			<version>${diagonline.common.version}</version>
+			<artifactId>diaghealth-core</artifactId>
+			<version>${diaghealth.common.version}</version>
 		</dependency>	
 	</dependencies>
 
 	<build>
-		<finalName>diagonline-web</finalName>
+		<finalName>diaghealth-web</finalName>
 	</build>
 
 </project>

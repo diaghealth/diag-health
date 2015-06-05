@@ -7,7 +7,7 @@
     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>DiagOnline</title>
+	<title>DiagHealth</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">	
 	<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
 	<link type="text/css" rel="stylesheet" href="css/registerUserCommon.css">

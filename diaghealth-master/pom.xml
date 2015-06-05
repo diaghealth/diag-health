@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-  <groupId>com.diagonline</groupId>
-  <artifactId>diagonline-master</artifactId>
+  <groupId>com.diaghealth</groupId>
+  <artifactId>diaghealth-master</artifactId>
   <packaging>pom</packaging>
   <version>CURRENT</version>
-  <name>diagonline-master</name>
-  <description>Parent module for diagonline projects</description>
+  <name>diaghealth-master</name>
+  <description>Parent module for diaghealth projects</description>
   
   <properties>
-  	<diagonline.common.version>0.0.1-SNAPSHOT</diagonline.common.version>
+  	<diaghealth.common.version>0.0.1-SNAPSHOT</diaghealth.common.version>
   	<org.springframework.version>4.0.4.RELEASE</org.springframework.version>
   	<junit.version>4.11</junit.version>
   	<spring.data.neo4j.version>2.3.2.RELEASE</spring.data.neo4j.version>
@@ -60,7 +60,7 @@
   </dependencies>
   
   <build>
-    <finalName>diagonline-master</finalName>
+    <finalName>diaghealth-master</finalName>
     <plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

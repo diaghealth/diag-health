@@ -13,9 +13,8 @@
         http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
         http://www.springframework.org/schema/data/neo4j http://www.springframework.org/schema/data/neo4j/spring-neo4j.xsd">
         
-        <import resource="classpath:diagonline-core.xml" />
-     	<!-- <import resource="diagonline-neo4j-db-context.xml"/>  -->
-     	<import resource="diagonline-security.xml"/>
+        <import resource="classpath:diaghealth-core.xml" />
+     	<import resource="diaghealth-security.xml"/>
      	
      	<context:property-placeholder location="classpath:urlconstants.properties" /> 
      	

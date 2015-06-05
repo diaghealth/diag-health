@@ -2,12 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.diagonline</groupId>
-		<artifactId>diagonline-master</artifactId>
+		<groupId>com.diaghealth</groupId>
+		<artifactId>diaghealth-master</artifactId>
 		<version>CURRENT</version>
 	</parent>
-	<artifactId>diagonline-repository</artifactId>
-	<version>${diagonline.common.version}</version>
+	<artifactId>diaghealth-repository</artifactId>
+	<version>${diaghealth.common.version}</version>
 
 	<properties>
 		<neo4j.version>1.9.7</neo4j.version>
@@ -98,8 +98,8 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>diagonline-entities</artifactId>
-			<version>${diagonline.common.version}</version>
+			<artifactId>diaghealth-entities</artifactId>
+			<version>${diaghealth.common.version}</version>
 		</dependency>
 	</dependencies>
 </project>
