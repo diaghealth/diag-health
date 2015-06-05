@@ -1,6 +1,7 @@
 package com.diaghealth.web.filters;
 
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -34,6 +35,25 @@ public class SpringLoginFilter implements Filter {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	private boolean allowRequest(String uri){
+		String requestPage = uri.substring(uri.lastIndexOf("/") + 1);
+		
+		if(requestPage == null)
+			return false;
+		
+		if(
+				requestPage.contains("login") ||
+				requestPage.contains("register") ||
+				uri.contains("/images/") || 
+				uri.contains("/css/") || 
+				uri.contains("/js/")
+		){
+			return true;
+		}
+		
+		return false;
+	}
 
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
@@ -44,9 +64,8 @@ public class SpringLoginFilter implements Filter {
 			return;
 		}*/
 		String uri = httpServletRequest.getRequestURI();
-		String requestPage = uri.substring(uri.lastIndexOf("/") + 1);
-		if(requestPage == null || !(requestPage.contains("login") || requestPage.contains("register") || 
-				requestPage.contains(".js") || requestPage.contains(".css"))){		
+		
+		if(!allowRequest(uri)){		
 	        if (sessionUtil.getLoggedInUser(httpServletRequest) == null) {
 	            // No user logegd In
 	        	String redirectUrl = loginUrl; //"/login" + httpServletRequest.getRequestURI();
