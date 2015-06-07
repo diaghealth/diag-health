@@ -64,4 +64,15 @@ public class SessionUtil {
     public void removeAttribute(HttpServletRequest httpServletRequest, String attribute){
     	httpServletRequest.getSession().removeAttribute(attribute);
     }
+    
+
+	public boolean isAdminUser(HttpServletRequest httpServletRequest){
+		UserDetails loggedInUser = getLoggedInUser(httpServletRequest);
+		if(loggedInUser.getUsername().equalsIgnoreCase("admin") ||
+		 	 loggedInUser.getUsername().equalsIgnoreCase("diaghealth")	){
+			return true;
+		}
+		return false;
+		 
+	}
 }
