@@ -72,7 +72,7 @@ public class AdminTestTypeAddController {
 		} else {
 			result.reject("test.exists", "Test Already Exists");
 		}
-		mv.setViewName("redirect:" + "/addLabTest");
+		mv.setViewName("redirect:" + "/addLabTestType");
 		return mv;		
 	}
 	
