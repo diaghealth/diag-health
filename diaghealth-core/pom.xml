@@ -11,9 +11,9 @@
 	<name>diaghealth-core</name>
 	<description>Core Services</description>
 
-	<properties>
+	<!-- <properties>
 		<security.version>3.1.4.RELEASE</security.version>  
-	</properties>
+	</properties> -->
 
 	<dependencies>
 		<dependency>
@@ -26,33 +26,33 @@
 		    <artifactId>javax.mail</artifactId>
 		    <version>1.5.3</version>
 		</dependency>
-		<!-- Spring Security -->
-		<dependency>  
-		   <groupId>org.springframework.security</groupId>  
-		   <artifactId>spring-security-core</artifactId>  
-		   <version>${security.version}</version>  
-		  </dependency>  
-		  
-		  <dependency>  
-		   <groupId>org.springframework.security</groupId>  
-		   <artifactId>spring-security-web</artifactId>  
-		   <version>${security.version}</version>  
-		  </dependency>  
-		  
-		  <dependency>  
-		   <groupId>org.springframework.security</groupId>  
-		   <artifactId>spring-security-config</artifactId>  
-		   <version>${security.version}</version>  
-		  </dependency>  
-		  <dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>diaghealth-repository</artifactId>
-			<version>${diaghealth.common.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>diaghealth-entities</artifactId>
 			<version>${diaghealth.common.version}</version>
 		</dependency>
+		  <dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>diaghealth-repository</artifactId>
+			<version>${diaghealth.common.version}</version>
+		</dependency>		
+		<!-- Spring Security -->
+		<dependency>  
+		   <groupId>org.springframework.security</groupId>  
+		   <artifactId>spring-security-core</artifactId>  
+		   <version>${security.version}</version> 
+		  </dependency>  
+		  
+		  <dependency>  
+		   <groupId>org.springframework.security</groupId>  
+		   <artifactId>spring-security-web</artifactId>  
+		   <version>${security.version}</version>
+		  </dependency>  
+		  
+		  <dependency>  
+		   <groupId>org.springframework.security</groupId>  
+		   <artifactId>spring-security-config</artifactId>  
+		   <version>${security.version}</version>
+		  </dependency> 
 	</dependencies>
 </project>

@@ -37,7 +37,7 @@ public class LabTestService {
 		return labTestPriceRepo.searchTestsForLab(user.getId());
 	}
 	
-	public List<LabTestDetails> getAllAvailableTests(){
+	public Set<LabTestDetails> getAllAvailableTests(){
 		return labTestDetailsRepo.searchAllAvailableTests();
 	}
 	

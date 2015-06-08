@@ -25,8 +25,8 @@
 		<!-- SMTP settings -->
 		<property name="host" value="smtp.gmail.com" />
 		<property name="port" value="587" />
-		<property name="username" value="i.m.sanu@gmail.com" />
-		<property name="password" value="Richa@1986" />     
+		<property name="username" value="contact@diaghealth.com" />
+		<property name="password" value="diaghealth11$$" />     
 
 		<property name="javaMailProperties">
 			<!-- additional properties specific to JavaMail -->

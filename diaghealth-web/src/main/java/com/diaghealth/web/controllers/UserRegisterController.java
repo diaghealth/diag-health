@@ -50,7 +50,7 @@ public class UserRegisterController {
 	private static final String INPUT_DETAILS_ATTR = "detailsForm";
 	private static final int MAX_ASCII = 45;
 	private static final String EMAIL_SUBJECT = "DiagHealth registration";
-	private static final String FROM_EMAIL = "i.m.sanu@gmail.com";
+	private static final String FROM_EMAIL = "contact@diaghealth.com";
 	private static final String EMAIL_BODY_WELCOME = "Welcome to DiagHealth";
 	private static final int NAME_LENGTH_IN_USERNAME  = 4;
 	private static final int ASCCI_START = 48;
@@ -143,7 +143,7 @@ public class UserRegisterController {
 			 displayPage = "redirect:" + LOGIN_URL; //redirect to Login page to login 
 		 }
 		 
-		 //sendMail(detailsForm);
+		 sendMail(detailsForm);
 		 //Save new Registered user and its relationship			 
 		 if(!userSaved) //could not save the new user
 			 displayPage = USER_REGISTER_JSP;

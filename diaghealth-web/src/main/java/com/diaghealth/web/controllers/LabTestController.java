@@ -68,7 +68,7 @@ public class LabTestController {
 		}
 		
 		List<LabTestAvailablePrice> tests = labTestService.getTestsForUser(loggedInUser);
-		List<LabTestDetails> allTests = labTestService.getAllAvailableTests();
+		List<LabTestDetails> allTests = new ArrayList<LabTestDetails>(labTestService.getAllAvailableTests());
 		LabTestUtils.putAllTestsInModel(mv, allTests);
 		LabTestListViewDto testListObject = new LabTestListViewDto();
 		if(tests != null){
