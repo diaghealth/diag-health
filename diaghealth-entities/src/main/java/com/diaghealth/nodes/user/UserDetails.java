@@ -36,7 +36,7 @@ public class UserDetails extends BaseNode {
 	
     @NotNull(message = "Please enter Name.") 
     @Indexed(indexType = IndexType.FULLTEXT, indexName = "searchByFirstName")
-    @Size(min=1)
+    @Size(min=4, max=30)
     private String firstname;
     
     private String lastname;

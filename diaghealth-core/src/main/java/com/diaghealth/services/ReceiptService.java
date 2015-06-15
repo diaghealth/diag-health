@@ -35,7 +35,7 @@ public class ReceiptService {
 		receipt.setCreatorId(creator.getId());
 		receipt.addRelatedUsers(creator);
 		receipt.setSubject(subjectUser);
-		receipt = receiptRepo.save(receipt);
+		receipt = receiptRepo.save(receipt); 
 		logger.debug("Created New Receipt: " + receipt);
 		return receipt;		
 	}	

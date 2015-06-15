@@ -22,7 +22,8 @@ $(document).ready( function() {
 				"<td><input name='testList[" + testCount + "].price' value='" + $('#testPrice').val()+ "'/></td>" +
 				"<td><input name='testList[" + testCount + "].discountPercent' value='" + $('#testDiscount').val()+ "'/></td>" +
 				"<td><button type='button' class='deleteButton' onclick='deleteRow(this)'>Delete</button></td>"
-				"</tr>"
+				"</tr>";
+		testCount++;
 		$("#endRow").before(data);
 	});	
 	

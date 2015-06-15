@@ -10,10 +10,11 @@
 <jsp:include page="menuHeader.jsp" />
 </head>
 <body>
+
 <h3>Enter Receipt Id:</h3>
-<form:form action="searchReceipt" method="POST">
+<form:form action="searchReceipt" modelAttribute="receiptObj" method="POST">
+<form:errors class="error"/>
 <%-- <label>${errorMessage}</label> --%>
-<form:errors/>
 <br>
 <%-- <%
 	String errorString = (String)request.getAttribute("error");

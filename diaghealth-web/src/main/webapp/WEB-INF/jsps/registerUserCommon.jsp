@@ -21,9 +21,9 @@
 <div class="main">
 	<div class="register">
 	<h3 align="center">Register New User</h3>      
-	<%-- <label>${errorMessage}</label> --%>      
-	<form:errors/> 
+	<%-- <label>${errorMessage}</label> --%>      	
 	<form:form action="register" id="detailsForm" modelAttribute="detailsForm" method="POST">
+		<form:errors/> 
 		<div class="loginTable">
 			<label>Login Details</label>
 			<p></p>

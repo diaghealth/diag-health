@@ -8,9 +8,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Receipt</title>
 <jsp:include page="menuHeader.jsp" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/print.js"></script>
 </head>
 <body>
-<form:form action="saveReceiptDetails" modelAttribute="receiptView" method="POST">
+<form:form action="saveReceiptDetails" method="POST">
+<form:errors class="error"/> 
+<div id="printable">
 <input type="hidden" name="receipt.id" value="${receiptView.receipt.id}"/>
 <h1>
 <input type="hidden" name="receipt.receiptId" value="${receiptView.receipt.receiptId}"/>
@@ -42,12 +46,20 @@ Doctor: ${receiptView.receipt.doctorName}
 <h3>
 <c:if test="${not empty receiptView.receipt.dateCreated}">Date Created : ${receiptView.receipt.dateCreated}</c:if>
 </h3>
-<c:if test="${not empty showTestList}">
+</div>
+<c:choose>
+<c:when test="${not empty showTestList}">
 <!-- ----------------------------Add new Table -------------------------------->
 <jsp:include page="showLabTestTableCommon.jsp" />
 <p></p>
 <input type="submit" name="commit" value="Save" class="button">
-</c:if>
+</c:when>
+<c:otherwise>
+<!-- <input type="button" name="commit" value="Print" class="button"> -->
+<button type="button" id="print" class="button">Print</button>
+<!-- <button class="print"> Print </button> -->
+</c:otherwise>
+</c:choose>
 </form:form>
 </body>
 </html>

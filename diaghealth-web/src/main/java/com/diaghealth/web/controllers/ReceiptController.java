@@ -78,7 +78,7 @@ public class ReceiptController {
 	}
 	
 	@RequestMapping(value = "/searchReceipt", method = RequestMethod.POST)
-	public ModelAndView searchReceiptPost(@Valid @ModelAttribute ReceiptObject receiptObj, BindingResult result, HttpServletRequest httpServletRequest, ModelAndView mv /*ModelMap model*/) throws ApplicationException {
+	public ModelAndView searchReceiptPost(@Valid @ModelAttribute("receiptObj") ReceiptObject receiptObj, BindingResult result, HttpServletRequest httpServletRequest, ModelAndView mv /*ModelMap model*/) throws ApplicationException {
 
 		ReceiptObject receipt = receiptService.findReceipt(receiptObj.getReceiptId());
 		UserDetails loggedInUser = sessionUtil.getLoggedInUser(httpServletRequest);
