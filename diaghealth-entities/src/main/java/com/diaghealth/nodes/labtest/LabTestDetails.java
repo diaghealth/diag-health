@@ -1,5 +1,7 @@
 package com.diaghealth.nodes.labtest;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -11,7 +13,11 @@ public class LabTestDetails {
 	@GraphId
 	protected Long id;
 	private String type;
+	@NotNull(message = "Please enter Test Name.")
 	private String name;
+	private float refLower;
+	private float refUpper;
+	private String unit;
 	
 	public String getType() {
 		return type;
@@ -52,6 +58,30 @@ public class LabTestDetails {
 	public String toString() {
 		return "LabTest [code=" + ", type=" + type + ", name=" + name				
 				+ "]";
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public float getRefLower() {
+		return refLower;
+	}
+	public void setRefLower(float refLower) {
+		this.refLower = refLower;
+	}
+	public float getRefUpper() {
+		return refUpper;
+	}
+	public void setRefUpper(float refUpper) {
+		this.refUpper = refUpper;
+	}
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 
 }

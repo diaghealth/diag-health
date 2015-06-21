@@ -45,7 +45,7 @@ public class RelatedUserListController {
 		
 		UserDetails loggedInUser = sessionUtil.getLoggedInUser(httpServletRequest);
 		Set<UserDetails> relatedUsers = searchService.searchRelatedUsers(loggedInUser.getId(), UserType.valueOf(type.toUpperCase()));
-		
+		mv.getModel().put("displayUserType", type.toUpperCase());
 		new ModelBuilder().buildUserListModel(loggedInUser, mv, UserType.valueOf(type.toUpperCase()), relatedUsers);
 		mv.setViewName(USERS_SHOW_JSP);
 		return mv;

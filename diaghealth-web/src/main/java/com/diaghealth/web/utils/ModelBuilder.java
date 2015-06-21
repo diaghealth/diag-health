@@ -19,8 +19,9 @@ public class ModelBuilder {
 		mv.getModel().put("userList", relatedUsers);
 		mv.getModel().put("userHistory", 1);
 		if((loggedInUser.getUserType() == UserType.DOCTOR || loggedInUser.getUserType() == UserType.CLINIC)
-				 && listType == UserType.PATIENT)
+				 && listType == UserType.PATIENT){
 			 mv.getModel().put("buildReceipt", 1);
+		}
 	}
 
 }

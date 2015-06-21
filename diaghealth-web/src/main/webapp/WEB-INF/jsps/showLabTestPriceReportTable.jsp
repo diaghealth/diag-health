@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
 <script src="js/addTestRow.js"></script>
 <link rel="stylesheet" type="text/css" href="css/commonTable.css">
 <style>
@@ -17,9 +17,15 @@
     font-family: Tahoma;
     font-size: 13px;
 }
-#displayTestsTable input
+#displayTestsTable input[readonly='readonly']
 {
     background-color:transparent;
+    border:0px;
+    padding:0px;
+}
+#addNewTestPriceReportTable input[readonly='readonly']
+{
+	background-color:transparent;
     border:0px;
     padding:0px;
 }
@@ -36,9 +42,15 @@ function deleteRow(obj){
 </head>
 <body>
 <!-- -------------------------Display Table starts-------------------------- -->
-<!-- <div id="TestsTable"> -->
+
 <table id="displayTestsTable">
-<tr><th>Test Type</th><th>Test Name</th><th>Price</th><th>Discount %</th><th>Delete</th>
+<tr><th>Test Type</th><th>Test Name</th><th>Price</th><th>Discount %</th>
+<c:if test="${not empty buildResult}">
+<th>Result</th><th>Lower</th><th>Upper</th><th>Unit</th>
+</c:if>
+<th>Date</th>
+<th>Delete</th>
+
 </tr>
 <c:if test="${fn:length(labTests.testList) > 0}">
 <c:forEach var="test" items="${labTests.testList}" varStatus="status">
@@ -47,18 +59,37 @@ function deleteRow(obj){
 	<%-- <div class="test_item_<c:out value='${status.index}' />"> --%>
 	
 		<td>
-			<input name='testList[${status.index}].type' readonly='readonly' value='${test.type}'/>
+			<input name='testList[${status.index}].type' readonly='readonly' value='${test.type}' class='type'/>
 		</td>
 		<td>
-			<input name='testList[${status.index}].name' readonly='readonly' value='${test.name}'/>
+			<input name='testList[${status.index}].name' readonly='readonly' value='${test.name}' class='name'/>
 		</td>
 		<td>
-			<input name='testList[${status.index}].price' readonly='readonly' value='${test.price}'/>
+			<input name='testList[${status.index}].price' readonly='readonly' value='${test.price}' class='price'/>
 		</td>
 		<td>
-			<input name='testList[${status.index}].discountPercent' readonly='readonly' value='${test.discountPercent}'/>
+			<input name='testList[${status.index}].discountPercent' readonly='readonly' 
+			value='${test.discountPercent}' class='discountPercent'/>
+		</td>	
+		<c:if test="${not empty buildResult}">	
+		<td>
+			<input name='testList[${status.index}].resultValue' value='${test.resultValue}' class='resultValue'/>
 		</td>
-		<td><button type='button' class='deleteButton' onclick='deleteRow(this)'>Delete</button></td>	
+		<td>
+			<input name='testList[${status.index}].refLower' readonly='readonly' value='${test.refLower}' class='refLower'/>
+		</td>
+		<td>
+			<input name='testList[${status.index}].refUpper' readonly='readonly' value='${test.refUpper}' class='refUpper'/>
+		</td>
+		<td>
+			<input name='testList[${status.index}].unit' readonly='readonly' value='${test.unit}' class='unit'/>
+		</td>	
+		</c:if>		
+		<td>
+			<input name='testList[${status.index}].dateCreated' readonly='readonly' value='${test.dateCreated}' class='dateCreated'/>
+		</td>	
+		<td></td> <!-- empty delete button -->
+		<!-- <td><button type='button' class='deleteButton' onclick='deleteRow(this)'>Delete</button></td> -->	
 		</tr>
 </c:forEach>
 </c:if>
@@ -66,7 +97,6 @@ function deleteRow(obj){
 	</tr>
 </table>
 <input id="hiddenField" type="hidden" class="hiddenField" value='${jsonMap}'>
-<!-- </div> -->
 
 <br>
 
@@ -74,8 +104,12 @@ function deleteRow(obj){
 
 <h2> Add Tests</h2>
 
-<table id="addNewTestTable">
-<tr><th>Test Type</th><th>Test Name</th><th>Price</th><th>Discount %</th></tr>
+<table id="addNewTestPriceReportTable">
+<tr><th>Test Type</th><th>Test Name</th><th>Price</th><th>Discount %</th>
+<c:if test="${not empty buildResult}">
+<th>Result</th><th>Lower</th><th>Upper</th><th>Unit</th>
+</c:if>
+</tr>
 <tr>
 <td><select id="testType" size="1">
 					  <%-- <c:forEach items="${allTests}" var="testsMap" varStatus="index" >
@@ -95,8 +129,21 @@ function deleteRow(obj){
 </td>
 <td><input size="30" type="text" id="testPrice" name="price" value=""/></td>
 <td><input size="30" type="text" id="testDiscount" name="discountPercent" value="0.0"/></td>
+<c:if test="${not empty buildResult}">
+<td><input size="30" type="text" id="testResultValue" name="resultValue" value="0.0"/></td>
+<td><input size="30" type="text" id="testRefLower" readonly='readonly' name="refLower" value="0.0"/></td>
+<td><input size="30" type="text" id="testRefUpper" readonly='readonly' name="refUpper" value="0.0"/></td>
+<td><input size="30" type="text" id="testUnit" readonly='readonly' name="unit" value="0.0"/></td>
+</c:if>
 </tr>
 </table>
-<button type="button" id="addNewTest">Add Test</button>
+<c:choose>
+<c:when test="${not empty buildResult}">
+<button type="button" id="addNewTestPriceReport">Add Test</button>
+</c:when>
+<c:otherwise>
+<button type="button" id="addNewTestPrice">Add Test</button>
+</c:otherwise>
+</c:choose>
 </body>
 </html>

@@ -1,6 +1,6 @@
-
+(function( $ ) {
 // Create a jquery plugin that prints the given element.
-jQuery.fn.print = function(){
+$.fn.print = function(args){
 	// NOTE: We are trimming the jQuery collection down to the
 	// first element in the collection.
 	if (this.size() > 1){
@@ -57,8 +57,9 @@ jQuery.fn.print = function(){
 	objDoc.write( document.title );
 	objDoc.write( "</title>" );
 	objDoc.write( jStyleDiv.html() );
-	objDoc.write( "</head>" );
-	objDoc.write( this.html() );
+	objDoc.write( "</head>" );	
+	//objDoc.write( this.html() );
+	objDoc.write( args );
 	objDoc.write( "</body>" );
 	objDoc.write( "</html>" );
 	objDoc.close();
@@ -71,10 +72,48 @@ jQuery.fn.print = function(){
 	// we don't build up too many of these frames.
 	setTimeout(function(){jFrame.remove();},(60 * 1000));
 };
-
+}( jQuery ));
 
 $(function() {
-	$('#print').on('click', function() {
-		$("#printable").print();
+	$('#printReport').on('click', function() {
+		$('#printable').print(reportContent());
+	});
+	$('#printPriceReceipt').on('click', function() {
+		$('#printable').print("");
+	});
+	$('#printReceipt').on('click', function() {
+		$('#printable').print("");
 	});
 });
+
+reportContent = function() {
+	var element = "";
+	$( "#receiptUserDetails > h3" ).each(function() {
+		  element += $( this ).html();
+		  element += "<br>";
+	});
+	element += "<table><tr><th>Test Name</th><th>Result</th><th>Range</th><th>Date</th></tr>";
+	var header = 0;
+	$( "#displayTestsTable > tr").each(function() {
+		/*if(header == 0)	
+			header++;
+		else {*/
+		element += ("<tr>" + 
+				"<td>" +  $(this).find(".name").val() + "</td>" +
+				"<td>" +  $(this).find(".resultValue").val() + "</td>" +
+				
+				"<td>" +  $(this).find(".refLower").val() + " - " +  $(this).find(".refUpper").val() + " " +
+				$(this).find(".unit").val() + "</td>" +
+				
+				"<td>" +  $(this).find(".dateCreated").val() + "</td>" +
+				"</tr>");
+		//}
+	});
+	element += "</table>";
+	return element;
+};
+
+receiptContent = function() {
+	var element = $("#receiptUserDetails").text();
+	return element;
+}

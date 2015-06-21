@@ -21,7 +21,12 @@
 <th>Email</th>
 <th>Address</th>
 <th>Location</th>
-<th>History</th>
+<c:if test="${not empty userHistory}">
+<th>Tests Price</th>
+<c:if test="${displayUserType eq 'PATIENT'}">
+<th>Tests Report</th>
+</c:if>
+</c:if>
 <th>Receipt</th>
 </tr>
 <c:forEach var="users" items="${userList}" varStatus="status">
@@ -37,7 +42,10 @@
 <td><a href="addUser?id=${users.id}&type=${users.userType}">Add</a></td>
 </c:if>
 <c:if test="${not empty userHistory}">
-<td><a href="userRelationHistory?id=${users.id}&userType=${users.userType}">History</a></td>
+<td><a href="userRelationHistory?id=${users.id}&userType=${users.userType}">Tests Price</a></td>
+<c:if test="${displayUserType eq 'PATIENT'}">
+<td><a href="showReport?id=${users.id}&userType=${users.userType}">Tests Report</a></td>
+</c:if>
 </c:if>
 <c:if test="${not empty buildReceipt}">
 <td><a href="buildReceipt?id=${users.id}">Generate Receipt</a></td>

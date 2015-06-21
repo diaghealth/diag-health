@@ -13,7 +13,7 @@
 <body>
 <jsp:include page="menuHeader.jsp" />
 <form:form action="saveTests" modelAttribute="labTests" method="POST">
-<jsp:include page="showLabTestTableCommon.jsp" />
+<jsp:include page="showLabTestPriceReportTable.jsp" />
 <p></p>
 <input type="submit" class="button" name="commit" value="Save">
 </form:form>

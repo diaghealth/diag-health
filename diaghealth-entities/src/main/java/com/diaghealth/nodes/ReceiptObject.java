@@ -11,6 +11,7 @@ import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import com.diaghealth.nodes.labtest.LabTestDoneObject;
 import com.diaghealth.nodes.user.UserDetails;
 
 @NodeEntity
@@ -23,6 +24,8 @@ public class ReceiptObject extends BaseNode {
 	@Fetch
 	private Set<UserDetails> relatedUsers;
 	private UserDetails subject;
+	@RelatedTo(type="RECEIPT_TESTS_DONE", direction=Direction.BOTH)
+	private Set<LabTestDoneObject> labTestDoneObject;
 	
 	private Date validTill;
 	
@@ -31,55 +34,7 @@ public class ReceiptObject extends BaseNode {
 	}
 	public void setReceiptId(String receiptId) {
 		this.receiptId = receiptId;
-	}
-	/*public Long getClinicId() {
-		return clinicId;
-	}
-	public void setClinicId(Long clinicId) {
-		this.clinicId = clinicId;
-	}
-	public Long getDoctorId() {
-		return doctorId;
-	}
-	public void setDoctorId(Long doctorId) {
-		this.doctorId = doctorId;
-	}
-	public Long getPatientId() {
-		return patientId;
-	}
-	public void setPatientId(Long patientId) {
-		this.patientId = patientId;
-	}
-	public Long getLabId() {
-		return labId;
-	}
-	public void setLabId(Long labId) {
-		this.labId = labId;
-	}
-	public String getClinicName() {
-		return clinicName;
-	}
-	public void setClinicName(String clinicName) {
-		this.clinicName = clinicName;
-	}
-	public String getDoctorName() {
-		return doctorName;
-	}
-	public void setDoctorName(String doctorName) {
-		this.doctorName = doctorName;
-	}
-	public String getPatientName() {
-		return patientName;
-	}
-	public void setPatientName(String patientName) {
-		this.patientName = patientName;
-	}
-	public String getLabName() {
-		return labName;
-	}
-	public void setLabName(String labName) {
-		this.labName = labName;
-	}*/
+	}	
 	public Date getValidTill() {
 		return validTill;
 	}
@@ -103,5 +58,17 @@ public class ReceiptObject extends BaseNode {
 			this.relatedUsers = new HashSet<UserDetails>();
 		}
 		this.relatedUsers.add(user);
+	}
+	public Set<LabTestDoneObject> getLabTestDoneObject() {
+		return labTestDoneObject;
+	}
+	public void setLabTestDoneObject(Set<LabTestDoneObject> labTestDoneObject) {
+		this.labTestDoneObject = labTestDoneObject;
+	}
+	public void addLabTestDoneObject(Set<LabTestDoneObject> labTestDoneObject){
+		if(this.labTestDoneObject == null){
+			this.labTestDoneObject = new HashSet<LabTestDoneObject>();
+		}
+		this.labTestDoneObject.addAll(labTestDoneObject);
 	}
 }

@@ -30,17 +30,17 @@ import com.diaghealth.services.SearchService;
 import com.diaghealth.web.utils.SessionUtil;
 
 @Controller
-public class ShowHistoryController {
+public class ShowTestPaymentHistoryController {
 	
 	@Autowired
     private SessionUtil sessionUtil;
 	@Autowired
 	private SearchService searchService;
-	@Value("${show.usertest.jsp}")
-	private String USERS_TESTS_SHOW_JSP;
+	@Value("${show.usertest.payment.jsp}")
+	private String USERS_TESTS_PAYMENT_SHOW_JSP;
 	@Autowired
 	private LabTestService labTestService;
-	private static Logger logger = LoggerFactory.getLogger(ShowHistoryController.class);
+	private static Logger logger = LoggerFactory.getLogger(ShowTestPaymentHistoryController.class);
 	
 	@RequestMapping(value = "/userRelationHistory", method = RequestMethod.GET)
 	public ModelAndView showHistory(@RequestParam Long id, @RequestParam String userType, HttpServletRequest httpServletRequest, ModelAndView mv /*ModelMap model*/) throws ApplicationException {
@@ -52,7 +52,7 @@ public class ShowHistoryController {
 		testView.setTotalPrice(getTotalAmount(testSet));
 		testView.setTestList(testSet);
 		mv.getModel().put("testViewObject", testView);
-		mv.setViewName(USERS_TESTS_SHOW_JSP);
+		mv.setViewName(USERS_TESTS_PAYMENT_SHOW_JSP);
 		logger.info("Relation History requested by user: " + loggedInUser.getUsername() + " for userId: " + id + " userType " + userType);
 		return mv;
 	}
@@ -73,7 +73,7 @@ public class ShowHistoryController {
 		UserDetails loggedInUser = sessionUtil.getLoggedInUser(httpServletRequest);
 		Set<LabTestDoneObject> testSet = new HashSet<LabTestDoneObject>();
 		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-		mv.setViewName(USERS_TESTS_SHOW_JSP);
+		mv.setViewName(USERS_TESTS_PAYMENT_SHOW_JSP);
 		Date fromDate = null;
 		Date toDate = null;
 		try{

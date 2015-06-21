@@ -14,11 +14,15 @@
 <tr>
 <th>Test Type</th>
 <th>Test Name</th>
+<th>Reference Lower</th>
+<th>Reference Upper</th>
 </tr>
 <c:forEach var="test" items="${labTestExistList}" varStatus="status">
 	<tr>
 	<td>${test.type}</td>
 	<td>${test.name}</td>
+	<td>${test.refLower}</td>
+	<td>${test.refUpper}</td>
 	</tr>
 </c:forEach>
 </table>
@@ -29,10 +33,14 @@
 <tr>
 <th>Test Type</th>
 <th>Test Name</th>
+<th>Reference Lower</th>
+<th>Reference Upper</th>
 </tr>
 <tr>
 <td><input type="text" name="type"/></td>
 <td><input type="text" name="name"/></td>
+<td><input type="text" name="refLower"/></td>
+<td><input type="text" name="refUpper"/></td>
 </tr>
 </table>
 <input name="submit" type="submit" id="submitButton" class="button" value="Save" />

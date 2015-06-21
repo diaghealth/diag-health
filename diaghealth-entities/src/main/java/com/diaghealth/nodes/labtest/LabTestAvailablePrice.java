@@ -13,6 +13,10 @@ public class LabTestAvailablePrice extends BaseNode {
 	private String type;
 	private int price;
 	private float discountPercent;
+	private float resultValue;
+	private float refLower;
+	private float refUpper;
+	private String unit;
 	
 	public String getName() {
 		return name;
@@ -72,5 +76,29 @@ public class LabTestAvailablePrice extends BaseNode {
 		return "LabTestAvailablePrice [name=" + name + ", type=" + type
 				+ ", price=" + price + ", discountPercent=" + discountPercent
 				+ "]";
+	}
+	public float getResultValue() {
+		return resultValue;
+	}
+	public void setResultValue(float resultValue) {
+		this.resultValue = resultValue;
+	}
+	public float getRefLower() {
+		return refLower;
+	}
+	public void setRefLower(float refLower) {
+		this.refLower = refLower;
+	}
+	public float getRefUpper() {
+		return refUpper;
+	}
+	public void setRefUpper(float refUpper) {
+		this.refUpper = refUpper;
+	}
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 }
