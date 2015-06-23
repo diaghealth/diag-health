@@ -15,7 +15,7 @@ public class MailSenderUtilTest {
 
 	@Test
 	public void sendTestMail(){
-		mailSenderUtil.setToMail("i.m.sanu@gmail.com");
+		mailSenderUtil.addToMail("i.m.sanu@gmail.com");
 		mailSenderUtil.setSubject("Test Mail Subject");
 		mailSenderUtil.setBody("Test Mail Body");
 		mailSenderUtil.setFromMail("contact@diaghealth.com");

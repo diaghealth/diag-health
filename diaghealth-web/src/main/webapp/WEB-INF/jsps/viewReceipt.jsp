@@ -17,6 +17,7 @@
 <form:form action="saveReceiptDetails" method="POST">
 <form:errors class="error"/> 
 <div id="printable">
+<div id="receiptDetails">
 <input type="hidden" name="receipt.id" value="${receiptView.receipt.id}"/>
 <h1>
 <input type="hidden" name="receipt.receiptId" value="${receiptView.receipt.receiptId}"/>
@@ -54,6 +55,8 @@ Doctor: ${receiptView.receipt.doctorName}
 </h3>
 <c:if test="${not empty receiptView.receipt.validTill}"><h3>Valid Till : ${receiptView.receipt.validTill}</h3></c:if>
 <c:if test="${not empty receiptView.receipt.dateCreated}"><h3>Date Created : ${receiptView.receipt.dateCreated}</h3></c:if>
+</div> <!-- receiptUserDetails div -->
+
 <c:choose>
 <c:when test="${not empty showTestList}">
 <!-- ----------------------------Add new Table -------------------------------->
@@ -68,7 +71,7 @@ Doctor: ${receiptView.receipt.doctorName}
 <button type="button" id="printReceipt" class="button">Print</button>
 </c:otherwise>
 </c:choose>
-</div> <!-- printable div -->
+</div> <!--  printable div -->
 </form:form>
 </body>
 </html>

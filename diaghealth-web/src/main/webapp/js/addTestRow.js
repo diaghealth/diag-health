@@ -7,7 +7,7 @@ $(document).ready( function() {
 	//$.datepicker.formatDate('yy/mm/dd', new Date());
 	//Initialize drop down from json Map
 	testHashMap =$.parseJSON(jsonString);
-	currentDate = $.datepicker.formatDate('yy-mm-dd', new Date());
+	currentDate = $.datepicker.formatDate('dd-M-yy', new Date());
 	//currentDate += $.timepicker({});
 	var now = $.now();
 	//currentDate = dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");

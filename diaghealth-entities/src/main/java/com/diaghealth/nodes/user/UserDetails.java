@@ -201,6 +201,9 @@ public class UserDetails extends BaseNode {
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
+	public String getFullName(){
+		return this.firstname + this.lastname;
+	}
 	public String getUserRole() {
 		return userRole;
 	}

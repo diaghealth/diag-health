@@ -46,11 +46,12 @@ public class UserRegisterController {
 	private String USER_LIST_ATTR;
 	@Value("${user.add.attr}")
 	private String USER_ADD_ATTR;
+	@Autowired
+	MailSenderUtil mailSenderUtil;
 	
 	private static final String INPUT_DETAILS_ATTR = "detailsForm";
 	private static final int MAX_ASCII = 45;
 	private static final String EMAIL_SUBJECT = "DiagHealth registration";
-	private static final String FROM_EMAIL = "contact@diaghealth.com";
 	private static final String EMAIL_BODY_WELCOME = "Welcome to DiagHealth";
 	private static final int NAME_LENGTH_IN_USERNAME  = 4;
 	private static final int ASCCI_START = 48;
@@ -59,8 +60,7 @@ public class UserRegisterController {
 	private UserRegisterService userRegisterService;
 	@Autowired
 	private SearchService searchService;
-	@Autowired
-	private MailSenderUtil mailSenderUtil;
+	
 	@Autowired
     private SessionUtil sessionUtil;
 	
@@ -154,6 +154,7 @@ public class UserRegisterController {
 	}
 	
 	private void sendMail(UserDetails detailsForm){
+		//MailSenderUtil mailSenderUtil = new MailSenderUtil();
 		if(detailsForm.getEmail() == null || detailsForm.getEmail().isEmpty()){
 			return;
 		}
@@ -161,10 +162,10 @@ public class UserRegisterController {
 		String emailBody = EMAIL_BODY_WELCOME;
 		emailBody += "\n Username: " + detailsForm.getUsername();
 		emailBody += "\n Password: " + detailsForm.getPassword();
-		mailSenderUtil.setToMail(detailsForm.getEmail());
+		mailSenderUtil.addToMail(detailsForm.getEmail());
 		mailSenderUtil.setSubject(EMAIL_SUBJECT);
 		mailSenderUtil.setBody(emailBody);
-		mailSenderUtil.setFromMail(FROM_EMAIL);
+		//mailSenderUtil.setFromMail(FROM_EMAIL);
 		
 		mailSenderUtil.sendMail();
 	}

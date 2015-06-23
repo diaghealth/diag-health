@@ -79,41 +79,70 @@ $(function() {
 		$('#printable').print(reportContent());
 	});
 	$('#printPriceReceipt').on('click', function() {
-		$('#printable').print("");
+		$('#printable').print(receiptPriceContent());
 	});
 	$('#printReceipt').on('click', function() {
-		$('#printable').print("");
+		$('#printable').print(receiptContent());
 	});
 });
 
-reportContent = function() {
+userDetails = function(){
 	var element = "";
 	$( "#receiptUserDetails > h3" ).each(function() {
 		  element += $( this ).html();
 		  element += "<br>";
 	});
-	element += "<table><tr><th>Test Name</th><th>Result</th><th>Range</th><th>Date</th></tr>";
-	var header = 0;
-	$( "#displayTestsTable > tr").each(function() {
-		/*if(header == 0)	
-			header++;
-		else {*/
-		element += ("<tr>" + 
-				"<td>" +  $(this).find(".name").val() + "</td>" +
-				"<td>" +  $(this).find(".resultValue").val() + "</td>" +
-				
-				"<td>" +  $(this).find(".refLower").val() + " - " +  $(this).find(".refUpper").val() + " " +
-				$(this).find(".unit").val() + "</td>" +
-				
-				"<td>" +  $(this).find(".dateCreated").val() + "</td>" +
-				"</tr>");
-		//}
-	});
-	element += "</table>";
 	return element;
 };
 
-receiptContent = function() {
-	var element = $("#receiptUserDetails").text();
+reportContent = function() {
+	var element = "";
+	element += userDetails();
+	element += "<br><table border=1 width=100%><tr><th>Test Name</th><th>Result</th><th>Range</th><th>Date</th></tr>";
+	$( "#displayTestsTable > tbody > tr").each(function() {
+		
+		if(!($('td:eq(1) input', this).val() === undefined)){
+			element += ("<tr>" + 
+				"<td>" +  $('td:eq(1) input', this).val() + "</td>" + //name
+				"<td>" +  $('td:eq(4) input', this).val() + "</td>" + //result
+				
+				"<td>" +  $('td:eq(5) input', this).val() + " - " +  $('td:eq(6) input', this).val() + " " +
+				$('td:eq(7) input', this).val() + "</td>" + // lower - upper unit
+				
+				"<td>" +  $('td:eq(8) input', this).val() + "</td>" + //date
+				"</tr>");
+		}
+	});
+	element += "</table><br>";
 	return element;
-}
+};
+
+receiptPriceContent = function() {
+	var element = "";
+	element += userDetails();
+	element += "<br><table border=1 width=100%><tr><th>Test Name</th><th>Price</th><th>Discount</th><th>Date</th></tr>";
+	$( "#displayTestsTable > tbody > tr").each(function() {
+		
+		if(!($('td:eq(1) input', this).val() === undefined)){
+		element += ("<tr>" + 
+				"<td>" +  $('td:eq(1) input', this).val() + "</td>" + //name
+				"<td>" +  $('td:eq(2) input', this).val() + "</td>" + //price
+				
+				"<td>" +  $('td:eq(3) input', this).val() + "</td>" + //discount
+				
+				"<td>" +  $('td:eq(8) input', this).val() + "</td>" + //date
+				"</tr>");
+		}
+	});
+	element += "</table><br>";
+	return element;
+};
+
+receiptConent = function() {
+	var element = "";
+	$( "#receiptUserDetails > h3" ).each(function() {
+		  element += $( this ).html();
+		  element += "<br>";
+	});
+	return element;
+};

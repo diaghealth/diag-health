@@ -32,14 +32,16 @@ value="${toDate}"/></div></td>
 </table>
 </div>
 <table>
+<tr>
 <th>Test Name</th>
 <th>Price</th>
 <th>Date</th>
+</tr>
 <c:forEach var="test" items="${testViewObject.testList}" varStatus="status">
 	<tr>
 	<td>${test.name}</td>
 	<td>${test.price}</td>
-	<td><fmt:formatDate value="${test.dateCreated}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+	<td><fmt:formatDate value="${test.dateCreated}" pattern="dd-MMM-yyyy HH:mm"/></td>
 	</tr>
 </c:forEach>
 <tr><td>Total</td><td>${testViewObject.totalPrice}</td>

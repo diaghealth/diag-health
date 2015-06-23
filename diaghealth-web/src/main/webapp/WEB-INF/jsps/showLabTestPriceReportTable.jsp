@@ -4,6 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -86,7 +87,8 @@ function deleteRow(obj){
 		</td>	
 		</c:if>		
 		<td>
-			<input name='testList[${status.index}].dateCreated' readonly='readonly' value='${test.dateCreated}' class='dateCreated'/>
+			<fmt:formatDate value="${test.dateCreated}" var="dateString" pattern="dd-MMM-yyyy HH:mm" />
+			<input name='testList[${status.index}].dateCreated' readonly='readonly' value='${dateString}' class='dateCreated'/>
 		</td>	
 		<td></td> <!-- empty delete button -->
 		<!-- <td><button type='button' class='deleteButton' onclick='deleteRow(this)'>Delete</button></td> -->	

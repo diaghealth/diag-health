@@ -1,6 +1,10 @@
 package com.diaghealth.mail;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.mail.Message;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -10,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 public class MailSenderUtil {
@@ -17,8 +22,8 @@ public class MailSenderUtil {
 	JavaMailSender mailSender;
 	private static Logger logger = LoggerFactory.getLogger(MailSenderUtil.class);
 	
-	private String fromMail;
-	private String toMail;
+	private String fromMail = new String("contact@diaghealth.com");
+	private List<String> toMail = new ArrayList<String>();
 	private String subject;
 	private String attachment;
 	private String body;
@@ -35,11 +40,16 @@ public class MailSenderUtil {
 	public void setFromMail(String fromMail) {
 		this.fromMail = fromMail;
 	}
-	public String getToMail() {
+	public List<String> getToMail() {
 		return toMail;
 	}
-	public void setToMail(String toMail) {
-		this.toMail = toMail;
+	public void setToMail(List<String> toMail) {
+		if(toMail != null)
+			this.toMail = toMail;
+	}
+	public void addToMail(String toMail){
+		if(!StringUtils.isEmpty(toMail))
+			this.toMail.add(toMail);
 	}
 	public String getSubject() {
 		return subject;
@@ -60,14 +70,27 @@ public class MailSenderUtil {
 		this.body = body;
 	}
 	
+	private InternetAddress[] getInternetAddressFromMailId(){
+		List<InternetAddress> addresses = new ArrayList<InternetAddress>();
+		for(String email: toMail){
+			try{
+			addresses.add(new InternetAddress(email));
+			} catch (AddressException exc){
+				logger.error("Cannot send mail. Invalid email id: " + email);
+				logger.debug(exc.toString());
+			}
+		}
+		return addresses.toArray(new InternetAddress[addresses.size()]);
+	}
+	
 	public void sendMail(){
 		//try{
 		MimeMessagePreparator mimeMessagePrep = new MimeMessagePreparator() {
 			public void prepare(MimeMessage mimeMessage) throws Exception {
-				mimeMessage.setRecipient(Message.RecipientType.TO,
-                        new InternetAddress(toMail));
+				mimeMessage.setRecipients(Message.RecipientType.TO, getInternetAddressFromMailId());
                 mimeMessage.setFrom(new InternetAddress(fromMail));
-                mimeMessage.setText(body);
+                //mimeMessage.setText(body);
+                mimeMessage.setContent(body, "text/html");
                 mimeMessage.setSubject(subject);
                 logger.debug("Preparing mail: " + mimeMessage);
                  
@@ -81,10 +104,18 @@ public class MailSenderUtil {
 			  }
 			};
 		mailSender.send(mimeMessagePrep);
+		reset();
 		logger.debug("Mail sent");
 		/*}catch(Exception e){
 			logger.error("Canot sent mail: Exception" + e.getMessage());
 			e.printStackTrace();
 		}*/
+	}
+	
+	public void reset(){
+		subject = "";
+		attachment = "";
+		body = "";
+		toMail = new ArrayList<String>();		
 	}
 }

@@ -60,6 +60,7 @@ public class UpdateDetailsController {
 	    }*/
 		
 		UserDetails loggedInUser = sessionUtil.getLoggedInUser(httpServletRequest);
+		UserDetails changedInfo = details.getUserDetails();
 		//Password check
 		if(!StringUtils.isEmpty(details.getNewPassword()) && !StringUtils.isEmpty(details.getNewPasswordRepeat())){
 			if(!details.getNewPassword().equals(details.getNewPasswordRepeat())){
@@ -73,6 +74,9 @@ public class UpdateDetailsController {
 			else if(!loggedInUser.getPassword().equals(details.getOldPassword())){
 				result.reject("password.error", "Entered Password does not match.");
 				logger.info("PasswordError. Password dont match with previous pwd" + details.getOldPassword());
+			} else {
+				changedInfo.setPassword(details.getNewPassword()); //TODO check if this is required
+				loggedInUser.setPassword(details.getNewPassword());
 			}
 		}
 		
@@ -80,9 +84,6 @@ public class UpdateDetailsController {
 			 return mv;
 	    }
 		
-		UserDetails changedInfo = details.getUserDetails();
-		changedInfo.setPassword(details.getNewPassword());
-		loggedInUser.setPassword(details.getNewPassword());
 		logger.info("Password changed successfully for user: " + loggedInUser.getUsername());
 		//TODO the copy should be done field by field
 		try {

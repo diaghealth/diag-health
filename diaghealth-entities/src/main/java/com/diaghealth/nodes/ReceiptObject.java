@@ -25,6 +25,7 @@ public class ReceiptObject extends BaseNode {
 	private Set<UserDetails> relatedUsers;
 	private UserDetails subject;
 	@RelatedTo(type="RECEIPT_TESTS_DONE", direction=Direction.BOTH)
+	@Fetch
 	private Set<LabTestDoneObject> labTestDoneObject;
 	
 	private Date validTill;

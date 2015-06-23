@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -15,6 +19,7 @@
 <body>
 <form:form action="filterTestsOnDate" modelAttribute="testViewObject" method="POST">
 <form:errors class="error"/>
+
 <div id="dateFromToDiv"> 
 <table>
 <tr>
@@ -26,19 +31,25 @@ value="${toDate}"/></div></td>
 </tr>
 </table>
 </div>
-<table>
+
+<table id="displayTable" class="tablesorter">
+<thead>
+<tr>
 <th>Test Name</th>
 <th>Result</th>
 <th>Date</th>
+</tr>
+</thead>
+<tbody>
 <c:forEach var="test" items="${testViewObject.testList}" varStatus="status">
 	<tr>
 	<td>${test.name}</td>
 	<td>${test.resultValue}</td>
-	<td><fmt:formatDate value="${test.dateCreated}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+	<td><fmt:formatDate value="${test.dateCreated}" pattern="dd-MMM-yyyy HH:mm"/></td>
 	</tr>
 </c:forEach>
-<td><input id="hiddenField" type="hidden" class="hiddenField" name="id" value="${testViewObject.id}"></td></tr>
-
+<tr><td><input id="hiddenField" type="hidden" class="hiddenField" name="id" value="${testViewObject.id}"></td></tr>
+</tbody>
 </table>
 </form:form>
 </body>

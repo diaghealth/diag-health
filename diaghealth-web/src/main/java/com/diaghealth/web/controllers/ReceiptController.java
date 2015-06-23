@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.diaghealth.mail.MailSenderUtil;
 import com.diaghealth.models.ReceiptViewDto;
 import com.diaghealth.nodes.ReceiptObject;
 import com.diaghealth.nodes.labtest.LabTestAvailablePrice;
@@ -43,6 +44,8 @@ public class ReceiptController {
 	@Autowired
     private SessionUtil sessionUtil;
 	@Autowired
+	MailSenderUtil mailSenderUtil;
+	@Autowired
 	private ReceiptService receiptService;
 	@Value("${receipt.view.jsp}")
 	private String RECEIPT_VIEW_JSP;
@@ -56,6 +59,7 @@ public class ReceiptController {
 	private SearchService searchService;
 	@Autowired
 	private UserRegisterService userRegisterService;
+	private static final String TEST_REPORT_SUBJECT = "Diaghealth Test Report";
 	
 	private static Logger logger = LoggerFactory.getLogger(ReceiptController.class);
 	
@@ -111,12 +115,13 @@ public class ReceiptController {
 			receiptView.setCurrentLab(loggedInUser);
 		}
 		receiptView.getTestList().addAll(receipt.getLabTestDoneObject());
-		receiptView.setTestList(receiptView.getTestList());
+		receiptView.setTestList(receiptView.getTestList()); //TODO why ?
 		mv.getModel().put("receiptView", receiptView);
 		List<LabTestAvailablePrice> availableTests = labTestService.getAvailableTestsInLab(loggedInUser.getId());
 		//List<LabTestDetailsDto> allTests = labTestService.getAllAvailableTests();
 		LabTestUtils.putAvailableTestsInModel(mv, availableTests);
 		sessionUtil.removeAttribute(httpServletRequest, "labTests");
+		mv.getModel().put("labTests", receiptView);
 		logger.info("Found Receipt: " + receipt.getReceiptId() + " requestby User: " + loggedInUser.getUsername());
 		mv.getModel().put("showTestList", 1);
 		mv.getModel().put("buildResult", 1);
@@ -132,10 +137,7 @@ public class ReceiptController {
 		ReceiptObject receiptObjDto = receiptService.findReceipt(receiptView.getReceipt().getId());
 		receiptObjDto.setValidTill(DateUtils.addMonths(new Date(),1)); //Set Validity of 1 month
 		receiptObjDto.addRelatedUsers(loggedInUser);
-		Set<LabTestDoneObject> testsToSave = new HashSet<LabTestDoneObject>();
-		testsToSave.addAll(receiptView.getTestList());
-		receiptObjDto.setLabTestDoneObject(testsToSave);
-		receiptObjDto = receiptService.save(receiptObjDto);
+		
 		
 		if (result.hasErrors()) {
 			 return mv;
@@ -145,20 +147,27 @@ public class ReceiptController {
 		Set<UserDetails> relatedUsers = receiptObjDto.getRelatedUsers();
 		
 		for(LabTestDoneObject test: receiptView.getTestList()){
-			test.setDateCreated(new Date());
-			test.setCreatorId(loggedInUser.getId());
-			
-			test.addRelatedUsers(subject);
-			for(UserDetails user: relatedUsers){
-				test.addRelatedUsers(user);
+			if(test.getDateCreated() == null){
+				test.setDateCreated(new Date());
+				test.setCreatorId(loggedInUser.getId());
+				
+				test.addRelatedUsers(subject);
+				for(UserDetails user: relatedUsers){
+					test.addRelatedUsers(user);
+				}
+				subject.addTest(test);
+				loggedInUser.addTest(test);
 			}
-			subject.addTest(test);
-			loggedInUser.addTest(test);
 		}
 		userRegisterService.saveDetails(subject); //TODO check if this is required since loggedInUser is already being saved
 		loggedInUser.addRelated(subject);
 		//userRegisterService.saveRelationship(user, relatedId, relatedUserType) TODO if we can save only relationship
 		userRegisterService.saveDetails(loggedInUser);
+		
+		Set<LabTestDoneObject> testsToSave = new HashSet<LabTestDoneObject>();
+		testsToSave.addAll(receiptView.getTestList());
+		receiptObjDto.setLabTestDoneObject(testsToSave);
+		receiptObjDto = receiptService.save(receiptObjDto);
 		
 		//Save Tests in Lab
 		/*UserDetailsDto loggedInUser = sessionUtil.getLoggedInUser(httpServletRequest);
@@ -177,13 +186,85 @@ public class ReceiptController {
 		//List<LabTestDetailsDto> allTests = labTestService.getAllAvailableTests();
 		LabTestUtils.putAvailableTestsInModel(mv, availableTests);
 		sessionUtil.removeAttribute(httpServletRequest, "labTests");
+		mv.getModel().put("labTests", receiptView);
+		receiptView.setReceipt(receiptObjDto);
 		mv.getModel().put("receiptView", receiptView);
 		mv.getModel().put("showTestList", 1);
 		mv.getModel().put("buildResult", 1);
 		mv.setViewName(RECEIPT_VIEW_JSP);
 		
 		result.reject("save.success", "Saved");
+		
+		sendTestResultsMail(receiptView);
 		return mv;
+	}
+	
+	private boolean hasReports(ReceiptViewDto receiptView){
+		int testResultCount = 0;
+		for(LabTestDoneObject test: receiptView.getReceipt().getLabTestDoneObject()){
+			if(test.getResultValue() != 0.0){ 
+				testResultCount++;
+			}
+		}
+		return testResultCount != 0;
+	}
+	
+	private void sendTestResultsMail(ReceiptViewDto receiptView){
+		ReceiptObject receiptObjDto = receiptView.getReceipt();
+		if(!hasReports(receiptView))
+			return;
+		
+		//MailSenderUtil mailSender = new MailSenderUtil();
+		for(UserDetails related: receiptObjDto.getRelatedUsers()){
+			mailSenderUtil.addToMail(related.getEmail());
+		}
+		mailSenderUtil.setSubject(TEST_REPORT_SUBJECT);		
+		String body = getTestReport(receiptView);		
+		mailSenderUtil.setBody(body);		
+		mailSenderUtil.sendMail();
+	}
+	
+	private String getTestReport(ReceiptViewDto receiptView){
+		StringBuilder report = new StringBuilder();
+		
+		report.append("<html>");
+		//body
+		report.append("<body>");
+		//User Details
+		report.append("<h3>");
+		report.append(receiptView.getReceipt().getSubject().getUserType() + " : " + receiptView.getReceipt().getSubject().getFullName().toUpperCase());
+		report.append("</h3>");
+		for(UserDetails user: receiptView.getReceipt().getRelatedUsers()){
+			report.append("<h3>");
+			report.append(user.getUserType() + " : " + user.getFullName().toUpperCase());
+			report.append("</h3>");
+		}
+		report.append("<br>");
+		//table
+		report.append("<table border=1 width=100%>");
+		report.append("<tr><th>Test Name</th><th>Result</th><th>Range</th><th>Date</th><tr>");
+		for(LabTestDoneObject test: receiptView.getReceipt().getLabTestDoneObject()){			
+			report.append("<tr>");
+			report.append("<td>");
+			report.append(test.getName());
+			report.append("</td>");
+			report.append("<td>");
+			report.append(test.getResultValue());
+			report.append("</td>");
+			report.append("<td>");
+			report.append(test.getRefLower() + " - " + test.getRefUpper() + " " + test.getUnit());
+			report.append("</td>");
+			report.append("<td>");
+			report.append(test.getDateCreated());
+			report.append("</td>");
+			report.append("</tr>");
+			
+		}
+		report.append("</table>");
+		report.append("</body>");
+		report.append("</html>");
+		
+		return report.toString();
 	}
 
 

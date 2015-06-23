@@ -5,12 +5,14 @@ import java.util.Date;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.GraphProperty;
 import org.springframework.data.neo4j.annotation.Indexed;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class BaseNode {
 
 	@GraphId
 	protected Long id;
 	@GraphProperty(propertyType=long.class) 
+	@DateTimeFormat(pattern = "dd-MMM-yyyy HH:mm")
 	protected Date dateCreated;
 	@GraphProperty(propertyType=long.class) 
 	protected Date dateModified;
