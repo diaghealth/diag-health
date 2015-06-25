@@ -2,7 +2,7 @@ package com.diaghealth.utils;
 
 
 public enum UserType {
-	PATIENT(0),
+	/*PATIENT(0),
 	DOCTOR(1),
 	LAB(2),
 	CLINIC(3);
@@ -16,5 +16,9 @@ public enum UserType {
 		return this.value;
 	}
 	
-	public static final int MAX_VALUE = 4;
+	public static final int MAX_VALUE = 4;*/
+	PATIENT,
+	DOCTOR,
+	LAB,
+	CLINIC
 }
