@@ -45,6 +45,11 @@ public class ReportLabTestController {
 		}
 		Set<LabTestDoneObject> testSet = new HashSet<LabTestDoneObject>();
 		testSet = labTestService.getTestsByUserId(id, loggedInUser.getId());
+		for(LabTestDoneObject test: testSet){
+			if(test.getResultValue() == 0.0){
+				testSet.remove(test);
+			}
+		}
 		TestListViewDto testView = new TestListViewDto();
 		testView.setId(id);
 		testView.setTestList(testSet);
