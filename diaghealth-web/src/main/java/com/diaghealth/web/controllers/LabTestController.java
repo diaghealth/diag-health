@@ -149,6 +149,7 @@ public class LabTestController {
 		if(deleteList.size() > 0)
 			labTestService.deleteTests(deleteList); //TODO delete later
 		
+		//Most recent are at the ends (bottom), discard duplicates from top
 		for(int i=testList.size()-1;i >= 0;i--){
 			if(!existsInList(saveList, (LabTestAvailablePrice)testList.get(i))){
 				saveList.add((LabTestAvailablePrice)testList.get(i));

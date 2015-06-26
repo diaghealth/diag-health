@@ -32,4 +32,29 @@ public class LabTestDoneObject extends LabTestAvailablePrice {
 		
 		relatedUsers.add(user);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		if(id != null)
+			result = prime * result + id.intValue();
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LabTestDoneObject other = (LabTestDoneObject) obj;
+		if(id == null || other.id == null)
+			return false;
+		if (id.intValue() != other.id.intValue())
+			return false;
+		return true;
+	}
 }

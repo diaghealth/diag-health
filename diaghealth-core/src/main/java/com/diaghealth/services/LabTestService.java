@@ -75,5 +75,9 @@ public class LabTestService {
 		labTestPriceRepo.delete(deleteList);
 	}
 	
+	public Set<LabTestDoneObject> saveTestsDone(Set<LabTestDoneObject> set){
+		return (Set<LabTestDoneObject>) labTestDoneRepo.save(set);
+	}
+	
 
 }

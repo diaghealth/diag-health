@@ -67,14 +67,20 @@ public class LabTestAvailablePrice extends BaseNode {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
+	
+	@Override
+	public String toString() {
+		return "LabTestAvailablePrice [name=" + name + ", type=" + type
+				+ ", price=" + price + ", discountPercent=" + discountPercent
+				+ ", resultValue=" + resultValue + ", refLower=" + refLower
+				+ ", refUpper=" + refUpper + ", unit=" + unit + ", id=" + id
+				+ ", dateCreated=" + dateCreated + "]";
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Float.floatToIntBits(discountPercent);
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((dateCreated == null) ? 0 : dateCreated.hashCode());
-		result = prime * result + price;
 		return result;
 	}
 	@Override
@@ -86,29 +92,13 @@ public class LabTestAvailablePrice extends BaseNode {
 		if (getClass() != obj.getClass())
 			return false;
 		LabTestAvailablePrice other = (LabTestAvailablePrice) obj;
-		if (Float.floatToIntBits(discountPercent) != Float
-				.floatToIntBits(other.discountPercent))
-			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (price != other.price)
-			return false;
-		if (dateCreated == null) {
-			if (other.dateCreated != null)
-				return false;
-		} else if (!dateCreated.equals(other.dateCreated))
+		if (id.intValue() != other.id.intValue())
 			return false;
 		return true;
-	}
-	@Override
-	public String toString() {
-		return "LabTestAvailablePrice [name=" + name + ", type=" + type
-				+ ", price=" + price + ", discountPercent=" + discountPercent
-				+ ", resultValue=" + resultValue + ", refLower=" + refLower
-				+ ", refUpper=" + refUpper + ", unit=" + unit + ", id=" + id
-				+ ", dateCreated=" + dateCreated + "]";
 	}
 }

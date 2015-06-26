@@ -250,7 +250,7 @@ public class UserDetails extends BaseNode {
 		this.relatedList.add(related);
 	}
 	
-	public Set<LabTestDoneObject> getTestList() {
+	/*public Set<LabTestDoneObject> getTestList() {
 		return testDoneList;
 	}
 	
@@ -258,12 +258,15 @@ public class UserDetails extends BaseNode {
 	public void setTestList(Set<LabTestDoneObject> testList) {
 		if(this.testDoneList == null)
 			this.testDoneList = testList;
-	}
+	}*/
 	
 	public void addTest(LabTestDoneObject testList){
 		if(this.testDoneList == null)
 			this.testDoneList = new HashSet<LabTestDoneObject>();
-		this.testDoneList.add(testList);
+		if(!this.testDoneList.add(testList)){
+			this.testDoneList.remove(testList); //Element already exists, remove the element and add the latest element
+			this.testDoneList.add(testList);
+		}
 	}
 	public UserType getUserType() {
 		return userType;
@@ -275,7 +278,8 @@ public class UserDetails extends BaseNode {
 		return testDoneList;
 	}
 	public void setTestDoneList(Set<LabTestDoneObject> testDoneList) {
-		this.testDoneList = testDoneList;
+		if(this.testDoneList == null)
+			this.testDoneList = testDoneList;
 	}
 	
 		

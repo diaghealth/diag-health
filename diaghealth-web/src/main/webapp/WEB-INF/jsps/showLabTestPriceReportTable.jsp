@@ -58,8 +58,7 @@ function deleteRow(obj){
 <c:forEach var="test" items="${labTests.testList}" varStatus="status">
 	
 	<tr id="rowIndex${status.index}">
-	<%-- <div class="test_item_<c:out value='${status.index}' />"> --%>
-	
+	<%-- <div class="test_item_<c:out value='${status.index}' />"> --%>		
 		<td>
 			<input name='testList[${status.index}].type' readonly='readonly' value='${test.type}' class='type'/>
 		</td>
@@ -100,7 +99,9 @@ function deleteRow(obj){
 			<fmt:formatDate value="${test.dateCreated}" var="dateString" pattern="dd-MMM-yyyy HH:mm" />
 			<input name='testList[${status.index}].dateCreated' readonly='readonly' value='${dateString}' class='dateCreated'/>
 		</td>	
-		<td></td> <!-- empty delete button -->
+		<td>
+			<input type='hidden' name='testList[${status.index}].id' readonly='readonly' value='${test.id}' class='id'/>
+		</td> <!-- empty delete button -->
 		<!-- <td><button type='button' class='deleteButton' onclick='deleteRow(this)'>Delete</button></td> -->	
 		</tr>
 </c:forEach>

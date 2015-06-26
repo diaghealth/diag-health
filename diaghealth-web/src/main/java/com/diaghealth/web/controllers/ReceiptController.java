@@ -147,25 +147,39 @@ public class ReceiptController {
 		Set<UserDetails> relatedUsers = receiptObjDto.getRelatedUsers();
 		
 		for(LabTestDoneObject test: receiptView.getTestList()){
+			
 			if(test.getDateCreated() == null){
 				test.setDateCreated(new Date());
-				test.setCreatorId(loggedInUser.getId());
-				
-				test.addRelatedUsers(subject);
-				for(UserDetails user: relatedUsers){
-					test.addRelatedUsers(user);
-				}
-				subject.addTest(test);
-				loggedInUser.addTest(test);
+				test.setCreatorId(loggedInUser.getId());				
 			}
+			
+			test.addRelatedUsers(subject);
+			for(UserDetails user: relatedUsers){
+				test.addRelatedUsers(user);
+			}
+		}
+		
+		//Save Tests
+		Set<LabTestDoneObject> testsToSave = new HashSet<LabTestDoneObject>();
+		testsToSave.addAll(receiptView.getTestList());
+		testsToSave = labTestService.saveTestsDone(testsToSave);
+		
+		//Save related users
+		for(LabTestDoneObject test: testsToSave){			
+			/*test.addRelatedUsers(subject);
+			for(UserDetails user: relatedUsers){
+				test.addRelatedUsers(user);
+			}*/
+			subject.addTest(test);
+			loggedInUser.addTest(test);
 		}
 		userRegisterService.saveDetails(subject); //TODO check if this is required since loggedInUser is already being saved
 		loggedInUser.addRelated(subject);
 		//userRegisterService.saveRelationship(user, relatedId, relatedUserType) TODO if we can save only relationship
 		userRegisterService.saveDetails(loggedInUser);
 		
-		Set<LabTestDoneObject> testsToSave = new HashSet<LabTestDoneObject>();
-		testsToSave.addAll(receiptView.getTestList());
+		
+		//Save receipt Object
 		receiptObjDto.setLabTestDoneObject(testsToSave);
 		receiptObjDto = receiptService.save(receiptObjDto);
 		
