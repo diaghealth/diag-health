@@ -1,5 +1,6 @@
 package com.diaghealth.web.controllers;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,13 +66,20 @@ public class AdminTestTypeAddController {
 		//Change to upper case
 		labTest.setName(labTest.getName().toUpperCase());
 		labTest.setType(labTest.getType().toUpperCase());
+		labTest.setUnit(labTest.getUnit().toUpperCase());
+		Set<LabTestDetails> exists = labTestDetailsService.findIfExists(labTest);
 		
-		if(!labTestDetailsService.findIfExists(labTest)){
-			logger.info("Added new Test Type: " + labTest);
-			labTestDetailsService.save(labTest);
-		} else {
-			result.reject("test.exists", "Test Already Exists");
+		if(exists != null && exists.size() > 0){
+			logger.error("Deleting test: " + exists);
+			for(LabTestDetails exist: exists){
+				labTestDetailsService.deleteTest(exist);
+			}
 		}
+		logger.info("Added new Test Type: " + labTest);
+		labTestDetailsService.save(labTest);
+		/*} else {
+			result.reject("test.exists", "Test Already Exists");
+		}*/
 		mv.setViewName("redirect:" + "/addLabTestType");
 		return mv;		
 	}

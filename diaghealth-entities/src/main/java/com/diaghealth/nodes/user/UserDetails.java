@@ -82,6 +82,31 @@ public class UserDetails extends BaseNode {
     @RelatedTo(type="TEST_DONE", direction=Direction.BOTH)
     //@Fetch
 	private Set<LabTestDoneObject> testDoneList;	
+    
+    public UserDetails(){
+    	
+    }
+    
+    public UserDetails(UserDetails obj){
+    	this.username = obj.getUsername();
+    	this.password = obj.getPassword();
+    	this.firstname = obj.getFirstname();
+    	this.lastname = obj.getLastname();
+    	this.email = obj.getEmail();
+    	this.phoneNumber = obj.getPhoneNumber();
+    	this.addressLine1 = obj.getAddressLine1();    	
+    	this.addressLine2 = obj.getAddressLine2();
+    	this.location = obj.getLocation();
+    	this.state = obj.getState(); 
+    	this.pincode = obj.getPincode();
+    	this.userType = obj.getUserType();
+    	this.userRole = obj.getUserRole();
+    	this.latLocation = obj.getLatLocation();    	
+    	this.longLocation = obj.getLongLocation();
+    	this.testDoneList = obj.getTestDoneList();
+    	this.relatedList = obj.getRelatedList();
+    	
+    }
 	
     
 	public String getUsername() {

@@ -146,15 +146,29 @@ public class LabTestController {
 		}
 		testList.removeAll(deleteList);
 		logger.debug("Deleting tests for user: " + loggedInUser.getUsername() + " tests: " + deleteList);
-		labTestService.deleteTests(deleteList); //TODO delete later
+		if(deleteList.size() > 0)
+			labTestService.deleteTests(deleteList); //TODO delete later
 		
-		for(int i=0;i < testList.size();i++){
-			saveList.add((LabTestAvailablePrice)testList.get(i));
+		for(int i=testList.size()-1;i >= 0;i--){
+			if(!existsInList(saveList, (LabTestAvailablePrice)testList.get(i))){
+				saveList.add((LabTestAvailablePrice)testList.get(i));
+			}
 		}			
 		
 		logger.debug("Saving tests for user: " + loggedInUser.getUsername() + " tests: " + saveList);
 	
 		return labTestService.saveTestsPrice(saveList, loggedInUser);
+	}
+	
+	private boolean existsInList(Set<LabTestAvailablePrice> list, LabTestAvailablePrice element){
+		if(list.size() > 0){
+			for(LabTestAvailablePrice test: list){
+				if(test.getName().equals(element.getName())){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	

@@ -52,16 +52,16 @@ public class UserRepositoryService {
 		UserDetails node = null;
 		switch(details.getUserType()){
 		case DOCTOR:
-			node = new Doctor();
+			node = new Doctor(details);
 			break;
 		case LAB:
-			node = new Lab();
+			node = new Lab(details);
 			break;
 		case CLINIC:
-			node = new Clinic();
+			node = new Clinic(details);
 			break;
 		case PATIENT:
-			node = new Patient();
+			node = new Patient(details);
 			break;
 		default:
 			break;
@@ -72,14 +72,60 @@ public class UserRepositoryService {
 	public UserDetails saveUser(UserDetails user, Long id){
 		setDateTime(user, id);
 		logger.debug("Saving User: " + user.getUsername());
-		return (UserDetails)getRepoByType(user.getUserType()).save(user);
+		return (UserDetails)saveUserByType(user.getUserType(), user);
+	}
+	
+	public UserDetails saveUserByType(UserType type, UserDetails userDetails){
+		UserDetails user = null;
+		switch(type){
+			case DOCTOR:
+				if(userDetails instanceof Doctor){
+					user = doctorRepo.save((Doctor)userDetails);
+				}
+				break;
+			case CLINIC:
+				if(userDetails instanceof Clinic){
+					user = clinicRepo.save((Clinic)userDetails);
+				}				
+				break;
+			case LAB:
+				if(userDetails instanceof Lab){
+					user = labRepo.save((Lab)userDetails);
+				}
+				break;
+			case PATIENT:
+				if(userDetails instanceof Patient){
+					user = patientRepo.save((Patient)userDetails);
+				}
+				break;
+			default:
+				break;
+		}	
+		return user;
 	}
 	
 	public UserDetails getActualObjectByIdType(Long id, UserType type){
-		return (UserDetails)getRepoByType(type).findOne(id);		
+		UserDetails user = null;
+		switch(type){
+			case DOCTOR:
+				user = doctorRepo.findOne(id);
+				break;
+			case CLINIC:
+				user = clinicRepo.findOne(id);
+				break;
+			case LAB:
+				user = labRepo.findOne(id);
+				break;
+			case PATIENT:
+				user = patientRepo.findOne(id);
+				break;
+			default:
+				break;
+		}	
+		return user;
 	}
 	
-	public GraphRepository getRepoByType(UserType type){
+	/*public GraphRepository getRepoByType(UserType type){
 		GraphRepository graphRepo = null;
 		switch(type){
 			case DOCTOR:
@@ -98,6 +144,6 @@ public class UserRepositoryService {
 				break;
 		}
 		return graphRepo;
-	}
+	}*/
 
 }

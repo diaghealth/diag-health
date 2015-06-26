@@ -27,8 +27,12 @@ public class LabTestDetailsService {
 		return labTestDetailsRepo.save(test);
 	}
 	
-	public boolean findIfExists(LabTestDetails test){
-		return labTestDetailsRepo.findByTypeName(test.getType().toUpperCase(), test.getName().toUpperCase()) != null;
+	public Set<LabTestDetails> findIfExists(LabTestDetails test){
+		return labTestDetailsRepo.findByTypeName(test.getType().toUpperCase(), test.getName().toUpperCase());
+	}
+	
+	public void deleteTest(LabTestDetails test){
+		labTestDetailsRepo.delete(test);
 	}
 
 }

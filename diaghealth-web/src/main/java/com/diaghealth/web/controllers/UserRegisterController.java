@@ -24,6 +24,7 @@ import com.diaghealth.mail.MailSenderUtil;
 import com.diaghealth.nodes.user.UserDetails;
 import com.diaghealth.services.SearchService;
 import com.diaghealth.services.UserRegisterService;
+import com.diaghealth.services.UserRepositoryService;
 import com.diaghealth.utils.UserType;
 import com.diaghealth.web.utils.ModelBuilder;
 import com.diaghealth.web.utils.SessionUtil;
@@ -123,7 +124,7 @@ public class UserRegisterController {
 		 boolean userSaved = false;
 				 
 		 String displayPage = USER_REGISTER_JSP;
-		 
+		 detailsForm = UserRepositoryService.getNewUserNode(detailsForm);
 		 detailsForm.setDateCreated(new Date());
 		 if(loggedInUser != null){ //user already logged in and registering new user
 			 //set relation between logged in user and new registered user
@@ -131,7 +132,7 @@ public class UserRegisterController {
 					 " type: " + loggedInUser.getUserType() + 
 					 " creating/registering new username: " + detailsForm.getUsername() + " type " + detailsForm.getUserType());
 			 			 
-			 displayPage = USERS_SHOW_JSP;
+			 displayPage = USERS_SHOW_JSP;			 
 			 detailsForm.setCreatorId(loggedInUser.getId());
 			 loggedInUser.addRelated(detailsForm);
 			 userSaved = userRegisterService.saveDetails(loggedInUser, null);		

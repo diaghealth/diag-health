@@ -37,6 +37,9 @@ value="${toDate}"/></div></td>
 <tr>
 <th>Test Name</th>
 <th>Result</th>
+<th>Lower Ref</th>
+<th>Upper Ref</th>
+<th>Unit</th>
 <th>Date</th>
 </tr>
 </thead>
@@ -44,7 +47,17 @@ value="${toDate}"/></div></td>
 <c:forEach var="test" items="${testViewObject.testList}" varStatus="status">
 	<tr>
 	<td>${test.name}</td>
-	<td>${test.resultValue}</td>
+	<c:choose>
+	<c:when test="${(test.resultValue lt test.refLower) || (test.resultValue gt test.refUpper)}">
+		<td class="error">${test.resultValue}</td>
+	</c:when>
+	<c:otherwise>
+		<td>${test.resultValue}</td>
+	</c:otherwise>
+	</c:choose>
+	<td>${test.refLower}</td>
+	<td>${test.refUpper}</td>
+	<td>${test.unit}</td>
 	<td><fmt:formatDate value="${test.dateCreated}" pattern="dd-MMM-yyyy HH:mm"/></td>
 	</tr>
 </c:forEach>

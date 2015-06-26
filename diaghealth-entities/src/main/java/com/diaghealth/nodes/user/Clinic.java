@@ -7,4 +7,12 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 @TypeAlias("User")
 public class Clinic extends UserDetails {
 	
+	public Clinic(){
+		
+	}
+	
+	public Clinic(UserDetails user){
+		super(user);
+	}
+	
 }

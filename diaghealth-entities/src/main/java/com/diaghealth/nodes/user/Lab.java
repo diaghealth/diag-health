@@ -14,6 +14,14 @@ import com.diaghealth.nodes.labtest.LabTestAvailablePrice;
 @TypeAlias("User")
 public class Lab extends UserDetails {
 	
+	public Lab(){
+		
+	}
+	
+	public Lab(UserDetails user){
+		super(user);
+	}
+	
     
 	@RelatedTo(type="TEST_AVAILABLE_PRICE", direction=Direction.BOTH)
     @Fetch

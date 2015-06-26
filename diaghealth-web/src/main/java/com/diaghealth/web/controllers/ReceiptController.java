@@ -248,7 +248,10 @@ public class ReceiptController {
 			report.append("<td>");
 			report.append(test.getName());
 			report.append("</td>");
-			report.append("<td>");
+			if(test.getResultValue() < test.getRefLower() || test.getResultValue() > test.getRefUpper())
+				report.append("<td style='color: red;	font-weight: bold'>");
+			else
+				report.append("<td>");
 			report.append(test.getResultValue());
 			report.append("</td>");
 			report.append("<td>");

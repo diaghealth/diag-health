@@ -47,8 +47,9 @@ function deleteRow(obj){
 <table id="displayTestsTable">
 <tr><th>Test Type</th><th>Test Name</th><th>Price</th><th>Discount %</th>
 <c:if test="${not empty buildResult}">
-<th>Result</th><th>Lower</th><th>Upper</th><th>Unit</th>
+<th>Result</th>
 </c:if>
+<th>Lower Ref</th><th>Upper Ref</th><th>Unit</th>
 <th>Date</th>
 <th>Delete</th>
 
@@ -72,10 +73,20 @@ function deleteRow(obj){
 			<input name='testList[${status.index}].discountPercent' readonly='readonly' 
 			value='${test.discountPercent}' class='discountPercent'/>
 		</td>	
-		<c:if test="${not empty buildResult}">	
-		<td>
+		<c:choose>
+		<c:when test="${not empty buildResult}">				
+			<c:choose>
+				<c:when test="${(test.resultValue lt test.refLower) || (test.resultValue gt test.refUpper)}">
+					<td class="error">						
+				</c:when>
+				<c:otherwise>
+					<td>
+				</c:otherwise>
+			</c:choose>
 			<input name='testList[${status.index}].resultValue' value='${test.resultValue}' class='resultValue'/>
-		</td>
+			</td>						
+		</c:when>	
+		</c:choose>	
 		<td>
 			<input name='testList[${status.index}].refLower' readonly='readonly' value='${test.refLower}' class='refLower'/>
 		</td>
@@ -85,7 +96,6 @@ function deleteRow(obj){
 		<td>
 			<input name='testList[${status.index}].unit' readonly='readonly' value='${test.unit}' class='unit'/>
 		</td>	
-		</c:if>		
 		<td>
 			<fmt:formatDate value="${test.dateCreated}" var="dateString" pattern="dd-MMM-yyyy HH:mm" />
 			<input name='testList[${status.index}].dateCreated' readonly='readonly' value='${dateString}' class='dateCreated'/>
@@ -109,8 +119,9 @@ function deleteRow(obj){
 <table id="addNewTestPriceReportTable">
 <tr><th>Test Type</th><th>Test Name</th><th>Price</th><th>Discount %</th>
 <c:if test="${not empty buildResult}">
-<th>Result</th><th>Lower</th><th>Upper</th><th>Unit</th>
+<th>Result</th>
 </c:if>
+<th>Lower Ref</th><th>Upper Ref</th><th>Unit</th>
 </tr>
 <tr>
 <td><select id="testType" size="1">
@@ -131,12 +142,22 @@ function deleteRow(obj){
 </td>
 <td><input size="30" type="text" id="testPrice" name="price" value=""/></td>
 <td><input size="30" type="text" id="testDiscount" name="discountPercent" value="0.0"/></td>
-<c:if test="${not empty buildResult}">
-<td><input size="30" type="text" id="testResultValue" name="resultValue" value="0.0"/></td>
+<c:choose>
+<c:when test="${not empty buildResult}">
+<c:choose>
+	<c:when test="${(test.resultValue lt test.refLower) || (test.resultValue gt test.refUpper)}">
+		<td class="error">						
+	</c:when>
+	<c:otherwise>
+		<td>
+	</c:otherwise>
+</c:choose>
+<input size="30" type="text" id="testResultValue" name="resultValue" value="0.0"/></td>
+</c:when>
+</c:choose>
 <td><input size="30" type="text" id="testRefLower" readonly='readonly' name="refLower" value="0.0"/></td>
 <td><input size="30" type="text" id="testRefUpper" readonly='readonly' name="refUpper" value="0.0"/></td>
 <td><input size="30" type="text" id="testUnit" readonly='readonly' name="unit" value="0.0"/></td>
-</c:if>
 </tr>
 </table>
 <c:choose>

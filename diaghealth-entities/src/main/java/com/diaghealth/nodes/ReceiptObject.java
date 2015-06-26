@@ -23,6 +23,7 @@ public class ReceiptObject extends BaseNode {
 	@RelatedTo(type="RECEIPT_USER", direction=Direction.BOTH)
 	@Fetch
 	private Set<UserDetails> relatedUsers;
+	@Fetch
 	private UserDetails subject;
 	@RelatedTo(type="RECEIPT_TESTS_DONE", direction=Direction.BOTH)
 	@Fetch

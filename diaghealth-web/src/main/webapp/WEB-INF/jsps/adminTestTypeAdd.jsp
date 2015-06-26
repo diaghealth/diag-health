@@ -16,6 +16,7 @@
 <th>Test Name</th>
 <th>Reference Lower</th>
 <th>Reference Upper</th>
+<th>Unit</th>
 </tr>
 <c:forEach var="test" items="${labTestExistList}" varStatus="status">
 	<tr>
@@ -23,24 +24,27 @@
 	<td>${test.name}</td>
 	<td>${test.refLower}</td>
 	<td>${test.refUpper}</td>
+	<td>${test.unit}</td>
 	</tr>
 </c:forEach>
 </table>
 <h2> Add Tests</h2>
-<form:errors/>
 <form:form action="saveLabTestType" modelAttribute="labTest" method="POST">
+<form:errors/>
 <table>
 <tr>
 <th>Test Type</th>
 <th>Test Name</th>
 <th>Reference Lower</th>
 <th>Reference Upper</th>
+<th>Unit</th>
 </tr>
 <tr>
 <td><input type="text" name="type"/></td>
 <td><input type="text" name="name"/></td>
 <td><input type="text" name="refLower"/></td>
 <td><input type="text" name="refUpper"/></td>
+<td><input type="text" name="unit"/></td>
 </tr>
 </table>
 <input name="submit" type="submit" id="submitButton" class="button" value="Save" />

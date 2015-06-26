@@ -103,8 +103,15 @@ reportContent = function() {
 		
 		if(!($('td:eq(1) input', this).val() === undefined)){
 			element += ("<tr>" + 
-				"<td>" +  $('td:eq(1) input', this).val() + "</td>" + //name
-				"<td>" +  $('td:eq(4) input', this).val() + "</td>" + //result
+				"<td>" +  $('td:eq(1) input', this).val() + "</td>"); //name
+				if($('td:eq(4) input', this).val() < $('td:eq(5) input', this).val() ||
+						$('td:eq(4) input', this).val() > $('td:eq(6) input', this).val()){
+					element += ("<td style='color: red;	font-weight: bold'>");
+				}
+				else{
+					element += ("<td>");
+				}	
+				element += ($('td:eq(4) input', this).val() + "</td>" + //result
 				
 				"<td>" +  $('td:eq(5) input', this).val() + " - " +  $('td:eq(6) input', this).val() + " " +
 				$('td:eq(7) input', this).val() + "</td>" + // lower - upper unit
