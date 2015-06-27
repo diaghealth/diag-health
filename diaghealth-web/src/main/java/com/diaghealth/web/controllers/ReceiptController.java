@@ -53,6 +53,8 @@ public class ReceiptController {
 	private String RECEIPT_SEARCH;
 	@Value("${show.userlist.jsp}")
 	private String USERS_SHOW_JSP;
+	@Value("${unauthorized.jsp}")
+	private String UNAUTHORIZED_JSP;
 	@Autowired
 	private LabTestService labTestService;
 	@Autowired
@@ -80,7 +82,26 @@ public class ReceiptController {
 	
 	@RequestMapping(value = "/searchReceipt", method = RequestMethod.GET)
 	public ModelAndView searchReceiptGet(HttpServletRequest httpServletRequest, ModelAndView mv /*ModelMap model*/) throws ApplicationException {
+		UserDetails loggedInUser = sessionUtil.getLoggedInUser(httpServletRequest);
 		mv.setViewName(RECEIPT_SEARCH);
+		Set<ReceiptObject> allReceipts = receiptService.getAllReceiptByUser(loggedInUser.getId());
+		mv.getModel().put("allReceipts", allReceipts);
+		return mv;
+	}
+	
+	@RequestMapping(value="/searchReceiptById", method = RequestMethod.GET)
+	public ModelAndView searchReceiptByIdInRequest(@RequestParam String receiptId, HttpServletRequest httpServletRequest, ModelAndView mv /*ModelMap model*/) throws ApplicationException {
+		/*ReceiptObject receiptObj = new ReceiptObject();
+		receiptObj.setReceiptId(receiptId);
+		return searchReceiptPost(receiptObj, result, httpServletRequest, mv);*/
+		UserDetails loggedInUser = sessionUtil.getLoggedInUser(httpServletRequest);
+		ReceiptObject receipt = receiptService.findReceipt(receiptId);
+		if(receipt == null){
+			logger.info("Invalid Receipt Id: " + receiptId + " by user: " + loggedInUser.getUsername());
+			mv.setViewName(UNAUTHORIZED_JSP);
+			return mv;
+		}
+		createReceiptViewModel(mv, receipt, httpServletRequest);
 		return mv;
 	}
 	
@@ -108,6 +129,30 @@ public class ReceiptController {
 			logger.error("Error retrieving receipt : " + result.getAllErrors());
 			 return mv;
 	    }
+		/*ReceiptViewDto receiptView = new ReceiptViewDto();		
+		receiptView.setReceipt(receipt);
+		if(loggedInUser.getUserType() == UserType.LAB && 
+				!receipt.getRelatedUsers().contains(loggedInUser)){
+			receiptView.setCurrentLab(loggedInUser);
+		}
+		receiptView.getTestList().addAll(receipt.getLabTestDoneObject());
+		receiptView.setTestList(receiptView.getTestList()); //TODO why ?
+		mv.getModel().put("receiptView", receiptView);
+		List<LabTestAvailablePrice> availableTests = labTestService.getAvailableTestsInLab(loggedInUser.getId());
+		//List<LabTestDetailsDto> allTests = labTestService.getAllAvailableTests();
+		LabTestUtils.putAvailableTestsInModel(mv, availableTests);
+		sessionUtil.removeAttribute(httpServletRequest, "labTests");
+		mv.getModel().put("labTests", receiptView);
+		logger.info("Found Receipt: " + receipt.getReceiptId() + " requestby User: " + loggedInUser.getUsername());
+		mv.getModel().put("showTestList", 1);
+		mv.getModel().put("buildResult", 1);
+		mv.setViewName(RECEIPT_VIEW_JSP);*/
+		createReceiptViewModel(mv, receipt, httpServletRequest);
+		return mv;
+	}
+	
+	private void createReceiptViewModel(ModelAndView mv, ReceiptObject receipt, HttpServletRequest httpServletRequest){
+		UserDetails loggedInUser = sessionUtil.getLoggedInUser(httpServletRequest);
 		ReceiptViewDto receiptView = new ReceiptViewDto();		
 		receiptView.setReceipt(receipt);
 		if(loggedInUser.getUserType() == UserType.LAB && 
@@ -126,7 +171,6 @@ public class ReceiptController {
 		mv.getModel().put("showTestList", 1);
 		mv.getModel().put("buildResult", 1);
 		mv.setViewName(RECEIPT_VIEW_JSP);
-		return mv;
 	}
 	
 	

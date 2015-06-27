@@ -1,6 +1,7 @@
 package com.diaghealth.services;
 
 import java.util.Date;
+import java.util.Set;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.time.DateUtils;
@@ -55,6 +56,10 @@ public class ReceiptService {
 	
 	public boolean setValidity(Long id, Date date){
 		return receiptRepo.setValidity(id, date) != null;
+	}
+	
+	public Set<ReceiptObject> getAllReceiptByUser(Long id){
+		return receiptRepo.getAllReceiptByUserId(id);
 	}
 
 }
