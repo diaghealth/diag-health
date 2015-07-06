@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.AutoPopulatingList;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,10 +34,12 @@ import com.diaghealth.services.LabTestService;
 import com.diaghealth.services.ReceiptService;
 import com.diaghealth.services.SearchService;
 import com.diaghealth.services.UserRegisterService;
+import com.diaghealth.util.DateUtilCore;
 import com.diaghealth.utils.UserType;
 import com.diaghealth.web.utils.LabTestUtils;
 import com.diaghealth.web.utils.ModelBuilder;
 import com.diaghealth.web.utils.SessionUtil;
+import com.google.gdata.util.common.base.StringUtil;
 
 @Controller
 public class ReceiptController {
@@ -89,13 +92,27 @@ public class ReceiptController {
 		return mv;
 	}
 	
+	/*
+	 * Input parameters - For valid receiptId, Long id is not required
+	 * 					  For DUMMY recieptId, Long id is required
+	 */
 	@RequestMapping(value="/searchReceiptById", method = RequestMethod.GET)
-	public ModelAndView searchReceiptByIdInRequest(@RequestParam String receiptId, HttpServletRequest httpServletRequest, ModelAndView mv /*ModelMap model*/) throws ApplicationException {
-		/*ReceiptObject receiptObj = new ReceiptObject();
-		receiptObj.setReceiptId(receiptId);
-		return searchReceiptPost(receiptObj, result, httpServletRequest, mv);*/
+	public ModelAndView searchReceiptByIdInRequest(@RequestParam String receiptId, @RequestParam Long id, HttpServletRequest httpServletRequest, ModelAndView mv /*ModelMap model*/) throws ApplicationException {
+		
 		UserDetails loggedInUser = sessionUtil.getLoggedInUser(httpServletRequest);
-		ReceiptObject receipt = receiptService.findReceipt(receiptId);
+		ReceiptObject receipt = new ReceiptObject();
+		
+		if(!receiptId.equals("DUMMY")){
+			receipt = receiptService.findReceipt(receiptId);
+		} else {
+			receipt.setSubject(searchService.findById(id));
+			Set<UserDetails> relatedUsers = new HashSet<UserDetails>();
+			receipt.setReceiptId(receiptService.getRandomUniqueString());
+			relatedUsers.add(loggedInUser);
+			receipt.setRelatedUsers(relatedUsers);
+			receiptService.save(receipt);
+		}
+		
 		if(receipt == null){
 			logger.info("Invalid Receipt Id: " + receiptId + " by user: " + loggedInUser.getUsername());
 			mv.setViewName(UNAUTHORIZED_JSP);
@@ -118,7 +135,7 @@ public class ReceiptController {
 			logger.info("Invalid Receipt Id: " + receiptObj.getReceiptId() + " by user: " + loggedInUser.getUsername());
 			isInvalid = true;
 		}
-		else if(receipt.getValidTill() != null && new Date().compareTo(receipt.getValidTill()) > 0){
+		else if(receipt.getValidTill() != null && DateUtilCore.getCurrentDateIST().compareTo(receipt.getValidTill()) > 0){
 			//mv.getModel().put("errorMessage", "Receipt has expired");
 			result.reject("receipt.expired", "Receipt has expired");
 			logger.info("Expired Receipt: " + receipt.getReceiptId() + " Expiry: " + receipt.getValidTill() + 
@@ -159,7 +176,8 @@ public class ReceiptController {
 				!receipt.getRelatedUsers().contains(loggedInUser)){
 			receiptView.setCurrentLab(loggedInUser);
 		}
-		receiptView.getTestList().addAll(receipt.getLabTestDoneObject());
+		if(receipt.getLabTestDoneObject() != null)
+			receiptView.getTestList().addAll(receipt.getLabTestDoneObject());
 		receiptView.setTestList(receiptView.getTestList()); //TODO why ?
 		mv.getModel().put("receiptView", receiptView);
 		List<LabTestAvailablePrice> availableTests = labTestService.getAvailableTestsInLab(loggedInUser.getId());
@@ -178,8 +196,11 @@ public class ReceiptController {
 	public ModelAndView saveReceiptAndTestDetails(@Valid @ModelAttribute ReceiptViewDto receiptView, BindingResult result, HttpServletRequest httpServletRequest, ModelAndView mv /*ModelMap model*/) throws ApplicationException {
 		UserDetails loggedInUser = sessionUtil.getLoggedInUser(httpServletRequest);
 		//Save Receipt
-		ReceiptObject receiptObjDto = receiptService.findReceipt(receiptView.getReceipt().getId());
-		receiptObjDto.setValidTill(DateUtils.addMonths(new Date(),1)); //Set Validity of 1 month
+		ReceiptObject receiptObjDto = receiptView.getReceipt();
+		if(receiptView.getReceipt().getId() != null)
+			receiptObjDto = receiptService.findReceipt(receiptView.getReceipt().getId());
+		
+		receiptObjDto.setValidTill(DateUtils.addMonths(DateUtilCore.getCurrentDateIST(),1)); //Set Validity of 1 month
 		receiptObjDto.addRelatedUsers(loggedInUser);
 		
 		
@@ -193,7 +214,7 @@ public class ReceiptController {
 		for(LabTestDoneObject test: receiptView.getTestList()){
 			
 			if(test.getDateCreated() == null){
-				test.setDateCreated(new Date());
+				test.setDateCreated(DateUtilCore.getCurrentDateIST());
 				test.setCreatorId(loggedInUser.getId());				
 			}
 			
@@ -260,7 +281,7 @@ public class ReceiptController {
 	private boolean hasReports(ReceiptViewDto receiptView){
 		int testResultCount = 0;
 		for(LabTestDoneObject test: receiptView.getReceipt().getLabTestDoneObject()){
-			if(test.getResultValue() != 0.0){ 
+			if(!StringUtils.isEmpty(test.getResultValue())){ 
 				testResultCount++;
 			}
 		}
@@ -300,13 +321,13 @@ public class ReceiptController {
 		report.append("<br>");
 		//table
 		report.append("<table border=1 width=100%>");
-		report.append("<tr><th>Test Name</th><th>Result</th><th>Range</th><th>Date</th><tr>");
+		report.append("<tr><th>Test Name</th><th>Result</th><th>Range</th><th>Comments</th><th>Date</th><tr>");
 		for(LabTestDoneObject test: receiptView.getReceipt().getLabTestDoneObject()){			
 			report.append("<tr>");
 			report.append("<td>");
 			report.append(test.getName());
 			report.append("</td>");
-			if(test.getResultValue() < test.getRefLower() || test.getResultValue() > test.getRefUpper())
+			if(!isResultWithinRange(test))
 				report.append("<td style='color: red;	font-weight: bold'>");
 			else
 				report.append("<td>");
@@ -314,6 +335,9 @@ public class ReceiptController {
 			report.append("</td>");
 			report.append("<td>");
 			report.append(test.getRefLower() + " - " + test.getRefUpper() + " " + test.getUnit());
+			report.append("</td>");
+			report.append("<td>");
+			report.append(test.getComments());
 			report.append("</td>");
 			report.append("<td>");
 			report.append(test.getDateCreated());
@@ -326,6 +350,20 @@ public class ReceiptController {
 		report.append("</html>");
 		
 		return report.toString();
+	}
+	
+	public boolean isResultWithinRange(LabTestDoneObject test){
+		if(test.getRefLower() < test.getRefUpper() && !StringUtil.isEmpty(test.getUnit())){			
+			try{
+				float resultValue = Float.parseFloat(test.getResultValue());
+				if(resultValue < test.getRefLower() || resultValue > test.getRefUpper()){
+					return false;
+				}
+			} catch (NumberFormatException e) {
+			    logger.error("Result is not a number : " + test.getResultValue());
+			}
+		}
+		return true;
 	}
 
 

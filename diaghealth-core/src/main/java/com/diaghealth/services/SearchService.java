@@ -37,8 +37,8 @@ public class SearchService {
 		return userRepoService.getActualObjectByIdType(match.getId(), match.getUserType());
 	}
 	
-	public boolean userExists(UserDetails user){
-		return searchRepo.findByUsername(user.getUsername()) != null;
+	public UserDetails userExists(UserDetails user){
+		return searchRepo.findByUsername(user.getUsername());
 	}
 	
 	public Set<UserDetails> searchUsers(SearchViewDto searchObject){

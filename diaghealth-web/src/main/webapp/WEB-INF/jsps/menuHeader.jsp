@@ -80,6 +80,9 @@
     </c:otherwise>
 </c:choose>
 </c:if>
+<c:if test="${userDetails.username.equals('diaghealth') || userDetails.username.equals('admin')}">
+	<li><a href="addLabTestType">Add Base Tests</a></li> 
+</c:if>
 </ul>
 </nav>
 </div>

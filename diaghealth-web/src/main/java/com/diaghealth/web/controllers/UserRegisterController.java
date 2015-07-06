@@ -1,7 +1,9 @@
 package com.diaghealth.web.controllers;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -25,6 +27,7 @@ import com.diaghealth.nodes.user.UserDetails;
 import com.diaghealth.services.SearchService;
 import com.diaghealth.services.UserRegisterService;
 import com.diaghealth.services.UserRepositoryService;
+import com.diaghealth.util.DateUtilCore;
 import com.diaghealth.utils.UserType;
 import com.diaghealth.web.utils.ModelBuilder;
 import com.diaghealth.web.utils.SessionUtil;
@@ -86,8 +89,9 @@ public class UserRegisterController {
 	public ModelAndView loginDetails( @Valid @ModelAttribute("detailsForm") UserDetails detailsForm,
             BindingResult result, HttpServletRequest httpServletRequest, ModelAndView mv) throws ApplicationException {
 		
-		UserDetails loggedInUser = sessionUtil.getLoggedInUser(httpServletRequest);
-		mv.setViewName(USER_REGISTER_JSP);
+		UserDetails loggedInUser = sessionUtil.getLoggedInUser(httpServletRequest);		
+		String displayPage = USER_REGISTER_JSP;
+		mv.setViewName(displayPage);
 		 if (result.hasErrors()) {	
 			 logger.error("User Register Error: " + result.getAllErrors());
 			 return mv;
@@ -115,17 +119,23 @@ public class UserRegisterController {
 			 return mv;
 		 }
 		 
-		 boolean userExists = searchService.userExists(detailsForm);
-		 if(userExists){
-			 result.addError(new ObjectError("UserNameExists", "User Name Already Exists"));
+		 UserDetails userExists = searchService.userExists(detailsForm);
+		 if(userExists != null){
+			 //result.addError(new ObjectError("UserNameExists", "User Name Already Exists"));
 			 logger.error("User already exists: " + detailsForm.getUsername());
+			 Set<UserDetails> userList = new HashSet<UserDetails>();
+			 userList.add(userExists);
+			 new ModelBuilder().buildUserListModel(loggedInUser, mv, detailsForm.getUserType(), userList);
+			 mv.getModel().put(USER_LIST_ATTR, loggedInUser.getRelatedList());
+			 displayPage = USERS_SHOW_JSP;
+			 mv.setViewName(displayPage);
 			 return mv;
 		 }
 		 boolean userSaved = false;
 				 
-		 String displayPage = USER_REGISTER_JSP;
+		 
 		 detailsForm = UserRepositoryService.getNewUserNode(detailsForm);
-		 detailsForm.setDateCreated(new Date());
+		 detailsForm.setDateCreated(DateUtilCore.getCurrentDateIST());
 		 if(loggedInUser != null){ //user already logged in and registering new user
 			 //set relation between logged in user and new registered user
 			 logger.info("Logged in username: " + loggedInUser.getUsername() + 
@@ -135,8 +145,10 @@ public class UserRegisterController {
 			 displayPage = USERS_SHOW_JSP;			 
 			 detailsForm.setCreatorId(loggedInUser.getId());
 			 loggedInUser.addRelated(detailsForm);
-			 userSaved = userRegisterService.saveDetails(loggedInUser, null);		
-			 new ModelBuilder().buildUserListModel(loggedInUser, mv, detailsForm.getUserType(), loggedInUser.getRelatedList());
+			 userSaved = userRegisterService.saveDetails(loggedInUser, null);	
+			 Set<UserDetails> userList = new HashSet<UserDetails>();
+			 userList.add(detailsForm);
+			 new ModelBuilder().buildUserListModel(loggedInUser, mv, detailsForm.getUserType(), userList);
 			 mv.getModel().put(USER_LIST_ATTR, loggedInUser.getRelatedList());
 		 } else {
 			 logger.info("Registering new username: " + detailsForm.getUsername() + " type: " + detailsForm.getUserType());

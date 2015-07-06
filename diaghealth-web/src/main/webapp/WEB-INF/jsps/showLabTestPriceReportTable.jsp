@@ -49,7 +49,7 @@ function deleteRow(obj){
 <c:if test="${not empty buildResult}">
 <th>Result</th>
 </c:if>
-<th>Lower Ref</th><th>Upper Ref</th><th>Unit</th>
+<th>Lower Ref</th><th>Upper Ref</th><th>Unit</th><th>Comments</th>
 <th>Date</th>
 <th>Delete</th>
 
@@ -75,7 +75,7 @@ function deleteRow(obj){
 		<c:choose>
 		<c:when test="${not empty buildResult}">				
 			<c:choose>
-				<c:when test="${(test.resultValue lt test.refLower) || (test.resultValue gt test.refUpper)}">
+				<c:when test="${(test.refLower lt test.refUpper) && ((test.resultValue lt test.refLower) || (test.resultValue gt test.refUpper))}">
 					<td class="error">						
 				</c:when>
 				<c:otherwise>
@@ -94,6 +94,9 @@ function deleteRow(obj){
 		</td>
 		<td>
 			<input name='testList[${status.index}].unit' readonly='readonly' value='${test.unit}' class='unit'/>
+		</td>	
+		<td>
+			<input name='testList[${status.index}].comments' readonly='readonly' value='${test.comments}' class='unit'/>
 		</td>	
 		<td>
 			<fmt:formatDate value="${test.dateCreated}" var="dateString" pattern="dd-MMM-yyyy HH:mm" />
@@ -122,7 +125,7 @@ function deleteRow(obj){
 <c:if test="${not empty buildResult}">
 <th>Result</th>
 </c:if>
-<th>Lower Ref</th><th>Upper Ref</th><th>Unit</th>
+<th>Lower Ref</th><th>Upper Ref</th><th>Unit</th><th>Comments</th>
 </tr>
 <tr>
 <td><select id="testType" size="1">
@@ -153,12 +156,13 @@ function deleteRow(obj){
 		<td>
 	</c:otherwise>
 </c:choose>
-<input size="30" type="text" id="testResultValue" name="resultValue" value="0.0"/></td>
+<input size="30" type="text" id="testResultValue" name="resultValue" value=""/></td>
 </c:when>
 </c:choose>
 <td><input size="30" type="text" id="testRefLower" readonly='readonly' name="refLower" value="0.0"/></td>
 <td><input size="30" type="text" id="testRefUpper" readonly='readonly' name="refUpper" value="0.0"/></td>
-<td><input size="30" type="text" id="testUnit" readonly='readonly' name="unit" value="0.0"/></td>
+<td><input size="30" type="text" id="testUnit" readonly='readonly' name="unit" value=""/></td>
+<td><input size="30" type="text" id="testComments" readonly='readonly' name="comments" value="0.0"/></td>
 </tr>
 </table>
 <c:choose>

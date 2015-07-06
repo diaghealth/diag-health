@@ -84,7 +84,7 @@ public class MailSenderUtil {
 	}
 	
 	public void sendMail(){
-		//try{
+		try{
 		MimeMessagePreparator mimeMessagePrep = new MimeMessagePreparator() {
 			public void prepare(MimeMessage mimeMessage) throws Exception {
 				mimeMessage.setRecipients(Message.RecipientType.TO, getInternetAddressFromMailId());
@@ -106,10 +106,10 @@ public class MailSenderUtil {
 		mailSender.send(mimeMessagePrep);
 		reset();
 		logger.debug("Mail sent");
-		/*}catch(Exception e){
-			logger.error("Canot sent mail: Exception" + e.getMessage());
+		}catch(Exception e){
+			logger.error("Cannot send mail: Exception" + e.getMessage());
 			e.printStackTrace();
-		}*/
+		}
 	}
 	
 	public void reset(){

@@ -39,7 +39,7 @@
 	<%-- <c:if test="${fn:length(allReceipts) > 0}"> --%>
 	<c:forEach var="receipt" items="${allReceipts}" varStatus="status">
 		<tr>
-		<td><a href="searchReceiptById?receiptId=${receipt.receiptId}">${receipt.receiptId}</a></td>
+		<td><a href="searchReceiptById?receiptId=${receipt.receiptId}&id=0">${receipt.receiptId}</a></td>
 		<td>${receipt.subject.firstname} ${receipt.subject.lastname}</td>
 		<td>${receipt.dateCreated}</td>
 		</tr>

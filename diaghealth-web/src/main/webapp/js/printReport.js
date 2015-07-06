@@ -116,7 +116,7 @@ reportContent = function() {
 				"<td>" +  $('td:eq(5) input', this).val() + " - " +  $('td:eq(6) input', this).val() + " " +
 				$('td:eq(7) input', this).val() + "</td>" + // lower - upper unit
 				
-				"<td>" +  $('td:eq(8) input', this).val() + "</td>" + //date
+				"<td>" +  $('td:eq(9) input', this).val() + "</td>" + //date
 				"</tr>");
 		}
 	});
@@ -137,7 +137,7 @@ receiptPriceContent = function() {
 				
 				"<td>" +  $('td:eq(3) input', this).val() + "</td>" + //discount
 				
-				"<td>" +  $('td:eq(8) input', this).val() + "</td>" + //date
+				"<td>" +  $('td:eq(9) input', this).val() + "</td>" + //date
 				"</tr>");
 		}
 	});

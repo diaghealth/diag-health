@@ -17,6 +17,7 @@
 <th>Reference Lower</th>
 <th>Reference Upper</th>
 <th>Unit</th>
+<th>Comments</th>
 </tr>
 <c:forEach var="test" items="${labTestExistList}" varStatus="status">
 	<tr>
@@ -25,6 +26,7 @@
 	<td>${test.refLower}</td>
 	<td>${test.refUpper}</td>
 	<td>${test.unit}</td>
+	<td>${test.comments}</td>
 	</tr>
 </c:forEach>
 </table>
@@ -38,13 +40,15 @@
 <th>Reference Lower</th>
 <th>Reference Upper</th>
 <th>Unit</th>
+<th>Comments</th>
 </tr>
 <tr>
 <td><input type="text" name="type"/></td>
 <td><input type="text" name="name"/></td>
-<td><input type="text" name="refLower"/></td>
-<td><input type="text" name="refUpper"/></td>
+<td><input type="text" name="refLower" value="0.0"/></td>
+<td><input type="text" name="refUpper" value="0.0"/></td>
 <td><input type="text" name="unit"/></td>
+<td><input type="text" name="comments"/></td>
 </tr>
 </table>
 <input name="submit" type="submit" id="submitButton" class="button" value="Save" />

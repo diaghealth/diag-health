@@ -18,6 +18,7 @@ public class LabTestDetails {
 	private float refLower;
 	private float refUpper;
 	private String unit;
+	private String comments;
 	
 	public String getType() {
 		return type;
@@ -82,6 +83,12 @@ public class LabTestDetails {
 	}
 	public void setUnit(String unit) {
 		this.unit = unit;
+	}
+	public String getComments() {
+		return comments;
+	}
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 
 }

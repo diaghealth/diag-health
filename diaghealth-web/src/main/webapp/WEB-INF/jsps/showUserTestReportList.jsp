@@ -40,6 +40,7 @@ value="${toDate}"/></div></td>
 <th>Lower Ref</th>
 <th>Upper Ref</th>
 <th>Unit</th>
+<th>Comments</th>
 <th>Date</th>
 </tr>
 </thead>
@@ -48,7 +49,7 @@ value="${toDate}"/></div></td>
 	<tr>
 	<td>${test.name}</td>
 	<c:choose>
-	<c:when test="${(test.resultValue lt test.refLower) || (test.resultValue gt test.refUpper)}">
+	<c:when test="${(test.refLower lt test.refUpper) && ((test.resultValue lt test.refLower) || (test.resultValue gt test.refUpper))}">
 		<td class="error">${test.resultValue}</td>
 	</c:when>
 	<c:otherwise>
@@ -58,6 +59,7 @@ value="${toDate}"/></div></td>
 	<td>${test.refLower}</td>
 	<td>${test.refUpper}</td>
 	<td>${test.unit}</td>
+	<td>${test.comments}</td>
 	<td><fmt:formatDate value="${test.dateCreated}" pattern="dd-MMM-yyyy HH:mm"/></td>
 	</tr>
 </c:forEach>

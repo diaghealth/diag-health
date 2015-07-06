@@ -29,6 +29,7 @@ $(document).ready( function() {
 				"<td><input name='testList[" + testCount + "].refLower' readonly='readonly' value='" + $('#testRefLower').val()+ "' class='refLower'/></td>" +
 				"<td><input name='testList[" + testCount + "].refUpper' readonly='readonly' value='" + $('#testRefUpper').val()+ "' class='refUpper'/></td>" +
 				"<td><input name='testList[" + testCount + "].unit' readonly='readonly' value='" + $('#testUnit').val()+ "' class='unit'/></td>" +
+				"<td><input name='testList[" + testCount + "].comments' readonly='readonly' value='" + $('#testComments').val()+ "' class='comments'/></td>" +
 				"<td><button type='button' class='deleteButton' onclick='deleteRow(this)'>Delete</button></td>"
 				"</tr>";
 		testCount++;
@@ -46,6 +47,7 @@ $(document).ready( function() {
 				"<td><input name='testList[" + testCount + "].refLower' readonly='readonly' value='" + $('#testRefLower').val()+ "' class='refLower'/></td>" +
 				"<td><input name='testList[" + testCount + "].refUpper' readonly='readonly' value='" + $('#testRefUpper').val()+ "' class='refUpper'/></td>" +
 				"<td><input name='testList[" + testCount + "].unit' readonly='readonly' value='" + $('#testUnit').val()+ "' class='unit'/></td>" +
+				"<td><input name='testList[" + testCount + "].comments' readonly='readonly' value='" + $('#testComments').val()+ "' class='comments'/></td>" +
 				"<td><input name='testList[" + testCount + "].date' readonly='readonly' value='" + currentDate + "' class='dateCreated'/></td>" +
 				"<td><button type='button' class='deleteButton' onclick='deleteRow(this)'>Delete</button></td>"
 				"</tr>";
@@ -81,6 +83,8 @@ function setPriceDiscountReport(){
 		$("#testRefUpper").val(testHashMap[opt][name].refUpper);
 	if(!(testHashMap[opt][name].unit === undefined))
 		$("#testUnit").val(testHashMap[opt][name].unit);
+	if(!(testHashMap[opt][name].comments === undefined))
+		$("#testComments").val(testHashMap[opt][name].comments);
 }
 
 

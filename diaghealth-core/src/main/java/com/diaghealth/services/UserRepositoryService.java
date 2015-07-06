@@ -18,6 +18,7 @@ import com.diaghealth.repository.DoctorRepo;
 import com.diaghealth.repository.LabRepo;
 import com.diaghealth.repository.PatientRepo;
 import com.diaghealth.repository.UserDetailsRepo;
+import com.diaghealth.util.DateUtilCore;
 import com.diaghealth.utils.UserType;
 
 @Component
@@ -38,11 +39,11 @@ public class UserRepositoryService {
 	
 	public static void setDateTime(UserDetails user, Long id){
 		if(user.getDateCreated() == null){
-			user.setDateCreated(new Date());
+			user.setDateCreated(DateUtilCore.getCurrentDateIST());
 			if(id != null)
 				user.setCreatorId(id);
 		} else {
-			user.setDateModified(new Date());
+			user.setDateModified(DateUtilCore.getCurrentDateIST());
 			if(id != null)
 				user.setModifierId(id);
 		}

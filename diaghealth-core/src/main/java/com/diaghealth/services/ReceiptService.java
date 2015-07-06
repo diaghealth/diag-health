@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.diaghealth.nodes.ReceiptObject;
 import com.diaghealth.nodes.user.UserDetails;
 import com.diaghealth.repository.ReceiptRepo;
+import com.diaghealth.util.DateUtilCore;
 
 @Component
 public class ReceiptService {
@@ -26,13 +27,13 @@ public class ReceiptService {
 	
 	public ReceiptObject createReceipt(UserDetails creator, UserDetails subjectUser){
 		ReceiptObject receipt = new ReceiptObject();
-		String random = RandomStringUtils.randomAlphanumeric(MAX_RECEIPT_ID_LENGTH).toUpperCase();
+		/*String random = RandomStringUtils.randomAlphanumeric(MAX_RECEIPT_ID_LENGTH).toUpperCase();
 		while(receiptRepo.findById(random) != null){
 			random = RandomStringUtils.randomAlphanumeric(MAX_RECEIPT_ID_LENGTH).toUpperCase();
-		}
-		receipt.setReceiptId(random);
-		receipt.setDateCreated(new Date());
-		receipt.setValidTill(DateUtils.addDays(new Date(), validity));		
+		}*/
+		receipt.setReceiptId(getRandomUniqueString());
+		receipt.setDateCreated(DateUtilCore.getCurrentDateIST());
+		receipt.setValidTill(DateUtils.addDays(DateUtilCore.getCurrentDateIST(), validity));		
 		receipt.setCreatorId(creator.getId());
 		receipt.addRelatedUsers(creator);
 		receipt.setSubject(subjectUser);
@@ -40,6 +41,14 @@ public class ReceiptService {
 		logger.debug("Created New Receipt: " + receipt);
 		return receipt;		
 	}	
+	
+	public String getRandomUniqueString(){
+		String random = RandomStringUtils.randomAlphanumeric(MAX_RECEIPT_ID_LENGTH).toUpperCase();
+		while(receiptRepo.findById(random) != null){
+			random = RandomStringUtils.randomAlphanumeric(MAX_RECEIPT_ID_LENGTH).toUpperCase();
+		}
+		return random;
+	}
 	
 	public ReceiptObject save(ReceiptObject obj){
 		logger.debug("Saving receipt " + obj);

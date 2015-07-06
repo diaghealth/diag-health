@@ -27,6 +27,9 @@
 <th>Tests Report</th>
 </c:if>
 </c:if>
+<c:if test="${(userType eq 'LAB') && (displayUserType eq 'PATIENT')}">
+<th>Add Tests</th>
+</c:if>
 <th>Receipt</th>
 </tr>
 <c:forEach var="users" items="${userList}" varStatus="status">
@@ -46,6 +49,9 @@
 <c:if test="${displayUserType eq 'PATIENT'}">
 <td><a href="showReport?id=${users.id}&userType=${users.userType}">Tests Report</a></td>
 </c:if>
+</c:if>
+<c:if test="${(userType eq 'LAB') && (displayUserType eq 'PATIENT')}">
+<td><a href="searchReceiptById?receiptId=DUMMY&id=${users.id}">Add Tests</a></td>
 </c:if>
 <c:if test="${not empty buildReceipt}">
 <td><a href="buildReceipt?id=${users.id}">Generate Receipt</a></td>

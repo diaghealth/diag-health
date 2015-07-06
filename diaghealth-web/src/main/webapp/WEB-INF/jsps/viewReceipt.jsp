@@ -26,6 +26,7 @@ ${receiptView.receipt.receiptId}
 <div id="receiptUserDetails">
 <c:if test="${not empty receiptView.receipt.subject.firstname}">
 <input type="hidden" name="receipt.subject.firstname" value="${receiptView.receipt.subject.firstname}"/>
+<input type="hidden" name="receipt.subject.id" value="${receiptView.receipt.subject.id}"/>
 <h3>
 ${receiptView.receipt.subject.userType}: ${receiptView.receipt.subject.firstname}
 </h3>
