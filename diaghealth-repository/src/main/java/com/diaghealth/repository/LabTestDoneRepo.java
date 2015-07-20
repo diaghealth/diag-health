@@ -39,4 +39,10 @@ public interface LabTestDoneRepo extends GraphRepository<LabTestDoneObject>{
 			+ "(m)-[:TEST_DONE]-(t{__type__:'LabTestObject'})-[:TEST_DONE]-(n) where t.dateCreated >= {2}"
 			+ " and t.dateCreated <= {3} return t")
 	public Set<LabTestDoneObject> findTestsByIdAndDate(Long id1, Long id2, Long from, Long to);
+	
+	@Query("start m=node({0})"
+			+ "(m)-[:TEST_DONE]-(t{__type__:'LabTestObject'})-[:TEST_DONE]-(n{__type__:'User') where t.dateCreated >= {2}"
+			+ " and t.dateCreated <= {3} return t")
+	public Set<LabTestDoneObject> findTestByRelatedUsers(Long id, String name1, String name2, 
+			String name3, String name4, String testType, String testName);
 }

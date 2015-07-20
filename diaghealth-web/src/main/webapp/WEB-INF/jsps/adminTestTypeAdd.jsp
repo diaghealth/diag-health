@@ -7,6 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" type="text/css" href="css/commonTable.css">
+<jsp:include page="menuHeader.jsp" />
 <title>Add Test For Lab (Admin)</title>
 </head>
 <body>
@@ -16,6 +17,7 @@
 <th>Test Name</th>
 <th>Reference Lower</th>
 <th>Reference Upper</th>
+<th>Gender</th>
 <th>Unit</th>
 <th>Comments</th>
 </tr>
@@ -25,6 +27,7 @@
 	<td>${test.name}</td>
 	<td>${test.refLower}</td>
 	<td>${test.refUpper}</td>
+	<td>${test.userGender}</td>
 	<td>${test.unit}</td>
 	<td>${test.comments}</td>
 	</tr>
@@ -39,6 +42,7 @@
 <th>Test Name</th>
 <th>Reference Lower</th>
 <th>Reference Upper</th>
+<th>Gender</th>
 <th>Unit</th>
 <th>Comments</th>
 </tr>
@@ -47,6 +51,18 @@
 <td><input type="text" name="name"/></td>
 <td><input type="text" name="refLower" value="0.0"/></td>
 <td><input type="text" name="refUpper" value="0.0"/></td>
+<td>
+<form:select id="userGender" path="userGender" size="1" name="userGender">
+					  <c:forEach items="${userGender}" var="userGender">
+				          <form:option value="${userGender}">${userGender}</form:option>
+				        </c:forEach>
+					</form:select>
+					<!-- <select name="userGender">
+		<option value="MALE">MALE</option>
+		<option value="FEMALE">FEMALE</option>
+		<option value="NA">NA</option>
+	</select> -->
+</td>
 <td><input type="text" name="unit"/></td>
 <td><input type="text" name="comments"/></td>
 </tr>

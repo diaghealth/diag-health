@@ -14,6 +14,7 @@
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>	
 	<script src="js/locationFinder.js"></script> 
+	<script src="js/registerUserSelection.js"></script> 
 	<jsp:include page="menuHeader.jsp" />
 </head>
 
@@ -34,6 +35,16 @@
 					<form:select id="userType" path="userType" size="1">
 					  <c:forEach items="${userTypes}" var="userType">
 				          <form:option value="${userType}">${userType}</form:option>
+				        </c:forEach>
+					</form:select>
+				</td>
+			</tr>
+			<tr>
+				<td class="labelField" width="33%">Gender</td>
+				<td>
+					<form:select id="userGender" path="userGender" size="1">
+					  <c:forEach items="${userGender}" var="gender">
+				          <form:option value="${gender}">${gender}</form:option>
 				        </c:forEach>
 					</form:select>
 				</td>

@@ -22,6 +22,15 @@ public class Lab extends UserDetails {
 		super(user);
 	}
 	
+	public Lab(Set<LabTestAvailablePrice> testPriceList){
+		this.testPriceList = testPriceList;		
+	}
+	
+	public Lab(UserDetails user, Set<LabTestAvailablePrice> testPriceList){
+		super(user);
+		this.testPriceList = testPriceList;				
+	}
+	
     
 	@RelatedTo(type="TEST_AVAILABLE_PRICE", direction=Direction.BOTH)
     @Fetch

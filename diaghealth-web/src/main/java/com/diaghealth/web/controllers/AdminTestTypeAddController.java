@@ -18,12 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.diaghealth.models.SearchViewDto;
+import com.diaghealth.models.SearchUserViewDto;
 import com.diaghealth.models.labtest.LabTestListViewDto;
 import com.diaghealth.nodes.labtest.LabTestDetails;
 import com.diaghealth.nodes.user.UserDetails;
 import com.diaghealth.repository.LabTestDetailsRepo;
 import com.diaghealth.services.LabTestDetailsService;
+import com.diaghealth.utils.UserGender;
 import com.diaghealth.utils.UserType;
 import com.diaghealth.web.utils.SessionUtil;
 
@@ -40,6 +41,11 @@ public class AdminTestTypeAddController {
 	private String LAB_TEST_ADMIN_JSP;
 	
 	private static Logger logger = LoggerFactory.getLogger(AdminTestTypeAddController.class);
+	
+	@ModelAttribute("userGender")
+    public UserGender[] userGender() {
+        return UserGender.values();
+    }
 	
 	
 	@RequestMapping(value = "/addLabTestType", method = RequestMethod.GET)
@@ -66,7 +72,7 @@ public class AdminTestTypeAddController {
 		//Change to upper case
 		labTest.setName(labTest.getName().toUpperCase());
 		labTest.setType(labTest.getType().toUpperCase());
-		labTest.setUnit(labTest.getUnit().toUpperCase());
+		labTest.setUnit(labTest.getUnit());
 		Set<LabTestDetails> exists = labTestDetailsService.findIfExists(labTest);
 		
 		if(exists != null && exists.size() > 0){

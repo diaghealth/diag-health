@@ -28,7 +28,7 @@ public class LabTestDetailsService {
 	}
 	
 	public Set<LabTestDetails> findIfExists(LabTestDetails test){
-		return labTestDetailsRepo.findByTypeName(test.getType().toUpperCase(), test.getName().toUpperCase());
+		return labTestDetailsRepo.findByTypeNameGender(test.getType().toUpperCase(), test.getName().toUpperCase(), test.getUserGender().toString());
 	}
 	
 	public void deleteTest(LabTestDetails test){

@@ -4,18 +4,20 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
 import com.diaghealth.nodes.BaseNode;
+import com.diaghealth.utils.UserGender;
 
 @NodeEntity
 @TypeAlias("LabTestPrice")
-public class LabTestAvailablePrice extends BaseNode {
+public class LabTestAvailablePrice extends LabTestDetails {
 	
-	private String name;
-	private String type;
+	//private String name;
+	//private String type;
 	private int price;
 	private float discountPercent;
 	private String resultValue;
-	private float refLower;
+	/*private float refLower;
 	private float refUpper;
+	private UserGender userGender;
 	private String unit;
 	private String comments;
 	
@@ -30,7 +32,7 @@ public class LabTestAvailablePrice extends BaseNode {
 	}
 	public void setType(String type) {
 		this.type = type;
-	}
+	}*/
 	public int getPrice() {
 		return price;
 	}
@@ -43,7 +45,7 @@ public class LabTestAvailablePrice extends BaseNode {
 	public void setDiscountPercent(float discountPercent) {
 		this.discountPercent = discountPercent;
 	}	
-	public float getRefLower() {
+	/*public float getRefLower() {
 		return refLower;
 	}
 	public void setRefLower(float refLower) {
@@ -60,21 +62,32 @@ public class LabTestAvailablePrice extends BaseNode {
 	}
 	public void setUnit(String unit) {
 		this.unit = unit;
+	}*/
+	public String getResultValue() {
+		return resultValue;
 	}
-	
-	@Override
-	public String toString() {
-		return "LabTestAvailablePrice [name=" + name + ", type=" + type
-				+ ", price=" + price + ", discountPercent=" + discountPercent
-				+ ", resultValue=" + resultValue + ", refLower=" + refLower
-				+ ", refUpper=" + refUpper + ", unit=" + unit + ", id=" + id
-				+ ", dateCreated=" + dateCreated + "]";
+	public void setResultValue(String resultValue) {
+		this.resultValue = resultValue;
 	}
+	/*public String getComments() {
+		return comments;
+	}
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+	public UserGender getUserGender() {
+		return userGender;
+	}
+	public void setUserGender(UserGender gender) {
+		this.userGender = gender;
+	}*/
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((userGender == null) ? 0 : userGender.hashCode());
 		return result;
 	}
 	@Override
@@ -91,20 +104,15 @@ public class LabTestAvailablePrice extends BaseNode {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (id.intValue() != other.id.intValue())
+		if (userGender != other.userGender)
 			return false;
 		return true;
 	}
-	public String getResultValue() {
-		return resultValue;
-	}
-	public void setResultValue(String resultValue) {
-		this.resultValue = resultValue;
-	}
-	public String getComments() {
-		return comments;
-	}
-	public void setComments(String comments) {
-		this.comments = comments;
+	@Override
+	public String toString() {
+		return "LabTestAvailablePrice [name=" + name + ", price=" + price
+				+ ", resultValue=" + resultValue + ", refLower=" + refLower
+				+ ", refUpper=" + refUpper + ", userGender=" + userGender
+				+ ", unit=" + unit + ", comments=" + comments + "]";
 	}
 }

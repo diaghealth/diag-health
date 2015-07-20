@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.diaghealth.models.SearchViewDto;
+import com.diaghealth.models.SearchUserViewDto;
 import com.diaghealth.nodes.user.UserDetails;
 import com.diaghealth.services.SearchService;
 import com.diaghealth.utils.UserType;
@@ -28,10 +28,10 @@ import com.diaghealth.utils.UserType;
 public class SearchController {
 	
 	private static final String SEARCH_FORM = "searchForm";
-	@Value("${search.jsp}")
-	private String SEARCH_JSP;
-	@Value("${search.results.jsp}")
-	private String SEARCH_RESULTS_JSP;
+	@Value("${search.user.jsp}")
+	private String SEARCH_USER_JSP;
+	@Value("${search.user.results.jsp}")
+	private String SEARCH_USER_RESULTS_JSP;	
 	@Value("${show.userlist.jsp}")
 	private String USERS_SHOW_JSP;
 	@Value("${user.list.attr}")
@@ -49,18 +49,18 @@ public class SearchController {
         return UserType.values();
     }*/
 	
-	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	@RequestMapping(value = "/searchUser", method = RequestMethod.GET)
 	public ModelAndView searchPage(HttpServletRequest httpServletRequest, ModelAndView mv /*ModelMap model*/) throws ApplicationException {
-		SearchViewDto searchForm = new SearchViewDto();
+		SearchUserViewDto searchForm = new SearchUserViewDto();
 		mv.getModel().put(SEARCH_FORM, searchForm);
-		mv.setViewName(SEARCH_JSP);
+		mv.setViewName(SEARCH_USER_JSP);
 		mv.getModel().put("userTypes", UserType.values());
 		return mv;
 		
 	}
 	
-	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public ModelAndView searchResult( @Valid @ModelAttribute("searchForm") SearchViewDto searchForm,
+	@RequestMapping(value = "/searchUser", method = RequestMethod.POST)
+	public ModelAndView searchResult( @Valid @ModelAttribute("searchForm") SearchUserViewDto searchForm,
             BindingResult result, Map<String, Object> model, ModelAndView mv) throws ApplicationException {
 		
 		if (result.hasErrors()) {

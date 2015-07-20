@@ -182,7 +182,8 @@ public class ReceiptController {
 		mv.getModel().put("receiptView", receiptView);
 		List<LabTestAvailablePrice> availableTests = labTestService.getAvailableTestsInLab(loggedInUser.getId());
 		//List<LabTestDetailsDto> allTests = labTestService.getAllAvailableTests();
-		LabTestUtils.putAvailableTestsInModel(mv, availableTests);
+		//LabTestUtils.putAvailableTestsInModel(mv, availableTests);
+		LabTestUtils.putAllTestsInModel(mv, availableTests);
 		sessionUtil.removeAttribute(httpServletRequest, "labTests");
 		mv.getModel().put("labTests", receiptView);
 		logger.info("Found Receipt: " + receipt.getReceiptId() + " requestby User: " + loggedInUser.getUsername());
@@ -263,7 +264,8 @@ public class ReceiptController {
 		new ModelBuilder().buildUserListModel(loggedInUser, mv, subject.getUserType(), users);*/	
 		List<LabTestAvailablePrice> availableTests = labTestService.getAvailableTestsInLab(loggedInUser.getId());
 		//List<LabTestDetailsDto> allTests = labTestService.getAllAvailableTests();
-		LabTestUtils.putAvailableTestsInModel(mv, availableTests);
+		//LabTestUtils.putAvailableTestsInModel(mv, availableTests);
+		LabTestUtils.putAllTestsInModel(mv, availableTests);
 		sessionUtil.removeAttribute(httpServletRequest, "labTests");
 		mv.getModel().put("labTests", receiptView);
 		receiptView.setReceipt(receiptObjDto);
@@ -335,7 +337,7 @@ public class ReceiptController {
 			report.append("</td>");
 			report.append("<td>");
 			report.append(test.getRefLower() + " - " + test.getRefUpper() + " " + test.getUnit());
-			report.append("</td>");
+			report.append("</td>");			
 			report.append("<td>");
 			report.append(test.getComments());
 			report.append("</td>");

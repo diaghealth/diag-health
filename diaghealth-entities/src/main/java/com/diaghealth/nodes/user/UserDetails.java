@@ -22,6 +22,7 @@ import com.diaghealth.nodes.labtest.LabTestDoneObject;
 import com.diaghealth.nodes.validate.Email;
 import com.diaghealth.nodes.validate.PhoneNumber;
 import com.diaghealth.nodes.validate.UserName;
+import com.diaghealth.utils.UserGender;
 import com.diaghealth.utils.UserType;
 
 @NodeEntity
@@ -82,6 +83,7 @@ public class UserDetails extends BaseNode {
     @RelatedTo(type="TEST_DONE", direction=Direction.BOTH)
     //@Fetch
 	private Set<LabTestDoneObject> testDoneList;	
+    private UserGender userGender;
     
     public UserDetails(){
     	
@@ -280,6 +282,12 @@ public class UserDetails extends BaseNode {
 	public void setTestDoneList(Set<LabTestDoneObject> testDoneList) {
 		if(this.testDoneList == null)
 			this.testDoneList = testDoneList;
+	}
+	public UserGender getUserGender() {
+		return userGender;
+	}
+	public void setUserGender(UserGender gender) {
+		this.userGender = gender;
 	}
 	
 		

@@ -18,7 +18,7 @@
 <body onload="initialize()">
 <div class="main">
 <div class="search">
-<form:form action="search" id="searchForm" modelAttribute="searchForm" method="POST">
+<form:form action="searchUser" id="searchForm" modelAttribute="searchForm" method="POST">
 <div id="LoginTable">
 			<h3>User Type</h3>
 			<p></p>

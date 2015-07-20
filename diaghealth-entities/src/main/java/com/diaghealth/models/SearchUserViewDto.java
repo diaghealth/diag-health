@@ -2,7 +2,7 @@ package com.diaghealth.models;
 
 import com.diaghealth.utils.UserType;
 
-public class SearchViewDto extends BaseDto {
+public class SearchUserViewDto extends BaseDto {
 	
 	private UserType userType;
 	private String location;

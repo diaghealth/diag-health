@@ -65,26 +65,44 @@ function onChange(){
 	$testName.find('option').remove();  
 	$.each(testHashMap[opt],function(index, value) 
 	{
-		$testName.append("<option value='" + value.name + "'>" + value.name + "</option>");
+		$testName.append("<option value='" + index + "'>" + index + "</option>");
+	});
+	setGender();
+}
+
+function setGender(){
+	var opt = $("#testType").find('option:selected').val();
+	var testName = $('#testName').find('option:selected').val(); 
+	var $testGender = $('#testGender');
+	$.each(testHashMap[opt][testName],function(index, value) 
+	{
+		if(!(value.gender === undefined))
+			$testGender.append("<option value='" + value.gender + "'>" + value.gender + "</option>");
+		else
+			$testGender.append("<option value='NA'>NA</option>");
 	});
 	setPriceDiscountReport();
 }
 
 function setPriceDiscountReport(){
 	var opt = $("#testType").find('option:selected').val();
-	var name = $("#testName")[0].selectedIndex;
-	if(!(testHashMap[opt][name].price === undefined))
-		$("#testPrice").val(testHashMap[opt][name].price);
-	if(!(testHashMap[opt][name].discountPercent === undefined))
-		$("#testDiscount").val(testHashMap[opt][name].discountPercent);
-	if(!(testHashMap[opt][name].refLower === undefined))
-		$("#testRefLower").val(testHashMap[opt][name].refLower);
-	if(!(testHashMap[opt][name].refUpper === undefined))
-		$("#testRefUpper").val(testHashMap[opt][name].refUpper);
-	if(!(testHashMap[opt][name].unit === undefined))
-		$("#testUnit").val(testHashMap[opt][name].unit);
-	if(!(testHashMap[opt][name].comments === undefined))
-		$("#testComments").val(testHashMap[opt][name].comments);
+	//var name = $("#testName")[0].selectedIndex;
+	var name = $("#testName").find('option:selected').val()
+	var gender = $("#testGender")[0].selectedIndex;
+	if(gender == -1)
+		gender = 0;
+	if(!(testHashMap[opt][name][gender].price === undefined))
+		$("#testPrice").val(testHashMap[opt][name][gender].price);
+	if(!(testHashMap[opt][name][gender].discountPercent === undefined))
+		$("#testDiscount").val(testHashMap[opt][name][gender].discountPercent);
+	if(!(testHashMap[opt][name][gender].refLower === undefined))
+		$("#testRefLower").val(testHashMap[opt][name][gender].refLower);
+	if(!(testHashMap[opt][name][gender].refUpper === undefined))
+		$("#testRefUpper").val(testHashMap[opt][name][gender].refUpper);
+	if(!(testHashMap[opt][name][gender].unit === undefined))
+		$("#testUnit").val(testHashMap[opt][name][gender].unit);
+	if(!(testHashMap[opt][name][gender].comments === undefined))
+		$("#testComments").val(testHashMap[opt][name][gender].comments);
 }
 
 

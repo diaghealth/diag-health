@@ -3,6 +3,7 @@ package com.diaghealth.web.controllers;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,11 +24,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.diaghealth.models.SearchTestViewDto;
 import com.diaghealth.models.labtest.LabTestListViewDto;
 import com.diaghealth.nodes.labtest.LabTestAvailablePrice;
 import com.diaghealth.nodes.labtest.LabTestDetails;
+import com.diaghealth.nodes.labtest.LabTestDoneObject;
 import com.diaghealth.nodes.user.UserDetails;
 import com.diaghealth.services.LabTestService;
+import com.diaghealth.utils.UserGender;
 import com.diaghealth.utils.UserType;
 import com.diaghealth.web.utils.LabTestUtils;
 import com.diaghealth.web.utils.SessionUtil;
@@ -36,21 +40,32 @@ import com.diaghealth.web.utils.SessionUtil;
 @SessionAttributes("labTests")
 public class LabTestController {
 	
-	
+	private static final String SEARCH_FORM = "searchForm";
 	@Value("${lab.tests.jsp}")
 	private String LAB_TESTS_JSP;
+	@Value("${update.lab.tests.jsp}")
+	private String UPDATE_TESTS_JSP;
 	@Value("${unauthorized.jsp}")
 	private String UNAUTHORIZED_JSP;
 	@Value("${welcome.jsp}")
 	private String USER_WELCOME_JSP;
 	@Value("${labtest.row.insert.jsp}")
 	private String LABTEST_ROW_INSRT_JSP;
+	@Value("${search.test.jsp}")
+	private String SEARCH_TEST_JSP;
+	@Value("${search.test.results.jsp}")
+	private String SEARCH_TEST_RESULTS_JSP;
 	@Autowired
 	private LabTestService labTestService;
 	@Autowired
     private SessionUtil sessionUtil;
 	
 	private static Logger logger = LoggerFactory.getLogger(LabTestController.class);
+	
+	@ModelAttribute("userGender")
+    public UserGender[] userGender() {
+        return UserGender.values();
+    }
 	
 	@ModelAttribute("labTests")
 	public LabTestListViewDto getTestList()
@@ -80,7 +95,8 @@ public class LabTestController {
 		//AutoPopulatingList<Integer> deletedIndexList = new AutoPopulatingList<Integer>(Integer.class);
 		testListObject.setDeletedIndexList(new ArrayList<Integer>());
 		mv.getModel().put("labTests", testListObject);
-		mv.setViewName(LAB_TESTS_JSP);
+		//mv.setViewName(LAB_TESTS_JSP);
+		mv.setViewName(UPDATE_TESTS_JSP);
 		logger.info("Populated tests list for user: " + loggedInUser.getUsername());
 		return mv;
 		
@@ -170,6 +186,37 @@ public class LabTestController {
 			}
 		}
 		return false;
+	}
+	
+	@RequestMapping(value = "/searchTests", method = RequestMethod.POST)
+	public ModelAndView searchTestResult( @Valid @ModelAttribute("searchForm") SearchTestViewDto searchForm,
+            BindingResult result, Map<String, Object> model, ModelAndView mv) throws ApplicationException {
+		
+		if (result.hasErrors()) {
+			mv.setViewName(SEARCH_FORM);
+			 return mv;
+	     }
+		
+		Set<LabTestDoneObject> searchResults = labTestService.searchTests(searchForm);
+		
+		if(searchResults == null)
+			searchResults = new HashSet<LabTestDoneObject>(); //Empty set
+		
+		/*mv.getModel().put(USER_LIST_ATTR, searchResults);
+		mv.getModel().put(USER_ADD_ATTR, 1); 
+		mv.setViewName(USERS_SHOW_JSP);*/
+		logger.error("Search Result returned " + searchResults.size() + " users");
+		return mv;
+	}
+		
+		
+	@RequestMapping(value = "/searchTests", method = RequestMethod.GET)
+	public ModelAndView searchTestPage(HttpServletRequest httpServletRequest, ModelAndView mv /*ModelMap model*/) throws ApplicationException {
+		SearchTestViewDto searchForm = new SearchTestViewDto();
+		mv.getModel().put(SEARCH_FORM, searchForm);
+		mv.setViewName(SEARCH_TEST_JSP);
+		mv.getModel().put("userTypes", UserType.values());
+		return mv;
 	}
 	
 	

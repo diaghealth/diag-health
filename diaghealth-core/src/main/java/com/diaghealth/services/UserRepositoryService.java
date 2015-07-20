@@ -1,6 +1,7 @@
 package com.diaghealth.services;
 
 import java.util.Date;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import com.diaghealth.nodes.user.UserDetails;
 import com.diaghealth.repository.ClinicRepo;
 import com.diaghealth.repository.DoctorRepo;
 import com.diaghealth.repository.LabRepo;
+import com.diaghealth.repository.LabTestDetailsRepo;
 import com.diaghealth.repository.PatientRepo;
 import com.diaghealth.repository.UserDetailsRepo;
 import com.diaghealth.util.DateUtilCore;
@@ -34,6 +36,8 @@ public class UserRepositoryService {
 	public PatientRepo patientRepo;
 	@Autowired
 	public UserDetailsRepo userDetailsRepo;
+	@Autowired
+	public static LabTestDetailsRepo labTestDetailsRepo;
 	
 	private static Logger logger = LoggerFactory.getLogger(UserRepositoryService.class);
 	
@@ -56,6 +60,8 @@ public class UserRepositoryService {
 			node = new Doctor(details);
 			break;
 		case LAB:
+			/*Set<LabTestDetails> defaultTests = labTestDetailsRepo.searchAllAvailableTests();
+			node = new Lab(details, defaultTests);*/
 			node = new Lab(details);
 			break;
 		case CLINIC:

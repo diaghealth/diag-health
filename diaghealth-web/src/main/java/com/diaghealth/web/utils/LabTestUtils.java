@@ -17,18 +17,55 @@ public class LabTestUtils {
 	
 	private static Logger logger = LoggerFactory.getLogger(LabTestUtils.class);
 	
-	public static void putAllTestsInModel(ModelAndView mv, List<LabTestDetails> allTests) {
+	/*public static void putAllTestsInModel(ModelAndView mv, List<LabTestDetails> allTests) {
 		
-		HashMap<String, List<LabTestDetails>> mapTypeTest = new HashMap<String, List<LabTestDetails>>();
+		HashMap<String, HashMap<String, List<LabTestDetails>>> mapTypeTest = new HashMap<String, HashMap<String, List<LabTestDetails>>>();
 		if(allTests != null){
 		
 			for(LabTestDetails test: allTests){
-				List<LabTestDetails> testOfType = mapTypeTest.get(test.getType());
+				HashMap<String, List<LabTestDetails>> testOfType = mapTypeTest.get(test.getType());
 				if(testOfType == null){
-					testOfType = new ArrayList<LabTestDetails>();
+					testOfType = new HashMap<String, List<LabTestDetails>>();					
 					mapTypeTest.put(test.getType(), testOfType);
 				}
-				testOfType.add(test);				
+				//testOfType = mapTypeTest.get(test.getType());
+				List<LabTestDetails> testList = testOfType.get(test.getName());
+				if(testList == null){
+					testList = new ArrayList<LabTestDetails>();
+					testOfType.put(test.getName(), testList);
+				}
+				testList.add(test);				
+			}	
+		
+			//mv.getModel().put("allTests", mapTypeTest);
+			try{
+				String jsonMap = new ObjectMapper().writeValueAsString(mapTypeTest);
+				mv.getModel().put("jsonMap", jsonMap);
+			} catch(Exception e){
+				logger.error("Cannot create jsonMap");
+			}
+
+			
+		}
+	}*/
+	
+	public static <T> void putAllTestsInModel(ModelAndView mv, List<T> allTests){
+		HashMap<String, HashMap<String, List<T>>> mapTypeTest = new HashMap<String, HashMap<String, List<T>>>();
+		if(allTests != null){
+		
+			for(T test: allTests){
+				HashMap<String, List<T>> testOfType = mapTypeTest.get(((LabTestDetails)test).getType());
+				if(testOfType == null){
+					testOfType = new HashMap<String, List<T>>();					
+					mapTypeTest.put(((LabTestDetails)test).getType(), testOfType);
+				}
+				//testOfType = mapTypeTest.get(test.getType());
+				List<T> testList = testOfType.get(((LabTestDetails)test).getName());
+				if(testList == null){
+					testList = new ArrayList<T>();
+					testOfType.put(((LabTestDetails)test).getName(), testList);
+				}
+				testList.add(test);				
 			}	
 		
 			//mv.getModel().put("allTests", mapTypeTest);
@@ -43,18 +80,29 @@ public class LabTestUtils {
 		}
 	}
 	
-	public static void putAvailableTestsInModel(ModelAndView mv, List<LabTestAvailablePrice> allTests){
+	/*public static void putAvailableTestsInModel(ModelAndView mv, List<LabTestAvailablePrice> allTests){
 		
-		HashMap<String, List<LabTestAvailablePrice>> mapTypeTest = new HashMap<String, List<LabTestAvailablePrice>>();
+		HashMap<String, HashMap<String, List<LabTestAvailablePrice>>> mapTypeTest = new HashMap<String, HashMap<String, List<LabTestAvailablePrice>>>();
 		if(allTests != null){
 		
 			for(LabTestAvailablePrice test: allTests){
-				List<LabTestAvailablePrice> testOfType = mapTypeTest.get(test.getType());
+				HashMap<String, List<LabTestAvailablePrice>> testOfType = mapTypeTest.get(test.getType());
 				if(testOfType == null){
 					testOfType = new ArrayList<LabTestAvailablePrice>();
 					mapTypeTest.put(test.getType(), testOfType);
 				}
-				testOfType.add(test);				
+				testOfType.add(test);		
+				if(testOfType == null){
+					testOfType = new HashMap<String, List<LabTestAvailablePrice>>();					
+					mapTypeTest.put(test.getType(), testOfType);
+				}
+				//testOfType = mapTypeTest.get(test.getType());
+				List<LabTestDetails> testList = testOfType.get(test.getName());
+				if(testList == null){
+					testList = new ArrayList<LabTestDetails>();
+					testOfType.put(test.getName(), testList);
+				}
+				testList.add(test);	
 			}	
 		
 			//mv.getModel().put("allTests", mapTypeTest);
@@ -65,6 +113,6 @@ public class LabTestUtils {
 				logger.error("Cannot create jsonMap");
 			}
 		}
-	}
+	}*/
 
 }

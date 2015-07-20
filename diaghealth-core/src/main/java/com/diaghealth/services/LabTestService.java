@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.diaghealth.models.SearchTestViewDto;
 import com.diaghealth.nodes.labtest.LabTestAvailablePrice;
 import com.diaghealth.nodes.labtest.LabTestDetails;
 import com.diaghealth.nodes.labtest.LabTestDoneObject;
@@ -77,6 +78,11 @@ public class LabTestService {
 	
 	public Set<LabTestDoneObject> saveTestsDone(Set<LabTestDoneObject> set){
 		return (Set<LabTestDoneObject>) labTestDoneRepo.save(set);
+	}
+	
+	public Set<LabTestDoneObject> searchTests(SearchTestViewDto searchObject){
+	
+		return null;
 	}
 	
 

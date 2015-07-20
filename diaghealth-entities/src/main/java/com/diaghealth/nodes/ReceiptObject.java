@@ -13,6 +13,7 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import com.diaghealth.nodes.labtest.LabTestDoneObject;
 import com.diaghealth.nodes.user.UserDetails;
+import com.diaghealth.utils.UserGender;
 
 @NodeEntity
 @TypeAlias("Receipt")
@@ -25,6 +26,7 @@ public class ReceiptObject extends BaseNode {
 	private Set<UserDetails> relatedUsers;
 	@Fetch
 	private UserDetails subject;
+	private UserGender userGender;
 	@RelatedTo(type="RECEIPT_TESTS_DONE", direction=Direction.BOTH)
 	@Fetch
 	private Set<LabTestDoneObject> labTestDoneObject;
@@ -72,5 +74,11 @@ public class ReceiptObject extends BaseNode {
 			this.labTestDoneObject = new HashSet<LabTestDoneObject>();
 		}
 		this.labTestDoneObject.addAll(labTestDoneObject);
+	}
+	public UserGender getUserGender() {
+		return userGender;
+	}
+	public void setUserGender(UserGender gender) {
+		this.userGender = gender;
 	}
 }

@@ -28,6 +28,7 @@ import com.diaghealth.services.SearchService;
 import com.diaghealth.services.UserRegisterService;
 import com.diaghealth.services.UserRepositoryService;
 import com.diaghealth.util.DateUtilCore;
+import com.diaghealth.utils.UserGender;
 import com.diaghealth.utils.UserType;
 import com.diaghealth.web.utils.ModelBuilder;
 import com.diaghealth.web.utils.SessionUtil;
@@ -74,6 +75,11 @@ public class UserRegisterController {
 	@ModelAttribute("userTypes")
     public UserType[] userTypes() {
         return UserType.values();
+    }
+	
+	@ModelAttribute("userGender")
+    public UserGender[] userGender() {
+        return UserGender.values();
     }
 	
 	@RequestMapping(value = "/register", method = RequestMethod.GET)

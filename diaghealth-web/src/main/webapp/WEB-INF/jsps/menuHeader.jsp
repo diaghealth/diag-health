@@ -34,51 +34,40 @@
 <nav>
   <ul>
 <c:if test="${not empty userType}">
+<li><a href="welcomeHome">Home</a></li> 
+<li><a href="updateDetails">Update Details</a></li>
+<li><a href="searchUser">Search Users</a></li>
 <c:choose>
-    <c:when test="${userType.equals('DOCTOR')}">
-    	<li><a href="welcomeHome">Home</a></li> 
-		<li><a href="updateDetails">Update Details</a></li>
-		<li><a href="search">Search</a></li>
+    <c:when test="${userType.equals('DOCTOR')}">  	
 		<li><a href="related?type=patient">Patients</a></li>
 		<li><a href="related?type=lab">Diagnostic</a></li>
 		<li><a href="related?type=clinic">Clinic</a></li>
 		<li><a href="register">Register User</a></li>
-		<li><a href="logout">Logout</a></li>
     </c:when>
-    <c:when test="${userType.equals('LAB')}">
-    	<li><a href="welcomeHome">Home</a></li> 
-		<li><a href="updateDetails">Update Details</a></li>
+    <c:when test="${userType.equals('LAB')}">    	
 		<li><a href="labTests">Update Tests</a></li>
-		<li><a href="search">Search</a></li>
 		<li><a href="related?type=patient">Patients</a></li>
 		<li><a href="related?type=doctor">Doctors</a></li>
 		<li><a href="related?type=clinic">Clinic</a></li>
 		<li><a href="register">Register User</a></li>
 		<li><a href="searchReceipt">Find Receipt</a></li>
-		<li><a href="logout">Logout</a></li>
     </c:when>
-    <c:when test="${userType.equals('CLINIC')}">
-    	<li><a href="welcomeHome">Home</a></li> 
-		<li><a href="updateDetails">Update Details</a></li>
-		<li><a href="search">Search</a></li>
+    <c:when test="${userType.equals('CLINIC')}">    	
 		<li><a href="related?type=patient">Patients</a></li>
 		<li><a href="related?type=lab">Diagnostic</a></li>
 		<li><a href="related?type=doctor">Doctor</a></li>
-		<li><a href="register">Register User</a></li>
-		<li><a href="logout">Logout</a></li>
+		
     </c:when>
-    <c:when test="${userType.equals('PATIENT')}">
-    	<li><a href="welcomeHome">Home</a></li> 
-		<li><a href="updateDetails">Update Details</a></li>
-		<li><a href="search">Search</a></li>
+    <c:when test="${userType.equals('PATIENT')}">    	
 		<li><a href="related?type=clinic">Clinic</a></li>	
 		<li><a href="related?type=lab">Diagnostic</a></li>
 		<li><a href="related?type=doctor">Doctor</a></li>
-		<li><a href="logout">Logout</a></li>	
     </c:when>
     <c:otherwise>
     </c:otherwise>
 </c:choose>
+<!-- <li><a href="searchTests">Search Tests</a></li> -->
+<li><a href="logout">Logout</a></li>
 </c:if>
 <c:if test="${userDetails.username.equals('diaghealth') || userDetails.username.equals('admin')}">
 	<li><a href="addLabTestType">Add Base Tests</a></li> 

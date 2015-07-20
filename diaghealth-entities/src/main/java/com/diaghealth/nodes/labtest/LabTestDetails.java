@@ -6,19 +6,23 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
+import com.diaghealth.nodes.BaseNode;
+import com.diaghealth.utils.UserGender;
+
 @NodeEntity
 @TypeAlias("LabTestDetails")
-public class LabTestDetails {
+public class LabTestDetails  extends BaseNode{
 	
-	@GraphId
-	protected Long id;
-	private String type;
+	/*@GraphId
+	protected Long id;*/
+	protected String type;
 	@NotNull(message = "Please enter Test Name.")
-	private String name;
-	private float refLower;
-	private float refUpper;
-	private String unit;
-	private String comments;
+	protected String name;
+	protected float refLower;
+	protected float refUpper;
+	protected UserGender userGender;
+	protected String unit;
+	protected String comments;
 	
 	public String getType() {
 		return type;
@@ -31,35 +35,7 @@ public class LabTestDetails {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		LabTestDetails other = (LabTestDetails) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
-	@Override
-	public String toString() {
-		return "LabTest [code=" + ", type=" + type + ", name=" + name				
-				+ "]";
-	}
+	}	
 	public Long getId() {
 		return id;
 	}
@@ -89,6 +65,45 @@ public class LabTestDetails {
 	}
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+	public UserGender getUserGender() {
+		return userGender;
+	}
+	public void setUserGender(UserGender gender) {
+		this.userGender = gender;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((userGender == null) ? 0 : userGender.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LabTestDetails other = (LabTestDetails) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (userGender != other.userGender)
+			return false;
+		return true;
+	}
+	@Override
+	public String toString() {
+		return "LabTestDetails [name=" + name + ", refLower=" + refLower
+				+ ", refUpper=" + refUpper + ", userGender=" + userGender
+				+ ", unit=" + unit + ", comments=" + comments + "]";
 	}
 
 }

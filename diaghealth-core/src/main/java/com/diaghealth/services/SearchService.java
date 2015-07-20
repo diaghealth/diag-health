@@ -9,7 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.diaghealth.models.SearchViewDto;
+import com.diaghealth.models.SearchTestViewDto;
+import com.diaghealth.models.SearchUserViewDto;
 import com.diaghealth.nodes.user.UserDetails;
 import com.diaghealth.repository.SearchRepo;
 import com.diaghealth.utils.UserType;
@@ -41,7 +42,7 @@ public class SearchService {
 		return searchRepo.findByUsername(user.getUsername());
 	}
 	
-	public Set<UserDetails> searchUsers(SearchViewDto searchObject){
+	public Set<UserDetails> searchUsers(SearchUserViewDto searchObject){
 		if(!StringUtils.isEmpty(searchObject.getName())){
 			logger.debug("Searching user by name: " + searchObject.getName() + " type " + searchObject.getUserType().name());
 			return searchUsersByName(searchObject.getName(), searchObject.getUserType().name());
@@ -59,6 +60,7 @@ public class SearchService {
 		}
 		return null;
 	}
+	
 	
 	public UserDetails findById(Long id){
 		return searchRepo.findOne(id);
