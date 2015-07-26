@@ -171,14 +171,14 @@ function deleteRow(obj){
 <td><input size="30" type="text" id="testComments" name="comments" value="0.0"/></td>
 </tr>
 </table>
-<c:choose>
+<%-- <c:choose>
 <c:when test="${not empty buildResult}">
 <button type="button" id="addNewTestPriceReport">Add Test</button>
 </c:when>
-<c:otherwise>
+<c:otherwise> --%>
 <button type="button" id="addNewTestPrice">Add Test</button>
-</c:otherwise>
-</c:choose>
+<%-- </c:otherwise>
+</c:choose> --%>
 
 <!-- ----------------------------Add New Test Table -------------------------------->
 
@@ -192,17 +192,17 @@ function deleteRow(obj){
 <th>Lower Ref</th><th>Upper Ref</th><th>Unit</th><th>Comments</th>
 </tr>
 <tr>
-<td><input size="30" type="text" id="testType" name="price" value=""/></td>
-<td><input size="30" type="text" id="testName" name="price" value=""/></td>
+<td><input size="30" type="text" id="testTypeNew" name="price" value=""/></td>
+<td><input size="30" type="text" id="testNameNew" name="price" value=""/></td>
 <td>
-<form:select id="testGender" path="userGender" size="1">
-					  <c:forEach items="${userGender}" var="userGender">
-				          <form:option value="${userGender}">${userGender}</form:option>
-				        </c:forEach>
-					</form:select>
+<select id="testGenderNew" name="userGender" size="1">
+  <c:forEach items="${userGender}" var="userGender">
+         <option value="${userGender}">${userGender}</option>
+       </c:forEach>
+</select>
 </td>
-<td><input size="30" type="text" id="testPrice" name="price" value=""/></td>
-<td><input size="30" type="text" id="testDiscount" name="discountPercent" value="0.0"/></td>
+<td><input size="30" type="text" id="testPriceNew" name="price" value=""/></td>
+<td><input size="30" type="text" id="testDiscountNew" name="discountPercent" value="0.0"/></td>
 <c:choose>
 <c:when test="${not empty buildResult}">
 <c:choose>
@@ -213,23 +213,23 @@ function deleteRow(obj){
 		<td>
 	</c:otherwise>
 </c:choose>
-<input size="30" type="text" id="testResultValue" name="resultValue" value=""/></td>
+<input size="30" type="text" id="testResultValueNew" name="resultValue" value=""/></td>
 </c:when>
 </c:choose>
-<td><input size="30" type="text" id="testRefLower" name="refLower" value="0.0"/></td>
-<td><input size="30" type="text" id="testRefUpper" name="refUpper" value="0.0"/></td>
-<td><input size="30" type="text" id="testUnit" name="unit" value=""/></td>
-<td><input size="30" type="text" id="testComments" name="comments" value="0.0"/></td>
+<td><input size="30" type="text" id="testRefLowerNew" name="refLower" value="0.0"/></td>
+<td><input size="30" type="text" id="testRefUpperNew" name="refUpper" value="0.0"/></td>
+<td><input size="30" type="text" id="testUnitNew" name="unit" value=""/></td>
+<td><input size="30" type="text" id="testCommentsNew" name="comments" value="0.0"/></td>
 </tr>
 </table>
-<c:choose>
+<%-- <c:choose>
 <c:when test="${not empty buildResult}">
 <button type="button" id="addNewTestPriceReport">Add Test</button>
 </c:when>
-<c:otherwise>
-<button type="button" id="addNewTestPrice">Add Test</button>
-</c:otherwise>
-</c:choose>
+<c:otherwise> --%>
+<button type="button" id="addNewTestPriceNew">Add Test</button>
+<%-- </c:otherwise>
+</c:choose> --%>
 
 
 <p></p>

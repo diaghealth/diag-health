@@ -13,7 +13,7 @@ public interface LabTestDetailsRepo extends GraphRepository<LabTestDetails>{
 	@Query("match (n{__type__:'LabTestDetails'}) return n;")
 	public Set<LabTestDetails> searchAllAvailableTests();
 	
-	@Query("match (n{__type__:'LabTestDetails',type:{0},name:{1},userGender:{2}) return n;")
+	@Query("match (n{__type__:'LabTestDetails',type:{0},name:{1},userGender:{2}}) return n;")
 	public Set<LabTestDetails> findByTypeNameGender(String type, String name, String Gender);
 
 }

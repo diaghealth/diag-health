@@ -20,27 +20,19 @@ $(document).ready( function() {
 	onChange();
 	
 	$("#addNewTestPrice").click(function(){		
-		var data;
-		data = "<tr id='rowIndex" + testCount + "'>" +  
-				"<td><input name='testList[" + testCount + "].type' readonly='readonly' value='" + $('#testType').val()+ "'/></td>" + 
-				"<td><input name='testList[" + testCount + "].name' readonly='readonly' value='" +$('#testName').val() + "'/></td>" +
-				"<td><input name='testList[" + testCount + "].price' value='" + $('#testPrice').val()+ "'/></td>" +
-				"<td><input name='testList[" + testCount + "].discountPercent' value='" + $('#testDiscount').val()+ "'/></td>" +
-				"<td><input name='testList[" + testCount + "].refLower' readonly='readonly' value='" + $('#testRefLower').val()+ "' class='refLower'/></td>" +
-				"<td><input name='testList[" + testCount + "].refUpper' readonly='readonly' value='" + $('#testRefUpper').val()+ "' class='refUpper'/></td>" +
-				"<td><input name='testList[" + testCount + "].unit' readonly='readonly' value='" + $('#testUnit').val()+ "' class='unit'/></td>" +
-				"<td><input name='testList[" + testCount + "].comments' readonly='readonly' value='" + $('#testComments').val()+ "' class='comments'/></td>" +
-				"<td><button type='button' class='deleteButton' onclick='deleteRow(this)'>Delete</button></td>"
-				"</tr>";
-		testCount++;
-		$("#endRow").before(data);
+		addNewTestPriceReport();
 	});	
+	
+	$("#addNewTestPriceNew").click(function(){		
+		addNewTestPriceReportNew();
+	});
 	
 	$("#addNewTestPriceReport").click(function(){		
 		var data;
 		data = "<tr id='rowIndex" + testCount + "'>" +  
 				"<td><input name='testList[" + testCount + "].type' readonly='readonly' value='" + $('#testType').val()+ "' class='type'/></td>" + 
 				"<td><input name='testList[" + testCount + "].name' readonly='readonly' value='" +$('#testName').val() + "' class='name'/></td>" +
+				"<td><input name='testList[" + testCount + "].userGender' value='" + $('#testGender').val()+ "' class='gender'/></td>" +
 				"<td><input name='testList[" + testCount + "].price' value='" + $('#testPrice').val()+ "' class='price'/></td>" +
 				"<td><input name='testList[" + testCount + "].discountPercent' value='" + $('#testDiscount').val()+ "' class='discountPercent'/></td>" +
 				"<td><input name='testList[" + testCount + "].resultValue' value='" + $('#testResultValue').val()+ "' class='resultValue'/></td>" +
@@ -56,8 +48,44 @@ $(document).ready( function() {
 	});
 	
 	$("#testType").change(onChange);
-	$("#testName").change(setPriceDiscountReport);
+	$("#testName").change(setGender);
 });
+
+function addNewTestPriceReport(){
+	var data;
+	data = "<tr id='rowIndex" + testCount + "'>" +  
+			"<td><input name='testList[" + testCount + "].type' readonly='readonly' value='" + $('#testType').val()+ "'/></td>" + 
+			"<td><input name='testList[" + testCount + "].name' readonly='readonly' value='" +$('#testName').val() + "'/></td>" +
+			"<td><input name='testList[" + testCount + "].userGender' readonly='readonly' value='" +$('#testGender').val() + "'/></td>" +
+			"<td><input name='testList[" + testCount + "].price' value='" + $('#testPrice').val()+ "'/></td>" +
+			"<td><input name='testList[" + testCount + "].discountPercent' value='" + $('#testDiscount').val()+ "'/></td>" +
+			"<td><input name='testList[" + testCount + "].refLower' readonly='readonly' value='" + $('#testRefLower').val()+ "' class='refLower'/></td>" +
+			"<td><input name='testList[" + testCount + "].refUpper' readonly='readonly' value='" + $('#testRefUpper').val()+ "' class='refUpper'/></td>" +
+			"<td><input name='testList[" + testCount + "].unit' readonly='readonly' value='" + $('#testUnit').val()+ "' class='unit'/></td>" +
+			"<td><input name='testList[" + testCount + "].comments' readonly='readonly' value='" + $('#testComments').val()+ "' class='comments'/></td>" +
+			"<td><button type='button' class='deleteButton' onclick='deleteRow(this)'>Delete</button></td>"
+			"</tr>";
+	testCount++;
+	$("#endRow").before(data);
+}
+
+function addNewTestPriceReportNew(){
+	var data;
+	data = "<tr id='rowIndex" + testCount + "'>" +  
+			"<td><input name='testList[" + testCount + "].type' readonly='readonly' value='" + $('#testTypeNew').val()+ "'/></td>" + 
+			"<td><input name='testList[" + testCount + "].name' readonly='readonly' value='" +$('#testNameNew').val() + "'/></td>" +
+			"<td><input name='testList[" + testCount + "].userGender' readonly='readonly' value='" +$('#testGenderNew').val() + "'/></td>" +
+			"<td><input name='testList[" + testCount + "].price' value='" + $('#testPriceNew').val()+ "'/></td>" +
+			"<td><input name='testList[" + testCount + "].discountPercent' value='" + $('#testDiscountNew').val()+ "'/></td>" +
+			"<td><input name='testList[" + testCount + "].refLower' readonly='readonly' value='" + $('#testRefLowerNew').val()+ "' class='refLower'/></td>" +
+			"<td><input name='testList[" + testCount + "].refUpper' readonly='readonly' value='" + $('#testRefUpperNew').val()+ "' class='refUpper'/></td>" +
+			"<td><input name='testList[" + testCount + "].unit' readonly='readonly' value='" + $('#testUnitNew').val()+ "' class='unit'/></td>" +
+			"<td><input name='testList[" + testCount + "].comments' readonly='readonly' value='" + $('#testCommentsNew').val()+ "' class='comments'/></td>" +
+			"<td><button type='button' class='deleteButton' onclick='deleteRow(this)'>Delete</button></td>"
+			"</tr>";
+	testCount++;
+	$("#endRow").before(data);
+}
 
 function onChange(){
 	var opt = $("#testType").find('option:selected').val();
@@ -74,12 +102,14 @@ function setGender(){
 	var opt = $("#testType").find('option:selected').val();
 	var testName = $('#testName').find('option:selected').val(); 
 	var $testGender = $('#testGender');
+	$testGender.find('option').remove(); 
 	$.each(testHashMap[opt][testName],function(index, value) 
 	{
-		if(!(value.gender === undefined))
-			$testGender.append("<option value='" + value.gender + "'>" + value.gender + "</option>");
-		else
+		if(!(value.userGender === undefined || value.userGender == null))
+			$testGender.append("<option value='" + value.userGender + "'>" + value.userGender + "</option>");
+		else {			 
 			$testGender.append("<option value='NA'>NA</option>");
+		}
 	});
 	setPriceDiscountReport();
 }
