@@ -21,9 +21,11 @@ public interface SearchRepo extends GraphRepository<UserDetails>{
 	@Query("start n=node({0}) match (n)-[r:RELATED_BOTH]-(m{userType:{1}}) return m")
 	public Iterable<UserDetails> findByRelation(Long id, String userType);
 	
-	@Query("START n=node:__types__(className='User') WHERE n.username = {0} AND n.password = {1} RETURN n")
+	//@Query("START n=node:__types__(className='User') WHERE n.username = {0} AND n.password = {1} RETURN n")
+	@Query("match (m{__type__:'User',username:{0},password:{1}}) return m")
 	public UserDetails findByUsernameAndPassword(String username, String password);
-	@Query("START n=node:__types__(className='User') WHERE n.username = {0} RETURN n")
+	//@Query("START n=node:__types__(className='User') WHERE n.username = {0} RETURN n")
+	@Query("match (m{__type__:'User',username:{0}}) return m")
 	public UserDetails findByUsername(String username);
 	
 	/* latLocation1 < latLocation2 and latLocation1 < longLocation2*/

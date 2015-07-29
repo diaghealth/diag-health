@@ -1,4 +1,6 @@
+
 (function( $ ) {
+	
 // Create a jquery plugin that prints the given element.
 $.fn.print = function(args){
 	// NOTE: We are trimming the jQuery collection down to the
@@ -74,6 +76,20 @@ $.fn.print = function(args){
 };
 }( jQuery ));
 
+var receiptColumn = {
+	    TYPE : 0,
+	    NAME : 1,
+	    GENDER : 2,
+	    PRICE : 3,
+	    DISCOUNT : 4,
+	    RESULT : 5,
+	    LOWERREF : 6,
+	    UPPERREF : 7,
+	    UNIT : 8,
+	    COMMENTS : 9,
+	    DATE : 10
+	};
+
 $(function() {
 	$('#printReport').on('click', function() {
 		$('#printable').print(reportContent());
@@ -101,22 +117,22 @@ reportContent = function() {
 	element += "<br><table border=1 width=100%><tr><th>Test Name</th><th>Result</th><th>Range</th><th>Date</th></tr>";
 	$( "#displayTestsTable > tbody > tr").each(function() {
 		
-		if(!($('td:eq(1) input', this).val() === undefined)){
+		if(!($('td:eq(' + receiptColumn.NAME + ') input', this).val() === undefined)){
 			element += ("<tr>" + 
-				"<td>" +  $('td:eq(1) input', this).val() + "</td>"); //name
-				if($('td:eq(4) input', this).val() < $('td:eq(5) input', this).val() ||
-						$('td:eq(4) input', this).val() > $('td:eq(6) input', this).val()){
+				"<td>" +  $('td:eq(' + receiptColumn.NAME + ') input', this).val() + "</td>"); //name
+				if($('td:eq(' + receiptColumn.RESULT + ') input', this).val() < $('td:eq(' + receiptColumn.LOWERREF + ') input', this).val() ||
+						$('td:eq(' + receiptColumn.RESULT + ') input', this).val() > $('td:eq(' + receiptColumn.UPPERREF + ') input', this).val()){
 					element += ("<td style='color: red;	font-weight: bold'>");
 				}
 				else{
 					element += ("<td>");
 				}	
-				element += ($('td:eq(4) input', this).val() + "</td>" + //result
+				element += ($('td:eq(' + receiptColumn.RESULT + ') input', this).val() + "</td>" + //result
 				
-				"<td>" +  $('td:eq(5) input', this).val() + " - " +  $('td:eq(6) input', this).val() + " " +
-				$('td:eq(7) input', this).val() + "</td>" + // lower - upper unit
+				"<td>" +  $('td:eq(' + receiptColumn.LOWERREF + ') input', this).val() + " - " +  $('td:eq(' + receiptColumn.UPPERREF + ') input', this).val() + " " +
+				$('td:eq(' + receiptColumn.UNIT + ') input', this).val() + "</td>" + // lower - upper unit
 				
-				"<td>" +  $('td:eq(9) input', this).val() + "</td>" + //date
+				"<td>" +  $('td:eq(' + receiptColumn.DATE + ') input', this).val() + "</td>" + //date
 				"</tr>");
 		}
 	});
@@ -132,12 +148,12 @@ receiptPriceContent = function() {
 		
 		if(!($('td:eq(1) input', this).val() === undefined)){
 		element += ("<tr>" + 
-				"<td>" +  $('td:eq(1) input', this).val() + "</td>" + //name
-				"<td>" +  $('td:eq(2) input', this).val() + "</td>" + //price
+				"<td>" +  $('td:eq(' + receiptColumn.NAME + ') input', this).val() + "</td>" + //name
+				"<td>" +  $('td:eq(' + receiptColumn.PRICE + ') input', this).val() + "</td>" + //price
 				
-				"<td>" +  $('td:eq(3) input', this).val() + "</td>" + //discount
+				"<td>" +  $('td:eq(' + receiptColumn.DISCOUNT + ') input', this).val() + "</td>" + //discount
 				
-				"<td>" +  $('td:eq(9) input', this).val() + "</td>" + //date
+				"<td>" +  $('td:eq(' + receiptColumn.DATE + ') input', this).val() + "</td>" + //date
 				"</tr>");
 		}
 	});
