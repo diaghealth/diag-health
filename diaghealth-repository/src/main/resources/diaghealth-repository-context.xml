@@ -20,12 +20,15 @@
 	<beans profile="local">
 		<bean id="graphDatabaseService" class="org.springframework.data.neo4j.rest.SpringRestGraphDatabase">
 			<constructor-arg index="0" value="http://localhost:7474/db/data" />
-			<constructor-arg index="1" value="neo4j" />
-			<constructor-arg index="2" value="diagonline" />
+			<!-- <constructor-arg index="1" value="neo4j" />
+			<constructor-arg index="2" value="diagonline" /> -->
+			<constructor-arg index="1" value="${db_userid}" />
+			<constructor-arg index="2" value="${db_password}" />
 		</bean>
 	</beans>
 	<beans profile="dev">
 		<bean id="graphDatabaseService" class="org.springframework.data.neo4j.rest.SpringRestGraphDatabase">
+			<!-- <constructor-arg index="0" value="${db_url}/db/data" /> -->
 			<constructor-arg index="0" value="${db_url}/db/data" />
 			<constructor-arg index="1" value="${db_userid}" />
 			<constructor-arg index="2" value="${db_password}" />

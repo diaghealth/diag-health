@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
@@ -49,7 +49,7 @@ function deleteRow(obj){
 <!-- -------------------------Display Table starts-------------------------- -->
 
 <table id="displayTestsTable">
-<tr><th>Test Type</th><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
+<tr><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
 <c:if test="${not empty buildResult}">
 <th>Result</th>
 </c:if>
@@ -62,9 +62,9 @@ function deleteRow(obj){
 	
 	<tr id="rowIndex${status.index}">
 	<%-- <div class="test_item_<c:out value='${status.index}' />"> --%>		
-		<td>
+		<%-- <td>
 			<input name='testList[${status.index}].type' readonly='readonly' value='${test.type}' class='type'/>
-		</td>		
+		</td> --%>		
 		<td>
 			<input name='testList[${status.index}].name' readonly='readonly' value='${test.name}' class='name'/>
 		</td>
@@ -127,7 +127,7 @@ function deleteRow(obj){
 <h2> Add Tests</h2>
 
 <table id="addNewTestPriceReportTable">
-<tr><th>Test Type</th><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
+<tr><th>Test Type</th><th>Sub Group1</th><th>Sub Group2</th><th>Sub Group3</th><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
 <c:if test="${not empty buildResult}">
 <th>Result</th>
 </c:if>
@@ -135,6 +135,15 @@ function deleteRow(obj){
 </tr>
 <tr>
 <td><select id="testType" size="1">
+					</select>
+</td>
+<td><select id="subGroup1" size="1">
+					</select>
+</td>
+<td><select id="subGroup2" size="1">
+					</select>
+</td>
+<td><select id="subGroup3" size="1">
 					</select>
 </td>
 <td><select id="testName" size="1">
@@ -185,7 +194,7 @@ function deleteRow(obj){
 <h2> Add Tests</h2>
 
 <table id="addNewTestPriceReportTable">
-<tr><th>Test Type</th><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
+<tr><th>Test Type</th><th>Sub Group1</th><th>Sub Group2</th><th>Sub Group3</th><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
 <c:if test="${not empty buildResult}">
 <th>Result</th>
 </c:if>
@@ -193,7 +202,9 @@ function deleteRow(obj){
 </tr>
 <tr>
 <td><input size="30" type="text" id="testTypeNew" name="price" value=""/></td>
-<td><input size="30" type="text" id="testNameNew" name="price" value=""/></td>
+<td><input size="30" type="text" id="subGroup1New" name="price" value=""/></td>
+<td><input size="30" type="text" id="subGroup2New" name="price" value=""/></td>
+<td><input size="30" type="text" id="subGroup3New" name="price" value=""/></td>
 <td>
 <select id="testGenderNew" name="userGender" size="1">
   <c:forEach items="${userGender}" var="userGender">
@@ -203,7 +214,7 @@ function deleteRow(obj){
 </td>
 <td><input size="30" type="text" id="testPriceNew" name="price" value=""/></td>
 <td><input size="30" type="text" id="testDiscountNew" name="discountPercent" value="0.0"/></td>
-<c:choose>
+<%-- <c:choose>
 <c:when test="${not empty buildResult}">
 <c:choose>
 	<c:when test="${(test.resultValue lt test.refLower) || (test.resultValue gt test.refUpper)}">
@@ -215,7 +226,7 @@ function deleteRow(obj){
 </c:choose>
 <input size="30" type="text" id="testResultValueNew" name="resultValue" value=""/></td>
 </c:when>
-</c:choose>
+</c:choose> --%>
 <td><input size="30" type="text" id="testRefLowerNew" name="refLower" value="0.0"/></td>
 <td><input size="30" type="text" id="testRefUpperNew" name="refUpper" value="0.0"/></td>
 <td><input size="30" type="text" id="testUnitNew" name="unit" value=""/></td>

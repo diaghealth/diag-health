@@ -9,7 +9,7 @@
   <description>Parent module for diaghealth projects</description>
   
   <properties>
-  	<diaghealth.common.version>0.0.1-SNAPSHOT</diaghealth.common.version>
+  	<diaghealth.common.version>1.0.0</diaghealth.common.version>
   	<org.springframework.version>4.0.4.RELEASE</org.springframework.version>
   	<junit.version>4.11</junit.version>
   	<spring.data.neo4j.version>2.3.2.RELEASE</spring.data.neo4j.version>

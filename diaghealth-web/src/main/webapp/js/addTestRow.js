@@ -6,13 +6,13 @@ $(document).ready( function() {
 	var jsonString = $("#hiddenField").val();
 	//$.datepicker.formatDate('yy/mm/dd', new Date());
 	//Initialize drop down from json Map
-	testHashMap =$.parseJSON(jsonString);
+	testList =$.parseJSON(jsonString);
 	currentDate = $.datepicker.formatDate('dd-M-yy', new Date());
 	//currentDate += $.timepicker({});
 	var now = $.now();
 	//currentDate = dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
 	var $testType = $('#testType');
-	$.each(testHashMap,function(key, value) 
+	$.each(testList,function(index, key) 
 			{
 		$testType.append("<option value='" + key + "'>" + key + "</option>");
 	});
@@ -89,13 +89,52 @@ function addNewTestPriceReportNew(){
 
 function onChange(){
 	var opt = $("#testType").find('option:selected').val();
-	var $testName = $('#testName'); 
-	$testName.find('option').remove();  
+	var $testName = $('#testName');
+	/* $.post(getUrl(), { testType: opt } , function(data, result){
+		 alert("Data: " + data + "\nStatus: " + status);
+	    });*/
+	
+	$.ajax({
+		  type: 'POST',
+		  url: getUrl(),
+		  data: { testType: opt },
+		  success: function(json){
+				 //alert("Data: " + data + "\nStatus: " + status);
+			  	setSubType(json, 'subGroup1');
+		    },
+		  /*dataType: dataType,*/
+		  async:false
+		});
+	
+	/*
+	$testName.find('option').remove();
+	
+	$("button").click(function(){
+	    $.ajax({url: "demo_test.txt", success: function(result){
+	        $("#div1").html(result);
+	    }});
+	});
+	
 	$.each(testHashMap[opt],function(index, value) 
 	{
 		$testName.append("<option value='" + index + "'>" + index + "</option>");
+	});*/
+	//setGender();
+}
+
+function setSubType(json, subGroup){
+	var testList =$.parseJSON(json);
+	var $testType = $('#' + subGroup);
+	$testType.find('option').remove(); 
+	$testType.append("<option value=''>(None)</option>");
+	$.each(testList,function(index, key) 
+	{
+		$testType.append("<option value='" + key + "'>" + key + "</option>");
 	});
-	setGender();
+}
+
+function getUrl(){
+	return window.location.href + '/getLabTestObject';
 }
 
 function setGender(){
@@ -103,14 +142,14 @@ function setGender(){
 	var testName = $('#testName').find('option:selected').val(); 
 	var $testGender = $('#testGender');
 	$testGender.find('option').remove(); 
-	$.each(testHashMap[opt][testName],function(index, value) 
+	/*$.each(testHashMap[opt][testName],function(index, value) 
 	{
 		if(!(value.userGender === undefined || value.userGender == null))
 			$testGender.append("<option value='" + value.userGender + "'>" + value.userGender + "</option>");
 		else {			 
 			$testGender.append("<option value='NA'>NA</option>");
 		}
-	});
+	});*/
 	setPriceDiscountReport();
 }
 
@@ -121,7 +160,7 @@ function setPriceDiscountReport(){
 	var gender = $("#testGender")[0].selectedIndex;
 	if(gender == -1)
 		gender = 0;
-	if(!(testHashMap[opt][name][gender].price === undefined))
+	/*if(!(testHashMap[opt][name][gender].price === undefined))
 		$("#testPrice").val(testHashMap[opt][name][gender].price);
 	if(!(testHashMap[opt][name][gender].discountPercent === undefined))
 		$("#testDiscount").val(testHashMap[opt][name][gender].discountPercent);
@@ -132,7 +171,7 @@ function setPriceDiscountReport(){
 	if(!(testHashMap[opt][name][gender].unit === undefined))
 		$("#testUnit").val(testHashMap[opt][name][gender].unit);
 	if(!(testHashMap[opt][name][gender].comments === undefined))
-		$("#testComments").val(testHashMap[opt][name][gender].comments);
+		$("#testComments").val(testHashMap[opt][name][gender].comments);*/
 }
 
 

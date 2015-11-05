@@ -14,6 +14,9 @@
 <table>
 <tr>
 <th>Test Type</th>
+<th>Sub Group1</th>
+<th>Sub Group2</th>
+<th>Sub Group3</th>
 <th>Test Name</th>
 <th>Reference Lower</th>
 <th>Reference Upper</th>
@@ -23,7 +26,11 @@
 </tr>
 <c:forEach var="test" items="${labTestExistList}" varStatus="status">
 	<tr>
-	<td>${test.type}</td>
+	<%-- <td>${test.type}</td> --%>
+	<td><c:if test="${not empty test.ancestorGroupNames[0]}">${test.ancestorGroupNames[0]}</c:if></td>
+	<td><c:if test="${not empty test.ancestorGroupNames[1]}">${test.ancestorGroupNames[1]}</c:if></td>
+	<td><c:if test="${not empty test.ancestorGroupNames[2]}">${test.ancestorGroupNames[2]}</c:if></td>
+	<td><c:if test="${not empty test.ancestorGroupNames[2]}">${test.ancestorGroupNames[3]}</c:if></td>
 	<td>${test.name}</td>
 	<td>${test.refLower}</td>
 	<td>${test.refUpper}</td>
@@ -39,6 +46,9 @@
 <table>
 <tr>
 <th>Test Type</th>
+<th>Sub Group1</th>
+<th>Sub Group2</th>
+<th>Sub Group3</th>
 <th>Test Name</th>
 <th>Reference Lower</th>
 <th>Reference Upper</th>
@@ -47,7 +57,10 @@
 <th>Comments</th>
 </tr>
 <tr>
-<td><input type="text" name="type"/></td>
+<td><input type="text" name="ancestorGroupNames[0]"/></td>
+<td><input type="text" name="ancestorGroupNames[1]"/></td>
+<td><input type="text" name="ancestorGroupNames[2]"/></td>
+<td><input type="text" name="ancestorGroupNames[3]"/></td>
 <td><input type="text" name="name"/></td>
 <td><input type="text" name="refLower" value="0.0"/></td>
 <td><input type="text" name="refUpper" value="0.0"/></td>

@@ -14,11 +14,13 @@ import com.diaghealth.models.SearchTestViewDto;
 import com.diaghealth.nodes.labtest.LabTestAvailablePrice;
 import com.diaghealth.nodes.labtest.LabTestDetails;
 import com.diaghealth.nodes.labtest.LabTestDoneObject;
+import com.diaghealth.nodes.labtest.LabTestTreeNode;
 import com.diaghealth.nodes.user.Lab;
 import com.diaghealth.nodes.user.UserDetails;
 import com.diaghealth.repository.LabTestDetailsRepo;
 import com.diaghealth.repository.LabTestDoneRepo;
 import com.diaghealth.repository.LabTestPriceRepo;
+import com.diaghealth.repository.LabTestTreeNodeRepo;
 
 @Component
 public class LabTestService {
@@ -30,7 +32,11 @@ public class LabTestService {
 	@Autowired
 	LabTestDetailsRepo labTestDetailsRepo;
 	@Autowired
+	LabTestTreeNodeRepo labTestTreeNodeRepo;
+	@Autowired
 	UserRepositoryService userRepositoryService;
+	@Autowired
+	LabTestDetailsService labTestDetailsService;
 	
 	private static Logger logger = LoggerFactory.getLogger(LabTestService.class);
 	
@@ -40,6 +46,13 @@ public class LabTestService {
 	
 	public Set<LabTestDetails> getAllAvailableTests(){
 		return labTestDetailsRepo.searchAllAvailableTests();
+	}
+	
+	public Set<LabTestTreeNode> getAllAvailableTestTypes(){
+		LabTestTreeNode head = labTestDetailsService.getHead();
+		if(head == null)
+			return null;
+		return head.getChildren();
 	}
 	
 	public List<LabTestAvailablePrice> getAvailableTestsInLab(Long id){

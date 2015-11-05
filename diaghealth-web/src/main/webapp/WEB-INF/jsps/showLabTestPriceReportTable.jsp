@@ -45,7 +45,7 @@ function deleteRow(obj){
 <!-- -------------------------Display Table starts-------------------------- -->
 
 <table id="displayTestsTable">
-<tr><th>Test Type</th><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
+<tr><!-- <th>Test Type</th> --><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
 <c:if test="${not empty buildResult}">
 <th>Result</th>
 </c:if>
@@ -59,9 +59,9 @@ function deleteRow(obj){
 	
 	<tr id="rowIndex${status.index}">
 	<%-- <div class="test_item_<c:out value='${status.index}' />"> --%>		
-		<td>
+		<%-- <td>
 			<input name='testList[${status.index}].type' readonly='readonly' value='${test.type}' class='type'/>
-		</td>		
+		</td> --%>		
 		<td>
 			<input name='testList[${status.index}].name' readonly='readonly' value='${test.name}' class='name'/>
 		</td>
@@ -124,7 +124,7 @@ function deleteRow(obj){
 <h2> Add Tests</h2>
 
 <table id="addNewTestPriceReportTable">
-<tr><th>Test Type</th><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
+<tr><th>Test Type</th><th>Sub Group1</th><th>Sub Group2</th><th>Sub Group3</th><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
 <c:if test="${not empty buildResult}">
 <th>Result</th>
 </c:if>
@@ -132,6 +132,15 @@ function deleteRow(obj){
 </tr>
 <tr>
 <td><select id="testType" size="1">
+					</select>
+</td>
+<td><select id="subGroup1" size="1">
+					</select>
+</td>
+<td><select id="subGroup2" size="1">
+					</select>
+</td>
+<td><select id="subGroup3" size="1">
 					</select>
 </td>
 <td><select id="testName" size="1">

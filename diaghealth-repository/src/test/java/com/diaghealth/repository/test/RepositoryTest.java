@@ -3,7 +3,7 @@ package com.diaghealth.repository.test;
 import java.util.Date;
 import java.util.Set;
 
-import org.apache.commons.lang.time.DateUtils;
+//import org.apache.commons.lang.time.DateUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +46,10 @@ public class RepositoryTest {
 	
 	@Test
 	public void searchTestDoneRepo(){
-		Set<LabTestDoneObject> labTestDoneSet = labTestDoneRepo.findTestsByIdAndDate(new Long(0), new Long(4), new Date().getTime(), DateUtils.addDays(new Date(), 1).getTime() );
+		/*Set<LabTestDoneObject> labTestDoneSet = labTestDoneRepo.findTestsByIdAndDate(new Long(0), new Long(4), new Date().getTime(), DateUtils.addDays(new Date(), 1).getTime() );
 		for(LabTestDoneObject test: labTestDoneSet){
 			System.out.println(test);
-		}
+		}*/
 	}
 	
 	private void showList(Iterable<UserDetails> matches){

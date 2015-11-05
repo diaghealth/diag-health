@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,12 +22,16 @@ import org.springframework.web.servlet.ModelAndView;
 import com.diaghealth.models.SearchUserViewDto;
 import com.diaghealth.models.labtest.LabTestListViewDto;
 import com.diaghealth.nodes.labtest.LabTestDetails;
+import com.diaghealth.nodes.labtest.LabTestTreeNode;
 import com.diaghealth.nodes.user.UserDetails;
 import com.diaghealth.repository.LabTestDetailsRepo;
 import com.diaghealth.services.LabTestDetailsService;
+import com.diaghealth.utils.LabTestTreeUtils;
 import com.diaghealth.utils.UserGender;
 import com.diaghealth.utils.UserType;
 import com.diaghealth.web.utils.SessionUtil;
+
+import static com.diaghealth.utils.LabTestTreeUtils.MAX_SUB_GROUPS;
 
 @Controller
 public class AdminTestTypeAddController {
@@ -71,7 +76,7 @@ public class AdminTestTypeAddController {
 		}
 		//Change to upper case
 		labTest.setName(labTest.getName().toUpperCase());
-		labTest.setType(labTest.getType().toUpperCase());
+		//labTest.setType(labTest.getType().toUpperCase());
 		labTest.setUnit(labTest.getUnit());
 		Set<LabTestDetails> exists = labTestDetailsService.findIfExists(labTest);
 		
@@ -82,6 +87,7 @@ public class AdminTestTypeAddController {
 			}
 		}
 		logger.info("Added new Test Type: " + labTest);
+		saveAncestorTree(labTest);
 		labTestDetailsService.save(labTest);
 		/*} else {
 			result.reject("test.exists", "Test Already Exists");
@@ -92,5 +98,45 @@ public class AdminTestTypeAddController {
 	
 	public Set<LabTestDetails> getLabTestExistList(UserDetails loggedInUser){
 		return labTestDetailsService.getAllTests();		
+	}
+	
+	private void saveAncestorTree(LabTestDetails labTest){
+		LabTestTreeNode baseNode = labTestDetailsService.getHead();
+		List<String> groups = labTest.getAncestorGroupNames();
+		boolean nodeFound = false;
+		int index = 0;
+		for(index = 0; index < MAX_SUB_GROUPS;index++ ){
+			if(!StringUtils.isEmpty(groups.get(index))){
+				LabTestTreeNode tmp = LabTestTreeUtils.findNodeInTree(baseNode, groups.get(index));
+				if(tmp != null){
+					baseNode = tmp;
+					nodeFound = true;
+				} else {
+					break;
+				}
+			}
+		}
+		
+		LabTestTreeNode toSaveNode = baseNode;
+		/*if(nodeFound)
+			index++; //Save from the next node
+*/		
+		for(;index < MAX_SUB_GROUPS;index++){
+			if(!StringUtils.isEmpty(groups.get(index))){
+				LabTestTreeNode  newNode = new LabTestTreeNode();
+				newNode.setParent(baseNode);
+				baseNode.addChild(newNode);
+				newNode.setTestGroupName(groups.get(index));
+				baseNode = newNode;
+			}
+		}
+		//Add head as ancestor
+		//labTest.saveAncestors(labTest);
+		
+		//Add LabTest as leaf node
+		baseNode.addChild(labTest);
+		
+		labTestDetailsService.save(toSaveNode);
+		
 	}
 }

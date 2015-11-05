@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.omg.CORBA.portable.ApplicationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.AutoPopulatingList;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,7 +32,9 @@ import com.diaghealth.models.labtest.LabTestListViewDto;
 import com.diaghealth.nodes.labtest.LabTestAvailablePrice;
 import com.diaghealth.nodes.labtest.LabTestDetails;
 import com.diaghealth.nodes.labtest.LabTestDoneObject;
+import com.diaghealth.nodes.labtest.LabTestTreeNode;
 import com.diaghealth.nodes.user.UserDetails;
+import com.diaghealth.services.LabTestDetailsService;
 import com.diaghealth.services.LabTestService;
 import com.diaghealth.utils.UserGender;
 import com.diaghealth.utils.UserType;
@@ -58,6 +63,8 @@ public class LabTestController {
 	@Autowired
 	private LabTestService labTestService;
 	@Autowired
+	private LabTestDetailsService labTestDetailsService;
+	@Autowired
     private SessionUtil sessionUtil;
 	
 	private static Logger logger = LoggerFactory.getLogger(LabTestController.class);
@@ -83,8 +90,8 @@ public class LabTestController {
 		}
 		
 		List<LabTestAvailablePrice> tests = labTestService.getTestsForUser(loggedInUser);
-		List<LabTestDetails> allTests = new ArrayList<LabTestDetails>(labTestService.getAllAvailableTests());
-		LabTestUtils.putAllTestsInModel(mv, allTests);
+		List<LabTestTreeNode> allTests = new ArrayList<LabTestTreeNode>(labTestService.getAllAvailableTestTypes());
+		LabTestUtils.putAllTestTypesInModel(mv, allTests);
 		LabTestListViewDto testListObject = new LabTestListViewDto();
 		if(tests != null){
 			AutoPopulatingList<LabTestAvailablePrice> autoList = new AutoPopulatingList<LabTestAvailablePrice>(LabTestAvailablePrice.class);
@@ -101,6 +108,28 @@ public class LabTestController {
 		return mv;
 		
 	}
+	
+	@RequestMapping(value = "/labTests/getLabTestObject", method = RequestMethod.POST)
+	public @ResponseBody String getLabTestObject(@RequestParam(value="testType", required=false) String testType, HttpServletRequest httpServletRequest, ModelAndView mv) throws ApplicationException {
+		
+		Set<LabTestTreeNode> children = labTestDetailsService.getSubGroupTests(testType);
+		List<String> testTypeList = new ArrayList<String>();
+		if(children != null){
+			for(LabTestTreeNode child: children){
+				if(child instanceof LabTestTreeNode && !StringUtils.isEmpty(child.getTestGroupName())){
+					testTypeList.add(child.getTestGroupName());
+				}
+			}
+		}
+		try{
+			String jsonMap = new ObjectMapper().writeValueAsString(testTypeList);
+			return jsonMap;
+		} catch (Exception e){
+			logger.error(e.toString());
+			return "";
+		}
+	}
+		
 	
 	@RequestMapping(value = "/saveTests", method = RequestMethod.POST)
 	public ModelAndView addTestsToExistingLabTests(@Valid @ModelAttribute("labTests") LabTestListViewDto labTests,

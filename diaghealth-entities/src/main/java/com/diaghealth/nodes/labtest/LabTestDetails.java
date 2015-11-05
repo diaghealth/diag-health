@@ -1,20 +1,30 @@
 package com.diaghealth.nodes.labtest;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.util.StringUtils;
 
 import com.diaghealth.nodes.BaseNode;
+import com.diaghealth.utils.LabTestTreeUtils;
 import com.diaghealth.utils.UserGender;
+
+import static com.diaghealth.utils.LabTestTreeUtils.MAX_SUB_GROUPS;
 
 @NodeEntity
 @TypeAlias("LabTestDetails")
-public class LabTestDetails  extends BaseNode{
+public class LabTestDetails  extends LabTestTreeNode {
 	
 	/*@GraphId
-	protected Long id;*/
+	protected Long id;*/	
 	protected String type;
 	@NotNull(message = "Please enter Test Name.")
 	protected String name;
@@ -23,9 +33,15 @@ public class LabTestDetails  extends BaseNode{
 	protected UserGender userGender;
 	protected String unit;
 	protected String comments;
+	@Transient
+	protected List<String> ancestorGroupNames = new ArrayList<String>(MAX_SUB_GROUPS);
 	
 	public String getType() {
-		return type;
+		List<String> ancestorGroupNamesTemp = getAncestorGroupNames();
+		if(ancestorGroupNamesTemp.size() > 0){
+			return ancestorGroupNamesTemp.get(0);
+		}
+		return null;
 	}
 	public void setType(String type) {
 		this.type = type;
@@ -104,6 +120,32 @@ public class LabTestDetails  extends BaseNode{
 		return "LabTestDetails [name=" + name + ", refLower=" + refLower
 				+ ", refUpper=" + refUpper + ", userGender=" + userGender
 				+ ", unit=" + unit + ", comments=" + comments + "]";
+	}
+	
+	public List<String> getAncestorGroupNames() {
+		
+		LabTestTreeNode prevNode = this.getParent();	
+		
+		if(ancestorGroupNames.size() > 0)
+			return ancestorGroupNames;
+		
+		int i = 0;		
+		//ancestorGroupNames = new ArrayList<String>();
+		while(prevNode != null && !prevNode.getTestGroupName().equals(LabTestTreeUtils.STR_HEAD) && i < MAX_SUB_GROUPS){
+			//ancestorGroupNames.set(i++, prevNode.getTestGroupName());
+			ancestorGroupNames.add(i++, prevNode.getTestGroupName());
+			prevNode = prevNode.getParent();
+		}
+		Collections.reverse(ancestorGroupNames);
+		return ancestorGroupNames;
+	}
+	
+	public void setAncestorGroupNames(List<String> ancestorGroupNames) {
+		this.ancestorGroupNames = ancestorGroupNames;
+	}
+	
+	public void saveAncestors(){
+		
 	}
 
 }

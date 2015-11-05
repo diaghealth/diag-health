@@ -8,6 +8,10 @@
                http://www.springframework.org/schema/context/spring-context-3.0.xsd 
                http://www.springframework.org/schema/security                
                http://www.springframework.org/schema/security/spring-security.xsd">	
+               
+    <!-- <http auto-config='true'>
+    	<intercept-url pattern="/**" access="ROLE_USER" />
+  	</http> -->
 	
 	<context:component-scan base-package="com.diaghealth.web.filters,com.diaghealth.web.utils" />
 	
@@ -25,8 +29,8 @@
 	</http> -->
 	
 	<!-- <beans:bean id="springLoginFilter" class="com.diaghealth.web.filters.SpringLoginFilter" autowire="byName">
-	</beans:bean>
-	<beans:bean id="sessionUtil" class="com.diaghealth.web.utils.SessionUtil" autowire="byName">
+	</beans:bean> -->
+	<!-- <beans:bean id="sessionUtil" class="com.diaghealth.web.utils.SessionUtil" autowire="byName">
 	</beans:bean> -->
 	
 	<!-- <http use-expressions="true"> -->

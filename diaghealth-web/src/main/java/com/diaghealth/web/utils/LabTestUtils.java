@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.diaghealth.nodes.labtest.LabTestAvailablePrice;
 import com.diaghealth.nodes.labtest.LabTestDetails;
+import com.diaghealth.nodes.labtest.LabTestTreeNode;
 
 
 public class LabTestUtils {
@@ -77,6 +79,20 @@ public class LabTestUtils {
 			}
 
 			
+		}
+	}
+	
+	public static void putAllTestTypesInModel(ModelAndView mv, List<LabTestTreeNode> allTests){
+		List<String> testTypes = new ArrayList<String>();
+		for(LabTestTreeNode test: allTests){
+			if(!StringUtils.isEmpty(test.getTestGroupName()))
+				testTypes.add(test.getTestGroupName());
+		}
+		try{
+			String jsonMap = new ObjectMapper().writeValueAsString(testTypes);
+			mv.getModel().put("jsonMap", jsonMap);
+		} catch(Exception e){
+			logger.error("Cannot create jsonMap");
 		}
 	}
 	
