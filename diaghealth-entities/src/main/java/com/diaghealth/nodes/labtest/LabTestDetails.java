@@ -25,7 +25,7 @@ public class LabTestDetails  extends LabTestTreeNode {
 	
 	/*@GraphId
 	protected Long id;*/	
-	protected String type;
+	protected String type; //Not used 
 	@NotNull(message = "Please enter Test Name.")
 	protected String name;
 	protected float refLower;
@@ -122,7 +122,11 @@ public class LabTestDetails  extends LabTestTreeNode {
 				+ ", unit=" + unit + ", comments=" + comments + "]";
 	}
 	
-	public List<String> getAncestorGroupNames() {
+	public List<String> getAncestorGroupNames(){
+		return getAncestorGroupNames(LabTestTreeUtils.STR_HEAD);
+	}
+	
+	public List<String> getAncestorGroupNames(String headName) {
 		
 		LabTestTreeNode prevNode = this.getParent();	
 		
@@ -131,7 +135,7 @@ public class LabTestDetails  extends LabTestTreeNode {
 		
 		int i = 0;		
 		//ancestorGroupNames = new ArrayList<String>();
-		while(prevNode != null && !prevNode.getTestGroupName().equals(LabTestTreeUtils.STR_HEAD) && i < MAX_SUB_GROUPS){
+		while(prevNode != null && !prevNode.getTestGroupName().equals(headName) && i < MAX_SUB_GROUPS){
 			//ancestorGroupNames.set(i++, prevNode.getTestGroupName());
 			ancestorGroupNames.add(i++, prevNode.getTestGroupName());
 			prevNode = prevNode.getParent();

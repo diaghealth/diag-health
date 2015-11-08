@@ -36,6 +36,7 @@ import com.diaghealth.nodes.labtest.LabTestTreeNode;
 import com.diaghealth.nodes.user.UserDetails;
 import com.diaghealth.services.LabTestDetailsService;
 import com.diaghealth.services.LabTestService;
+import com.diaghealth.utils.LabTestTreeUtils;
 import com.diaghealth.utils.UserGender;
 import com.diaghealth.utils.UserType;
 import com.diaghealth.web.utils.LabTestUtils;
@@ -109,11 +110,11 @@ public class LabTestController {
 		
 	}
 	
-	@RequestMapping(value = "/labTests/getLabTestObject", method = RequestMethod.POST)
-	public @ResponseBody String getLabTestObject(@RequestParam(value="testType", required=false) String testType, HttpServletRequest httpServletRequest, ModelAndView mv) throws ApplicationException {
+	@RequestMapping(value = "/labTests/getLabTestGroupObject", method = RequestMethod.POST)
+	public @ResponseBody String getLabTestGroupObject(@RequestParam(value="testType", required=false) String testType, HttpServletRequest httpServletRequest, ModelAndView mv) throws ApplicationException {
 		
 		Set<LabTestTreeNode> children = labTestDetailsService.getSubGroupTests(testType);
-		List<String> testTypeList = new ArrayList<String>();
+		Set<String> testTypeList = new HashSet<String>();
 		if(children != null){
 			for(LabTestTreeNode child: children){
 				if(child instanceof LabTestTreeNode && !StringUtils.isEmpty(child.getTestGroupName())){
@@ -123,6 +124,86 @@ public class LabTestController {
 		}
 		try{
 			String jsonMap = new ObjectMapper().writeValueAsString(testTypeList);
+			return jsonMap;
+		} catch (Exception e){
+			logger.error(e.toString());
+			return "";
+		}
+	}
+	
+	@RequestMapping(value = "/labTests/getLabTestObject", method = RequestMethod.POST)
+	public @ResponseBody String getLabTestObject(@RequestParam(value="testType", required=false) String testType, HttpServletRequest httpServletRequest, ModelAndView mv) throws ApplicationException {
+		
+		
+		Set<LabTestTreeNode> children = labTestDetailsService.getSubGroupTests(testType);
+		Set<String> testTypeList = new HashSet<String>();
+		if(children != null){
+			for(LabTestTreeNode child: children){
+				if(child instanceof LabTestDetails){
+					testTypeList.add(((LabTestDetails) child).getName());
+				}
+			}
+		}
+		try{
+			String jsonMap = new ObjectMapper().writeValueAsString(testTypeList);
+			return jsonMap;
+		} catch (Exception e){
+			logger.error(e.toString());
+			return "";
+		}
+		
+		/*Set<LabTestTreeNode> children = labTestDetailsService.getSubGroupTests(testType);
+		List<LabTestDetails> testList = new ArrayList<LabTestDetails>();
+		if(children != null){
+			for(LabTestTreeNode child: children){
+				if(child instanceof LabTestDetails && !StringUtils.isEmpty(child.getTestGroupName())){
+					testList.add((LabTestDetails)child);
+				}
+			}
+		}
+		try{
+			String jsonMap = new ObjectMapper().writeValueAsString(testList);
+			return jsonMap;
+		} catch (Exception e){
+			logger.error(e.toString());
+			return "";
+		}*/
+	}
+	
+	@RequestMapping(value = "/labTests/getLabTestGender", method = RequestMethod.POST)
+	public @ResponseBody String getTestGender(@RequestParam(value="name", required=false) String testType, 
+			HttpServletRequest httpServletRequest, ModelAndView mv) throws ApplicationException {
+	
+		Set<LabTestDetails> tests = labTestDetailsService.getTestByName(testType);
+		Set<String> testGenderList = new HashSet<String>();
+		if(tests != null){
+			for(LabTestDetails test: tests){
+				testGenderList.add(test.getUserGender().name());
+			}
+		}
+		
+		try{
+			String jsonMap = new ObjectMapper().writeValueAsString(testGenderList);
+			return jsonMap;
+		} catch (Exception e){
+			logger.error(e.toString());
+			return "";
+		}
+	}
+	
+	@RequestMapping(value = "/labTests/getLabTestDetails", method = RequestMethod.POST)
+	public @ResponseBody String getTestDetails(@RequestParam(value="name", required=false) String testName, 
+			@RequestParam(value="gender", required=false) String testGender, 
+			HttpServletRequest httpServletRequest, ModelAndView mv) throws ApplicationException {
+	
+		Set<LabTestDetails> tests = labTestDetailsService.findIfExists(testName, testGender);	
+		for(LabTestDetails test: tests){
+			//to prevent infinite loop of jason when it tries to encode all the parents/children too
+			test.setParent(null);
+			test.setChildren(null);
+		}
+		try{
+			String jsonMap = new ObjectMapper().writeValueAsString(tests);
 			return jsonMap;
 		} catch (Exception e){
 			logger.error(e.toString());
@@ -202,8 +283,13 @@ public class LabTestController {
 		}			
 		
 		logger.debug("Saving tests for user: " + loggedInUser.getUsername() + " tests: " + saveList);
+		for(LabTestAvailablePrice toSave: saveList){
+			labTestDetailsService.saveAncestorTree(toSave, LabTestTreeUtils.STR_HEAD + "-" + loggedInUser.getUsername());
+			//labTestDetailsService.save(toSave); //TODO check if required
+		}
 	
-		return labTestService.saveTestsPrice(saveList, loggedInUser);
+		//return labTestService.saveTestsPrice(saveList, loggedInUser); //TODO remove this - santosh
+		return true;
 	}
 	
 	private boolean existsInList(Set<LabTestAvailablePrice> list, LabTestAvailablePrice element){

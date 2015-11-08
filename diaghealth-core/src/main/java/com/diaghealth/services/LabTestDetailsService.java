@@ -1,10 +1,13 @@
 package com.diaghealth.services;
 
+import static com.diaghealth.utils.LabTestTreeUtils.MAX_SUB_GROUPS;
+
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.diaghealth.nodes.labtest.LabTestDetails;
 import com.diaghealth.nodes.labtest.LabTestTreeNode;
@@ -19,7 +22,7 @@ public class LabTestDetailsService {
 	LabTestDetailsRepo labTestDetailsRepo;
 	@Autowired
 	LabTestTreeNodeRepo labTestTreeNodeRepo;
-	private static LabTestTreeNode head;	
+	//private LabTestTreeNode head;	
 	
 	public Set<LabTestDetails> getAllTests(){
 		return labTestDetailsRepo.searchAllAvailableTests();		
@@ -39,7 +42,11 @@ public class LabTestDetailsService {
 	}
 	
 	public Set<LabTestDetails> findIfExists(LabTestDetails test){
-		return labTestDetailsRepo.findByTypeNameGender(test.getName().toUpperCase(), test.getUserGender().toString());
+		return findIfExists(test.getName().toUpperCase(), test.getUserGender().toString());
+	}
+	
+	public Set<LabTestDetails> findIfExists(String testName, String testGender){
+		return labTestDetailsRepo.findByTypeNameGender(testName.toUpperCase(), testGender.toString());
 	}
 	
 	public void deleteTest(LabTestDetails test){
@@ -47,14 +54,18 @@ public class LabTestDetailsService {
 	}
 	
 	public LabTestTreeNode getHead(){
+		return getHead(LabTestTreeUtils.STR_HEAD);
+	}
+	
+	public LabTestTreeNode getHead(String headName){
+		//if(head == null){
+		//Check in DB
+		LabTestTreeNode head = labTestTreeNodeRepo.findNodeByTestGroupName(headName);
 		if(head == null){
-			//Check in DB
-			head = labTestTreeNodeRepo.findNodeByTestGroupName(LabTestTreeUtils.STR_HEAD);
-			if(head == null){
-				head = new LabTestTreeNode();
-				head.setTestGroupName(LabTestTreeUtils.STR_HEAD);
-			}
+			head = new LabTestTreeNode();
+			head.setTestGroupName(headName);
 		}
+		//}
 		return head;
 	}
 	
@@ -71,14 +82,65 @@ public class LabTestDetailsService {
 	}
 	
 	public Set<LabTestTreeNode> getSubGroupTests(String groupName){
-		if(head == null)
-			getHead();
+		return getSubGroupTests(groupName, LabTestTreeUtils.STR_HEAD);
+	}
+	
+	public Set<LabTestTreeNode> getSubGroupTests(String groupName, String headName){
+		LabTestTreeNode head =	getHead(headName);
 		LabTestTreeNode node = LabTestTreeUtils.findNodeInTree(head, groupName);
 		if(node != null){
 			return node.getChildren();
 		}		
 		
 		return null;
+	}
+	
+	public Set<LabTestDetails> getTestByName(String testName){
+		return labTestDetailsRepo.findByTypeName(testName);
+	}
+	
+	public void saveAncestorTree(LabTestDetails labTest, String headName){
+		LabTestTreeNode baseNode = getHead(headName);
+		List<String> groups = labTest.getAncestorGroupNames(headName);
+		boolean nodeFound = false;
+		int index = 0;
+		for(index = 0; index < MAX_SUB_GROUPS;index++ ){
+			if(isValidNode(groups.get(index))){
+				LabTestTreeNode tmp = LabTestTreeUtils.findNodeInTree(baseNode, groups.get(index));
+				if(tmp != null){
+					baseNode = tmp;
+					nodeFound = true;
+				} else {
+					break;
+				}
+			}
+		}
+		
+		LabTestTreeNode toSaveNode = baseNode;
+		/*if(nodeFound)
+			index++; //Save from the next node
+*/		
+		for(;index < MAX_SUB_GROUPS;index++){
+			if(isValidNode(groups.get(index))){
+				LabTestTreeNode  newNode = new LabTestTreeNode();
+				newNode.setParent(baseNode);
+				baseNode.addChild(newNode);
+				newNode.setTestGroupName(groups.get(index));
+				baseNode = newNode;
+			}
+		}
+		//Add head as ancestor
+		//labTest.saveAncestors(labTest);
+		
+		//Add LabTest as leaf node
+		baseNode.addChild(labTest);
+		
+		save(toSaveNode);
+		
+	}
+	
+	private boolean isValidNode(String name){
+		return !StringUtils.isEmpty(name) && !name.equalsIgnoreCase("NULL");
 	}
 
 }

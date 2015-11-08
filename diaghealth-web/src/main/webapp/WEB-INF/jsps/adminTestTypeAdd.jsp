@@ -30,7 +30,7 @@
 	<td><c:if test="${not empty test.ancestorGroupNames[0]}">${test.ancestorGroupNames[0]}</c:if></td>
 	<td><c:if test="${not empty test.ancestorGroupNames[1]}">${test.ancestorGroupNames[1]}</c:if></td>
 	<td><c:if test="${not empty test.ancestorGroupNames[2]}">${test.ancestorGroupNames[2]}</c:if></td>
-	<td><c:if test="${not empty test.ancestorGroupNames[2]}">${test.ancestorGroupNames[3]}</c:if></td>
+	<td><c:if test="${not empty test.ancestorGroupNames[3]}">${test.ancestorGroupNames[3]}</c:if></td>
 	<td>${test.name}</td>
 	<td>${test.refLower}</td>
 	<td>${test.refUpper}</td>

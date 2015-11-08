@@ -47,14 +47,34 @@ $(document).ready( function() {
 		$("#endRow").before(data);
 	});
 	
+	
 	$("#testType").change(onChange);
+	$("#subGroup1").change(subGroup1Change);
+	$("#subGroup2").change(subGroup2Change);
+	$("#subGroup3").change(subGroup3Change);
 	$("#testName").change(setGender);
+	$('#testGender').change(setTestDetails);	
 });
+
+function subGroup1Change(){
+	subGroupChange('testType', 'subGroup1', 'subGroup2');
+}
+
+function subGroup2Change(){
+	subGroupChange('subGroup1', 'subGroup2', 'subGroup3')
+}
+
+function subGroup3Change(){
+	subGroupChange('subGroup2','subGroup3', 'testType')
+}
 
 function addNewTestPriceReport(){
 	var data;
 	data = "<tr id='rowIndex" + testCount + "'>" +  
-			"<td><input name='testList[" + testCount + "].type' readonly='readonly' value='" + $('#testType').val()+ "'/></td>" + 
+			"<td><input name='testList[" + testCount + "].ancestorGroupNames[0]' readonly='readonly' value='" + $('#testType').val()+ "'/></td>" + 
+			"<td><input name='testList[" + testCount + "].ancestorGroupNames[1]' readonly='readonly' value='" + $('#subGroup1').val()+ "'/></td>" + 
+			"<td><input name='testList[" + testCount + "].ancestorGroupNames[2]' readonly='readonly' value='" + $('#subGroup2').val()+ "'/></td>" + 
+			"<td><input name='testList[" + testCount + "].ancestorGroupNames[3]' readonly='readonly' value='" + $('#subGroup3').val()+ "'/></td>" + 
 			"<td><input name='testList[" + testCount + "].name' readonly='readonly' value='" +$('#testName').val() + "'/></td>" +
 			"<td><input name='testList[" + testCount + "].userGender' readonly='readonly' value='" +$('#testGender').val() + "'/></td>" +
 			"<td><input name='testList[" + testCount + "].price' value='" + $('#testPrice').val()+ "'/></td>" +
@@ -90,13 +110,10 @@ function addNewTestPriceReportNew(){
 function onChange(){
 	var opt = $("#testType").find('option:selected').val();
 	var $testName = $('#testName');
-	/* $.post(getUrl(), { testType: opt } , function(data, result){
-		 alert("Data: " + data + "\nStatus: " + status);
-	    });*/
 	
 	$.ajax({
 		  type: 'POST',
-		  url: getUrl(),
+		  url: getSubGroupUrl(),
 		  data: { testType: opt },
 		  success: function(json){
 				 //alert("Data: " + data + "\nStatus: " + status);
@@ -106,20 +123,54 @@ function onChange(){
 		  async:false
 		});
 	
-	/*
-	$testName.find('option').remove();
-	
-	$("button").click(function(){
-	    $.ajax({url: "demo_test.txt", success: function(result){
-	        $("#div1").html(result);
-	    }});
-	});
-	
-	$.each(testHashMap[opt],function(index, value) 
-	{
-		$testName.append("<option value='" + index + "'>" + index + "</option>");
-	});*/
-	//setGender();
+	subGroup1Change();
+}
+
+function subGroupChange(prevGroup, selectedGroup, populateGroup){
+	var opt = $('#' + selectedGroup).find('option:selected').val();
+
+	if(opt == ''){
+		var prevOpt = $('#' + prevGroup).find('option:selected').val();
+		$.ajax({
+			  type: 'POST',
+			  url: getTestsUrl(),
+			  data: { testType: prevOpt },
+			  success: function(json){
+					 //alert("Data: " + data + "\nStatus: " + status);
+				  setTests(json);
+			    },
+			  /*dataType: dataType,*/
+			  async:false
+			});
+		setGender();
+	}
+	else {
+		$.ajax({
+			  type: 'POST',
+			  url: getSubGroupUrl(),
+			  data: { testType: opt },
+			  success: function(json){
+					 //alert("Data: " + data + "\nStatus: " + status);
+				  setSubType(json, populateGroup);
+			    },
+			  /*dataType: dataType,*/
+			  async:false
+			});
+		subGroupChange(selectedGroup, populateGroup, null);
+	}
+}
+
+function setTests(json){
+	var testList =$.parseJSON(json);
+	var $testName = $('#testName');
+	$testName.find('option').remove(); 
+	if(testList.length > 0){
+		$testName.append("<option value='All'>(Select All)</option>");
+		$.each(testList,function(index, key) 
+		{
+			$testName.append("<option value='" + key + "'>" + key + "</option>");
+		});
+	}
 }
 
 function setSubType(json, subGroup){
@@ -133,15 +184,41 @@ function setSubType(json, subGroup){
 	});
 }
 
-function getUrl(){
+function getSubGroupUrl(){
+	return window.location.href + '/getLabTestGroupObject';
+}
+
+function getTestsUrl(){
 	return window.location.href + '/getLabTestObject';
 }
 
+function getGenderUrl(){
+	return window.location.href + '/getLabTestGender';
+}
+
+function getTestDetailsUrl(){
+	return window.location.href + '/getLabTestDetails';
+}
+
+
 function setGender(){
-	var opt = $("#testType").find('option:selected').val();
+	//var opt = $("#testType").find('option:selected').val();
 	var testName = $('#testName').find('option:selected').val(); 
-	var $testGender = $('#testGender');
-	$testGender.find('option').remove(); 
+	
+	if(testName != 'All'){
+		$.ajax({
+			  type: 'POST',
+			  url: getGenderUrl(),
+			  data: { name: testName },
+			  success: function(json){
+					 //alert("Data: " + data + "\nStatus: " + status);
+				  setGenderCallBack(json);
+			    },
+			  /*dataType: dataType,*/
+			  async:false
+			});
+		setTestDetails();
+	}
 	/*$.each(testHashMap[opt][testName],function(index, value) 
 	{
 		if(!(value.userGender === undefined || value.userGender == null))
@@ -151,6 +228,59 @@ function setGender(){
 		}
 	});*/
 	setPriceDiscountReport();
+}
+
+function setGenderCallBack(json){
+	var genderList =$.parseJSON(json);
+	var $testGender = $('#testGender');
+	var $testGender = $('#testGender');
+	$testGender.find('option').remove(); 
+	$.each(genderList,function(index, key) 
+	{
+		if(!(key === undefined || key == null))
+			$testGender.append("<option value='" + key + "'>" + key + "</option>");
+		else
+			$testGender.append("<option value='NA'>NA</option>");
+	});
+}
+
+function setTestDetails(){
+	var testName = $('#testName').find('option:selected').val(); 
+	var testGender = $('#testGender').find('option:selected').val(); 
+	
+	if(testName != 'All'){
+		$.ajax({
+			  type: 'POST',
+			  url: getTestDetailsUrl(),
+			  data: { name: testName , gender: testGender },
+			  success: function(json){
+					 //alert("Data: " + data + "\nStatus: " + status);
+				  setTestDetailsCallBack(json);
+			    },
+			  /*dataType: dataType,*/
+			  async:false
+			});
+	}
+}
+
+function setTestDetailsCallBack(json){
+	var jsonParsed =$.parseJSON(json);
+	if(jsonParsed.length > 0){
+		var testDetails = jsonParsed[0];
+		if(!(testDetails.refUpper === undefined))
+			$("#testRefUpper").val(testDetails.refUpper);
+		if(!(testDetails.refLower === undefined))
+			$("#testRefLower").val(testDetails.refLower);
+		if(!(testDetails.price === undefined))
+			$("#testPrice").val(testDetails.price);
+		if(!(testDetails.discountPercent === undefined))
+			$("#testDiscount").val(testDetails.discountPercent);
+		if(!(testDetails.unit === undefined))
+			$("#testUnit").val(testDetails.unit);
+		if(!(testDetails.comments === undefined))
+			$("#testComments").val(testDetails.comments);
+	}
+	
 }
 
 function setPriceDiscountReport(){

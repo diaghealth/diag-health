@@ -87,8 +87,8 @@ public class AdminTestTypeAddController {
 			}
 		}
 		logger.info("Added new Test Type: " + labTest);
-		saveAncestorTree(labTest);
-		labTestDetailsService.save(labTest);
+		labTestDetailsService.saveAncestorTree(labTest, LabTestTreeUtils.STR_HEAD);
+		labTestDetailsService.save(labTest); //TODO check if required
 		/*} else {
 			result.reject("test.exists", "Test Already Exists");
 		}*/
@@ -100,43 +100,5 @@ public class AdminTestTypeAddController {
 		return labTestDetailsService.getAllTests();		
 	}
 	
-	private void saveAncestorTree(LabTestDetails labTest){
-		LabTestTreeNode baseNode = labTestDetailsService.getHead();
-		List<String> groups = labTest.getAncestorGroupNames();
-		boolean nodeFound = false;
-		int index = 0;
-		for(index = 0; index < MAX_SUB_GROUPS;index++ ){
-			if(!StringUtils.isEmpty(groups.get(index))){
-				LabTestTreeNode tmp = LabTestTreeUtils.findNodeInTree(baseNode, groups.get(index));
-				if(tmp != null){
-					baseNode = tmp;
-					nodeFound = true;
-				} else {
-					break;
-				}
-			}
-		}
-		
-		LabTestTreeNode toSaveNode = baseNode;
-		/*if(nodeFound)
-			index++; //Save from the next node
-*/		
-		for(;index < MAX_SUB_GROUPS;index++){
-			if(!StringUtils.isEmpty(groups.get(index))){
-				LabTestTreeNode  newNode = new LabTestTreeNode();
-				newNode.setParent(baseNode);
-				baseNode.addChild(newNode);
-				newNode.setTestGroupName(groups.get(index));
-				baseNode = newNode;
-			}
-		}
-		//Add head as ancestor
-		//labTest.saveAncestors(labTest);
-		
-		//Add LabTest as leaf node
-		baseNode.addChild(labTest);
-		
-		labTestDetailsService.save(toSaveNode);
-		
-	}
+	
 }

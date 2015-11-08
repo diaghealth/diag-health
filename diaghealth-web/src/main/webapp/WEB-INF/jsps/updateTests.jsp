@@ -3,15 +3,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Update Tests</title>
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script> 
+<!-- <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>  -->
+<script src="js/jquery.js"></script>
+<script src="js/jquery-ui.js"></script>
 <script src="js/addTestRow.js"></script>
 <link rel="stylesheet" type="text/css" href="css/commonTable.css"> 
 <style>
@@ -49,7 +51,7 @@ function deleteRow(obj){
 <!-- -------------------------Display Table starts-------------------------- -->
 
 <table id="displayTestsTable">
-<tr><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
+<tr><th>Test Type</th><th>Sub Group1</th><th>Sub Group2</th><th>Sub Group3</th><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
 <c:if test="${not empty buildResult}">
 <th>Result</th>
 </c:if>
@@ -64,7 +66,23 @@ function deleteRow(obj){
 	<%-- <div class="test_item_<c:out value='${status.index}' />"> --%>		
 		<%-- <td>
 			<input name='testList[${status.index}].type' readonly='readonly' value='${test.type}' class='type'/>
-		</td> --%>		
+		</td> --%>	
+		<%-- <td>
+			<input name='testList[${status.index}].ancestorGroupNames[0]' readonly='readonly' value='${test.ancestorGroupNames[0]}' class='type'/>
+		</td>	
+		<td>
+			<input name='testList[${status.index}].ancestorGroupNames[1]' readonly='readonly' value='${test.ancestorGroupNames[1]}' class='type'/>
+		</td>
+		<td>
+			<input name='testList[${status.index}].ancestorGroupNames[2]' readonly='readonly' value='${test.ancestorGroupNames[2]}' class='type'/>
+		</td>
+		<td>
+			<input name='testList[${status.index}].nancestorGroupNames[3]' readonly='readonly' value='${test.ancestorGroupNames[3]}' class='type'/>
+		</td> --%>
+		<td><c:if test="${not empty test.ancestorGroupNames[0]}">${test.ancestorGroupNames[0]}</c:if></td>
+		<td><c:if test="${not empty test.ancestorGroupNames[1]}">${test.ancestorGroupNames[1]}</c:if></td>
+		<td><c:if test="${not empty test.ancestorGroupNames[2]}">${test.ancestorGroupNames[2]}</c:if></td>
+		<td><c:if test="${not empty test.ancestorGroupNames[3]}">${test.ancestorGroupNames[3]}</c:if></td>
 		<td>
 			<input name='testList[${status.index}].name' readonly='readonly' value='${test.name}' class='name'/>
 		</td>
