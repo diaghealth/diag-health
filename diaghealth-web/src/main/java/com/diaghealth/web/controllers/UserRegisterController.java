@@ -123,7 +123,13 @@ public class UserRegisterController {
 			 result.addError(new ObjectError("PasswordError", "Password must be of at least 8 characters."));
 			 logger.error("Password length error");
 			 return mv;
-		 }
+		 } 
+		 
+		 if(detailsForm.getDateOfBirth() == null){
+			 result.addError(new ObjectError("DateError", "Incorrect date of birth format."));
+			 logger.error("Date Format Error");
+			 return mv;
+		 } 
 		 
 		 UserDetails userExists = searchService.userExists(detailsForm);
 		 if(userExists != null){

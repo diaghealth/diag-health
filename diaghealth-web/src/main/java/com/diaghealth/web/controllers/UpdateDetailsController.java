@@ -55,9 +55,10 @@ public class UpdateDetailsController {
             BindingResult result, HttpServletRequest httpServletRequest, ModelAndView mv) throws ApplicationException {
 		
 		mv.setViewName(USER_DETAILS_UPDATE_JSP);
-		/*if (result.hasErrors()) {
+		if (result.hasErrors()) {
 			 return mv;
-	    }*/
+	    }
+		
 		
 		UserDetails loggedInUser = sessionUtil.getLoggedInUser(httpServletRequest);
 		UserDetails changedInfo = details.getUserDetails();
@@ -78,6 +79,10 @@ public class UpdateDetailsController {
 				changedInfo.setPassword(details.getNewPassword()); //TODO check if this is required
 				loggedInUser.setPassword(details.getNewPassword());
 			}
+		}
+		
+		if(loggedInUser.getDateOfBirth() == null){
+			result.reject("dateofBirth.error", "Incorrect date of birth format");
 		}
 		
 		if (result.hasErrors()) {

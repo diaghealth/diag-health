@@ -91,7 +91,7 @@ public class LabTestController {
 		}
 		
 		List<LabTestAvailablePrice> tests = labTestService.getTestsForUser(loggedInUser);
-		List<LabTestTreeNode> allTests = new ArrayList<LabTestTreeNode>(labTestService.getAllAvailableTestTypes());
+		List<LabTestTreeNode> allTests = new ArrayList<LabTestTreeNode>(labTestService.getAllAvailableTestTypes(LabTestTreeUtils.STR_HEAD));
 		LabTestUtils.putAllTestTypesInModel(mv, allTests);
 		LabTestListViewDto testListObject = new LabTestListViewDto();
 		if(tests != null){
@@ -284,12 +284,12 @@ public class LabTestController {
 		
 		logger.debug("Saving tests for user: " + loggedInUser.getUsername() + " tests: " + saveList);
 		for(LabTestAvailablePrice toSave: saveList){
-			labTestDetailsService.saveAncestorTree(toSave, LabTestTreeUtils.STR_HEAD + "-" + loggedInUser.getUsername());
+			labTestDetailsService.saveAncestorTree(toSave, LabTestTreeUtils.STR_HEAD_APPEND + loggedInUser.getUsername());
 			//labTestDetailsService.save(toSave); //TODO check if required
 		}
 	
-		//return labTestService.saveTestsPrice(saveList, loggedInUser); //TODO remove this - santosh
-		return true;
+		return labTestService.saveTestsPrice(saveList, loggedInUser);
+		//return true;
 	}
 	
 	private boolean existsInList(Set<LabTestAvailablePrice> list, LabTestAvailablePrice element){

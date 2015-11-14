@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import com.diaghealth.nodes.labtest.LabTestAvailablePrice;
 import com.diaghealth.nodes.labtest.LabTestDetails;
 import com.diaghealth.nodes.labtest.LabTestTreeNode;
 import com.diaghealth.repository.LabTestDetailsRepo;
+import com.diaghealth.repository.LabTestPriceRepo;
 import com.diaghealth.repository.LabTestTreeNodeRepo;
 import com.diaghealth.utils.LabTestTreeUtils;
 
@@ -22,6 +24,8 @@ public class LabTestDetailsService {
 	LabTestDetailsRepo labTestDetailsRepo;
 	@Autowired
 	LabTestTreeNodeRepo labTestTreeNodeRepo;
+	@Autowired
+	LabTestPriceRepo labTestPriceRepo;
 	//private LabTestTreeNode head;	
 	
 	public Set<LabTestDetails> getAllTests(){
@@ -37,6 +41,8 @@ public class LabTestDetailsService {
 			return labTestTreeNodeRepo.save(test);
 		else if(test instanceof LabTestDetails)
 			return labTestDetailsRepo.save((LabTestDetails)test);
+		else if(test instanceof LabTestAvailablePrice)
+			return labTestPriceRepo.save((LabTestAvailablePrice)test);
 		else
 			return null;
 	}
@@ -104,7 +110,8 @@ public class LabTestDetailsService {
 		List<String> groups = labTest.getAncestorGroupNames(headName);
 		boolean nodeFound = false;
 		int index = 0;
-		for(index = 0; index < MAX_SUB_GROUPS;index++ ){
+		int maxSize = groups.size() > MAX_SUB_GROUPS ? MAX_SUB_GROUPS : groups.size();
+		for(index = 0; index < maxSize;index++ ){
 			if(isValidNode(groups.get(index))){
 				LabTestTreeNode tmp = LabTestTreeUtils.findNodeInTree(baseNode, groups.get(index));
 				if(tmp != null){
@@ -120,12 +127,14 @@ public class LabTestDetailsService {
 		/*if(nodeFound)
 			index++; //Save from the next node
 */		
-		for(;index < MAX_SUB_GROUPS;index++){
+		
+		
+		for(;index < maxSize;index++){
 			if(isValidNode(groups.get(index))){
 				LabTestTreeNode  newNode = new LabTestTreeNode();
 				newNode.setParent(baseNode);
-				baseNode.addChild(newNode);
 				newNode.setTestGroupName(groups.get(index));
+				newNode = baseNode.addChild(newNode);				
 				baseNode = newNode;
 			}
 		}
@@ -134,12 +143,14 @@ public class LabTestDetailsService {
 		
 		//Add LabTest as leaf node
 		baseNode.addChild(labTest);
-		
-		save(toSaveNode);
+		save(baseNode);
+		if(baseNode != toSaveNode)
+			save(toSaveNode);
 		
 	}
 	
 	private boolean isValidNode(String name){
+		//Thread myThread = new Thread();
 		return !StringUtils.isEmpty(name) && !name.equalsIgnoreCase("NULL");
 	}
 

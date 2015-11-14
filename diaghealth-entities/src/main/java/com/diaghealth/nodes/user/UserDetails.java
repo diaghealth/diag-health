@@ -1,6 +1,7 @@
 package com.diaghealth.nodes.user;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,6 +16,7 @@ import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 import org.springframework.data.neo4j.support.index.IndexType;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.util.StringUtils;
 
 import com.diaghealth.nodes.BaseNode;
@@ -44,6 +46,11 @@ public class UserDetails extends BaseNode {
     
     @Email
 	private String email;
+    
+    
+    @NotNull(message = "Please enter Valid Date Of Birth.")
+    @DateTimeFormat(pattern = "DD/MM/YYYY")
+	private Date dateOfBirth;
     
 	@NotNull(message = "Please enter Valid Phone Number.")
 	@PhoneNumber
@@ -288,6 +295,14 @@ public class UserDetails extends BaseNode {
 	}
 	public void setUserGender(UserGender gender) {
 		this.userGender = gender;
+	}
+
+	public Date getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
 	
 		

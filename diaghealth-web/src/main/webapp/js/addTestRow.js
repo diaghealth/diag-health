@@ -71,11 +71,27 @@ function subGroup3Change(){
 function addNewTestPriceReport(){
 	var data;
 	data = "<tr id='rowIndex" + testCount + "'>" +  
-			"<td><input name='testList[" + testCount + "].ancestorGroupNames[0]' readonly='readonly' value='" + $('#testType').val()+ "'/></td>" + 
-			"<td><input name='testList[" + testCount + "].ancestorGroupNames[1]' readonly='readonly' value='" + $('#subGroup1').val()+ "'/></td>" + 
+			"<td><input name='testList[" + testCount + "].ancestorGroupNames[0]' readonly='readonly' value='" + $('#testType').val()+ "'/></td>";
+	
+	if($('#subGroup1').val() != '' &&  $('#subGroup1').val() != null)
+		data = data + "<td><input name='testList[" + testCount + "].ancestorGroupNames[1]' readonly='readonly' value='" + $('#subGroup1').val()+ "'/></td>";
+	else
+		data = data + "<td></td>";
+	
+	if($('#subGroup2').val() != '' &&  $('#subGroup2').val() != null)
+		data = data + "<td><input name='testList[" + testCount + "].ancestorGroupNames[2]' readonly='readonly' value='" + $('#subGroup2').val()+ "'/></td>";
+	else
+		data = data + "<td></td>";
+	
+	if($('#subGroup3').val() != '' &&  $('#subGroup3').val() != null)
+		data = data + "<td><input name='testList[" + testCount + "].ancestorGroupNames[3]' readonly='readonly' value='" + $('#subGroup3').val()+ "'/></td>";
+	else
+		data = data + "<td></td>";
+	
+			/*"<td><input name='testList[" + testCount + "].ancestorGroupNames[1]' readonly='readonly' value='" + $('#subGroup1').val()+ "'/></td>" + 
 			"<td><input name='testList[" + testCount + "].ancestorGroupNames[2]' readonly='readonly' value='" + $('#subGroup2').val()+ "'/></td>" + 
-			"<td><input name='testList[" + testCount + "].ancestorGroupNames[3]' readonly='readonly' value='" + $('#subGroup3').val()+ "'/></td>" + 
-			"<td><input name='testList[" + testCount + "].name' readonly='readonly' value='" +$('#testName').val() + "'/></td>" +
+			"<td><input name='testList[" + testCount + "].ancestorGroupNames[3]' readonly='readonly' value='" + $('#subGroup3').val()+ "'/></td>" + */
+	data = data + "<td><input name='testList[" + testCount + "].name' readonly='readonly' value='" +$('#testName').val() + "'/></td>" +
 			"<td><input name='testList[" + testCount + "].userGender' readonly='readonly' value='" +$('#testGender').val() + "'/></td>" +
 			"<td><input name='testList[" + testCount + "].price' value='" + $('#testPrice').val()+ "'/></td>" +
 			"<td><input name='testList[" + testCount + "].discountPercent' value='" + $('#testDiscount').val()+ "'/></td>" +
@@ -92,7 +108,10 @@ function addNewTestPriceReport(){
 function addNewTestPriceReportNew(){
 	var data;
 	data = "<tr id='rowIndex" + testCount + "'>" +  
-			"<td><input name='testList[" + testCount + "].type' readonly='readonly' value='" + $('#testTypeNew').val()+ "'/></td>" + 
+			"<td><input name='testList[" + testCount + "].ancestorGroupNames[0]' readonly='readonly' value='" + $('#testTypeNew').val()+ "'/></td>" + 
+			"<td><input name='testList[" + testCount + "].ancestorGroupNames[1]' readonly='readonly' value='" + $('#subGroup1New').val()+ "'/></td>" + 
+			"<td><input name='testList[" + testCount + "].ancestorGroupNames[2]' readonly='readonly' value='" + $('#subGroup2New').val()+ "'/></td>" + 
+			"<td><input name='testList[" + testCount + "].ancestorGroupNames[3]' readonly='readonly' value='" + $('#subGroup3New').val()+ "'/></td>" + 
 			"<td><input name='testList[" + testCount + "].name' readonly='readonly' value='" +$('#testNameNew').val() + "'/></td>" +
 			"<td><input name='testList[" + testCount + "].userGender' readonly='readonly' value='" +$('#testGenderNew').val() + "'/></td>" +
 			"<td><input name='testList[" + testCount + "].price' value='" + $('#testPriceNew').val()+ "'/></td>" +
@@ -115,12 +134,16 @@ function onChange(){
 		  type: 'POST',
 		  url: getSubGroupUrl(),
 		  data: { testType: opt },
+		  error: function(){
+		        timeoutError();
+		    },
 		  success: function(json){
 				 //alert("Data: " + data + "\nStatus: " + status);
 			  	setSubType(json, 'subGroup1');
 		    },
 		  /*dataType: dataType,*/
-		  async:false
+		  async:false,
+		  timeout: 60000
 		});
 	
 	subGroup1Change();
@@ -135,12 +158,16 @@ function subGroupChange(prevGroup, selectedGroup, populateGroup){
 			  type: 'POST',
 			  url: getTestsUrl(),
 			  data: { testType: prevOpt },
+			  error: function(){
+			        timeoutError();
+			    },
 			  success: function(json){
 					 //alert("Data: " + data + "\nStatus: " + status);
 				  setTests(json);
 			    },
 			  /*dataType: dataType,*/
-			  async:false
+			  async:false,
+			  timeout: 60000
 			});
 		setGender();
 	}
@@ -149,15 +176,23 @@ function subGroupChange(prevGroup, selectedGroup, populateGroup){
 			  type: 'POST',
 			  url: getSubGroupUrl(),
 			  data: { testType: opt },
+			  error: function(){
+			        timeoutError();
+			    },
 			  success: function(json){
 					 //alert("Data: " + data + "\nStatus: " + status);
 				  setSubType(json, populateGroup);
 			    },
 			  /*dataType: dataType,*/
-			  async:false
+			  async:false,
+			  timeout: 60000
 			});
 		subGroupChange(selectedGroup, populateGroup, null);
 	}
+}
+
+function timeoutError(){
+	
 }
 
 function setTests(json){
@@ -185,19 +220,23 @@ function setSubType(json, subGroup){
 }
 
 function getSubGroupUrl(){
-	return window.location.href + '/getLabTestGroupObject';
+	return getBaseUrl() + '/labTests/getLabTestGroupObject';
 }
 
 function getTestsUrl(){
-	return window.location.href + '/getLabTestObject';
+	return getBaseUrl() + '/labTests/getLabTestObject';
 }
 
 function getGenderUrl(){
-	return window.location.href + '/getLabTestGender';
+	return getBaseUrl() + '/labTests/getLabTestGender';
 }
 
 function getTestDetailsUrl(){
-	return window.location.href + '/getLabTestDetails';
+	return getBaseUrl() + '/labTests/getLabTestDetails';
+}
+
+function getBaseUrl(){
+	return window.location.origin + "/" + window.location.pathname.split('/')[1] + "/";	
 }
 
 
@@ -210,12 +249,16 @@ function setGender(){
 			  type: 'POST',
 			  url: getGenderUrl(),
 			  data: { name: testName },
+			  error: function(){
+			        timeoutError();
+			    },
 			  success: function(json){
 					 //alert("Data: " + data + "\nStatus: " + status);
 				  setGenderCallBack(json);
 			    },
 			  /*dataType: dataType,*/
-			  async:false
+			  async:false,
+			  timeout: 60000
 			});
 		setTestDetails();
 	}
@@ -253,12 +296,16 @@ function setTestDetails(){
 			  type: 'POST',
 			  url: getTestDetailsUrl(),
 			  data: { name: testName , gender: testGender },
+			  error: function(){
+			        timeoutError();
+			    },
 			  success: function(json){
 					 //alert("Data: " + data + "\nStatus: " + status);
 				  setTestDetailsCallBack(json);
 			    },
 			  /*dataType: dataType,*/
-			  async:false
+			  async:false,
+			  timeout: 60000
 			});
 	}
 }

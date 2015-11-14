@@ -1,5 +1,6 @@
 package com.diaghealth.web.controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -29,12 +30,14 @@ import com.diaghealth.models.ReceiptViewDto;
 import com.diaghealth.nodes.ReceiptObject;
 import com.diaghealth.nodes.labtest.LabTestAvailablePrice;
 import com.diaghealth.nodes.labtest.LabTestDoneObject;
+import com.diaghealth.nodes.labtest.LabTestTreeNode;
 import com.diaghealth.nodes.user.UserDetails;
 import com.diaghealth.services.LabTestService;
 import com.diaghealth.services.ReceiptService;
 import com.diaghealth.services.SearchService;
 import com.diaghealth.services.UserRegisterService;
 import com.diaghealth.util.DateUtilCore;
+import com.diaghealth.utils.LabTestTreeUtils;
 import com.diaghealth.utils.UserType;
 import com.diaghealth.web.utils.LabTestUtils;
 import com.diaghealth.web.utils.ModelBuilder;
@@ -180,10 +183,14 @@ public class ReceiptController {
 			receiptView.getTestList().addAll(receipt.getLabTestDoneObject());
 		receiptView.setTestList(receiptView.getTestList()); //TODO why ?
 		mv.getModel().put("receiptView", receiptView);
-		List<LabTestAvailablePrice> availableTests = labTestService.getAvailableTestsInLab(loggedInUser.getId());
+		
+		List<LabTestTreeNode> allTests = new ArrayList<LabTestTreeNode>(labTestService.getAllAvailableTestTypes(LabTestTreeUtils.STR_HEAD_APPEND + loggedInUser.getUsername()));
+		LabTestUtils.putAllTestTypesInModel(mv, allTests);
+		
+		//List<LabTestAvailablePrice> availableTests = labTestService.getAvailableTestsInLab(loggedInUser.getId());
 		//List<LabTestDetailsDto> allTests = labTestService.getAllAvailableTests();
 		//LabTestUtils.putAvailableTestsInModel(mv, availableTests);
-		LabTestUtils.putAllTestsInModel(mv, availableTests);
+		//LabTestUtils.putAllTestsInModel(mv, availableTests);
 		sessionUtil.removeAttribute(httpServletRequest, "labTests");
 		mv.getModel().put("labTests", receiptView);
 		logger.info("Found Receipt: " + receipt.getReceiptId() + " requestby User: " + loggedInUser.getUsername());
@@ -262,11 +269,17 @@ public class ReceiptController {
 		/*Set<UserDetails> users = new HashSet<UserDetails>();
 		users.add(subject);		
 		new ModelBuilder().buildUserListModel(loggedInUser, mv, subject.getUserType(), users);*/	
-		List<LabTestAvailablePrice> availableTests = labTestService.getAvailableTestsInLab(loggedInUser.getId());
+		//List<LabTestAvailablePrice> availableTests = labTestService.getAvailableTestsInLab(loggedInUser.getId());
 		//List<LabTestDetailsDto> allTests = labTestService.getAllAvailableTests();
 		//LabTestUtils.putAvailableTestsInModel(mv, availableTests);
-		LabTestUtils.putAllTestsInModel(mv, availableTests);
+		//LabTestUtils.putAllTestsInModel(mv, availableTests);
+		
+		List<LabTestTreeNode> allTests = new ArrayList<LabTestTreeNode>(labTestService.getAllAvailableTestTypes(LabTestTreeUtils.STR_HEAD_APPEND + loggedInUser.getUsername()));
+		LabTestUtils.putAllTestTypesInModel(mv, allTests);
 		sessionUtil.removeAttribute(httpServletRequest, "labTests");
+		
+		//createReceiptViewModel(mv, receiptObjDto, httpServletRequest);
+		
 		mv.getModel().put("labTests", receiptView);
 		receiptView.setReceipt(receiptObjDto);
 		mv.getModel().put("receiptView", receiptView);
@@ -274,9 +287,10 @@ public class ReceiptController {
 		mv.getModel().put("buildResult", 1);
 		mv.setViewName(RECEIPT_VIEW_JSP);
 		
-		result.reject("save.success", "Saved");
+		result.reject("save.success", "Saved");	
 		
 		sendTestResultsMail(receiptView);
+		
 		return mv;
 	}
 	

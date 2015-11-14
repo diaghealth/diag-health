@@ -45,7 +45,7 @@ function deleteRow(obj){
 <!-- -------------------------Display Table starts-------------------------- -->
 
 <table id="displayTestsTable">
-<tr><!-- <th>Test Type</th> --><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
+<tr><th>Test Type</th><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
 <c:if test="${not empty buildResult}">
 <th>Result</th>
 </c:if>

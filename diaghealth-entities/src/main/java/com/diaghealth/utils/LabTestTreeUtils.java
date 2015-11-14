@@ -10,6 +10,7 @@ import com.diaghealth.nodes.labtest.LabTestTreeNode;
 public class LabTestTreeUtils {
 
 	public static String STR_HEAD = "HEAD";
+	public static String STR_HEAD_APPEND = STR_HEAD + "-";
 	public static final int MAX_SUB_GROUPS = 4;
 	
 	public static LabTestTreeNode findNodeInTree(LabTestTreeNode head, String toFind){

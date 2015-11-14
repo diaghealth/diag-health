@@ -48,8 +48,8 @@ public class LabTestService {
 		return labTestDetailsRepo.searchAllAvailableTests();
 	}
 	
-	public Set<LabTestTreeNode> getAllAvailableTestTypes(){
-		LabTestTreeNode head = labTestDetailsService.getHead();
+	public Set<LabTestTreeNode> getAllAvailableTestTypes(String headName){
+		LabTestTreeNode head = labTestDetailsService.getHead(headName);
 		if(head == null)
 			return null;
 		return head.getChildren();

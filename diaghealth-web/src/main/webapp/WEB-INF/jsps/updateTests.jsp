@@ -219,10 +219,11 @@ function deleteRow(obj){
 <th>Lower Ref</th><th>Upper Ref</th><th>Unit</th><th>Comments</th>
 </tr>
 <tr>
-<td><input size="30" type="text" id="testTypeNew" name="price" value=""/></td>
-<td><input size="30" type="text" id="subGroup1New" name="price" value=""/></td>
-<td><input size="30" type="text" id="subGroup2New" name="price" value=""/></td>
-<td><input size="30" type="text" id="subGroup3New" name="price" value=""/></td>
+<td><input size="30" type="text" id="testTypeNew" name="ancestorGroupNames[0]" value=""/></td>
+<td><input size="30" type="text" id="subGroup1New" name="ancestorGroupNames[1]" value=""/></td>
+<td><input size="30" type="text" id="subGroup2New" name="ancestorGroupNames[2]" value=""/></td>
+<td><input size="30" type="text" id="subGroup3New" name="ancestorGroupNames[3]" value=""/></td>
+<td><input size="30" type="text" id="testNameNew" name="testName" value=""/></td>
 <td>
 <select id="testGenderNew" name="userGender" size="1">
   <c:forEach items="${userGender}" var="userGender">

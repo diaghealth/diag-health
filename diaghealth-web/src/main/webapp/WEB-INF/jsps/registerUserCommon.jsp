@@ -11,8 +11,12 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">	
 	<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
 	<link type="text/css" rel="stylesheet" href="css/registerUserCommon.css">
+	<link rel="stylesheet" href="css/jquery-ui.css">
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>	
+	<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->	
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-ui.js"></script>		
+	<script src="js/jquery.js"></script>
 	<script src="js/locationFinder.js"></script> 
 	<script src="js/registerUserSelection.js"></script> 
 	<jsp:include page="menuHeader.jsp" />
@@ -69,7 +73,7 @@
           	<tr>
           	<td>
           	<div class="addressTable">          	
-			<label>Address Details</label>
+			<label>Personal Details</label>
 			<p></p>
 			<table>
 				<tr>
@@ -91,6 +95,15 @@
 				  <td class="labelField" width="33%">Email</td>
 				  <td width="67%"><form:input path="email" name="email" type="text" size="30" /></td>
 				  <form:errors path="email" cssClass="error" />
+				</tr>
+				<tr>
+					<td class="labelField" width="33%">Date of Birth (DD/MM/YYYY) *</td>
+					<td width="67%">
+					<div class="date">
+					<form:input type="text" path="dateOfBirth" name="dateOfBirth" size="30"/>
+					</div>
+					</td>	
+					<form:errors path="dateOfBirth" cssClass="error" />
 				</tr>
 				<tr>
 				  <td class="labelField" >Address Line 1</td>

@@ -135,7 +135,7 @@ public class LabTestDetails  extends LabTestTreeNode {
 		
 		int i = 0;		
 		//ancestorGroupNames = new ArrayList<String>();
-		while(prevNode != null && !prevNode.getTestGroupName().equals(headName) && i < MAX_SUB_GROUPS){
+		while(prevNode != null && !prevNode.getTestGroupName().contains(headName) && i < MAX_SUB_GROUPS){
 			//ancestorGroupNames.set(i++, prevNode.getTestGroupName());
 			ancestorGroupNames.add(i++, prevNode.getTestGroupName());
 			prevNode = prevNode.getParent();

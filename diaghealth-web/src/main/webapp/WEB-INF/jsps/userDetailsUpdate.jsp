@@ -53,7 +53,16 @@
 				<tr>
 				  <td class="labelField" width="33%">Email</td>
 				  <td width="67%"><form:input path="userDetails.email" name="userDetails.email" type="text" size="30" /></td>
-				  <%-- <form:errors path="email" cssClass="error" /> --%>
+				  <form:errors path="userDetails.email" cssClass="error" />
+				</tr>
+				<tr>
+					<td class="labelField" width="33%">Date of Birth (DD/MM/YYYY) *</td>
+					<td width="67%">
+					<div class="date">
+					<form:input type="text" path="userDetails.dateOfBirth" name="userDetails.dateOfBirth" size="30" <%-- readonly="true" --%>/>
+					</div>
+					</td>	
+					<form:errors path="userDetails.dateOfBirth" cssClass="error" />
 				</tr>
 				<tr>
 				  <td class="labelField" >Address Line 1</td>
