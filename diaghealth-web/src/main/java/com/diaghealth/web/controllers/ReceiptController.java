@@ -195,7 +195,7 @@ public class ReceiptController {
 		mv.getModel().put("labTests", receiptView);
 		logger.info("Found Receipt: " + receipt.getReceiptId() + " requestby User: " + loggedInUser.getUsername());
 		mv.getModel().put("showTestList", 1);
-		mv.getModel().put("buildResult", 1);
+		//mv.getModel().put("buildResult", 1);
 		mv.setViewName(RECEIPT_VIEW_JSP);
 	}
 	

@@ -59,7 +59,7 @@
 					<td class="labelField" width="33%">Date of Birth (DD/MM/YYYY) *</td>
 					<td width="67%">
 					<div class="date">
-					<form:input type="text" path="userDetails.dateOfBirth" name="userDetails.dateOfBirth" size="30" <%-- readonly="true" --%>/>
+					<form:input type="text" path="userDetails.dateOfBirth" name="userDetails.dateOfBirth" size="30"/>
 					</div>
 					</td>	
 					<form:errors path="userDetails.dateOfBirth" cssClass="error" />

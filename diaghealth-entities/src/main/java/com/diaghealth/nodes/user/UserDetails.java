@@ -5,11 +5,14 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.neo4j.graphdb.Direction;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.Indexed;
@@ -91,6 +94,9 @@ public class UserDetails extends BaseNode {
     //@Fetch
 	private Set<LabTestDoneObject> testDoneList;	
     private UserGender userGender;
+    
+    @Transient
+    private int age;
     
     public UserDetails(){
     	
@@ -303,6 +309,19 @@ public class UserDetails extends BaseNode {
 
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+
+	public int getAge() {
+		if(age == 0 && dateOfBirth != null){
+			long diffInMillies = new Date().getTime() - dateOfBirth.getTime();
+			 return (int)((TimeUnit.DAYS.convert(diffInMillies,TimeUnit.MILLISECONDS))/365);
+		}
+			
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
 	}
 	
 		

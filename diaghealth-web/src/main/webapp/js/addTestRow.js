@@ -20,7 +20,7 @@ $(document).ready( function() {
 	onChange();
 	
 	$("#addNewTestPrice").click(function(){		
-		addNewTestPriceReport();
+		addNewTestPrice();
 	});	
 	
 	$("#addNewTestPriceNew").click(function(){		
@@ -68,8 +68,19 @@ function subGroup3Change(){
 	subGroupChange('subGroup2','subGroup3', 'testType')
 }
 
-function addNewTestPriceReport(){
-	var data;
+function addNewTestPrice(){
+	var opt = $("#testName").find('option:selected').val();
+	if(opt == 'All'){
+		addNewTestPriceAllTests();
+	} else {
+		addNewTestPriceSingleTest();
+	}
+}
+
+function addNewTestPriceSingleTest(){
+	
+	generateTestPriceRow($('#testName').val());
+	/*var data;
 	data = "<tr id='rowIndex" + testCount + "'>" +  
 			"<td><input name='testList[" + testCount + "].ancestorGroupNames[0]' readonly='readonly' value='" + $('#testType').val()+ "'/></td>";
 	
@@ -88,9 +99,9 @@ function addNewTestPriceReport(){
 	else
 		data = data + "<td></td>";
 	
-			/*"<td><input name='testList[" + testCount + "].ancestorGroupNames[1]' readonly='readonly' value='" + $('#subGroup1').val()+ "'/></td>" + 
+			"<td><input name='testList[" + testCount + "].ancestorGroupNames[1]' readonly='readonly' value='" + $('#subGroup1').val()+ "'/></td>" + 
 			"<td><input name='testList[" + testCount + "].ancestorGroupNames[2]' readonly='readonly' value='" + $('#subGroup2').val()+ "'/></td>" + 
-			"<td><input name='testList[" + testCount + "].ancestorGroupNames[3]' readonly='readonly' value='" + $('#subGroup3').val()+ "'/></td>" + */
+			"<td><input name='testList[" + testCount + "].ancestorGroupNames[3]' readonly='readonly' value='" + $('#subGroup3').val()+ "'/></td>" + 
 	data = data + "<td><input name='testList[" + testCount + "].name' readonly='readonly' value='" +$('#testName').val() + "'/></td>" +
 			"<td><input name='testList[" + testCount + "].userGender' readonly='readonly' value='" +$('#testGender').val() + "'/></td>" +
 			"<td><input name='testList[" + testCount + "].price' value='" + $('#testPrice').val()+ "'/></td>" +
@@ -102,7 +113,56 @@ function addNewTestPriceReport(){
 			"<td><button type='button' class='deleteButton' onclick='deleteRow(this)'>Delete</button></td>"
 			"</tr>";
 	testCount++;
+	$("#endRow").before(data);*/
+}
+
+function generateTestPriceRow(testName){
+	var data;
+	data = "<tr id='rowIndex" + testCount + "'>" +  
+			"<td><input name='testList[" + testCount + "].ancestorGroupNames[0]' readonly='readonly' value='" + $('#testType').val()+ "'/></td>";
+	
+	var gender = $('#userGenderHeader').html();
+	if(gender === undefined){ //For Recceipt page gender is defined
+		if($('#subGroup1').val() != '' &&  $('#subGroup1').val() != null)
+			data = data + "<td><input name='testList[" + testCount + "].ancestorGroupNames[1]' readonly='readonly' value='" + $('#subGroup1').val()+ "'/></td>";
+		else
+			data = data + "<td></td>";
+		
+		if($('#subGroup2').val() != '' &&  $('#subGroup2').val() != null)
+			data = data + "<td><input name='testList[" + testCount + "].ancestorGroupNames[2]' readonly='readonly' value='" + $('#subGroup2').val()+ "'/></td>";
+		else
+			data = data + "<td></td>";
+		
+		if($('#subGroup3').val() != '' &&  $('#subGroup3').val() != null)
+			data = data + "<td><input name='testList[" + testCount + "].ancestorGroupNames[3]' readonly='readonly' value='" + $('#subGroup3').val()+ "'/></td>";
+		else
+			data = data + "<td></td>";
+	}
+	
+			/*"<td><input name='testList[" + testCount + "].ancestorGroupNames[1]' readonly='readonly' value='" + $('#subGroup1').val()+ "'/></td>" + 
+			"<td><input name='testList[" + testCount + "].ancestorGroupNames[2]' readonly='readonly' value='" + $('#subGroup2').val()+ "'/></td>" + 
+			"<td><input name='testList[" + testCount + "].ancestorGroupNames[3]' readonly='readonly' value='" + $('#subGroup3').val()+ "'/></td>" + */
+	data = data + "<td><input name='testList[" + testCount + "].name' readonly='readonly' value='" + testName + "'/></td>" +
+			"<td><input name='testList[" + testCount + "].userGender' readonly='readonly' value='" +$('#testGender').val() + "'/></td>" +
+			"<td><input name='testList[" + testCount + "].price' value='" + $('#testPrice').val()+ "'/></td>" +
+			"<td><input name='testList[" + testCount + "].discountPercent' value='" + $('#testDiscount').val()+ "'/></td>" +
+			"<td><input name='testList[" + testCount + "].refLower' readonly='readonly' value='" + $('#testRefLower').val()+ "' class='refLower'/></td>" +
+			"<td><input name='testList[" + testCount + "].refUpper' readonly='readonly' value='" + $('#testRefUpper').val()+ "' class='refUpper'/></td>" +
+			"<td><input name='testList[" + testCount + "].unit' readonly='readonly' value='" + $('#testUnit').val()+ "' class='unit'/></td>" +
+			"<td><input name='testList[" + testCount + "].comments' readonly='readonly' value='" + $('#testComments').val()+ "' class='comments'/></td>" +
+			"<td><button type='button' class='deleteButton' onclick='deleteRow(this)'>Delete</button></td>"
+			"</tr>";
+	testCount++;
 	$("#endRow").before(data);
+}
+
+function addNewTestPriceAllTests(){
+	$("#testName > option").each(function()
+	{
+		if($(this).val() != 'All')
+			generateTestPriceRow($(this).val());
+		    // Add $(this).val() to your list
+	});
 }
 
 function addNewTestPriceReportNew(){
@@ -151,13 +211,18 @@ function onChange(){
 
 function subGroupChange(prevGroup, selectedGroup, populateGroup){
 	var opt = $('#' + selectedGroup).find('option:selected').val();
+	var gender = $('#userGenderHeader').html();
+	/*var gender = null;
+	if(!(genderDiv === undefined)){
+		gender = genderDiv[0].innerHTML;
+	}*/
 
 	if(opt == ''){
 		var prevOpt = $('#' + prevGroup).find('option:selected').val();
 		$.ajax({
 			  type: 'POST',
 			  url: getTestsUrl(),
-			  data: { testType: prevOpt },
+			  data: { testType: prevOpt, userGender: gender},
 			  error: function(){
 			        timeoutError();
 			    },
@@ -243,6 +308,16 @@ function getBaseUrl(){
 function setGender(){
 	//var opt = $("#testType").find('option:selected').val();
 	var testName = $('#testName').find('option:selected').val(); 
+	//If Test is for a patient, set the gender as patient gender
+	var gender = $('#userGenderHeader').html();
+	if(!(gender === undefined)){
+		//var gender = genderDiv[0].innerHTML;
+		var $testGender = $('#testGender');
+		$testGender.find('option').remove();
+		$testGender.append("<option value='" + gender + "'>" + gender + "</option>");
+		setTestDetails();
+		return;
+	}
 	
 	if(testName != 'All'){
 		$.ajax({
@@ -275,7 +350,6 @@ function setGender(){
 
 function setGenderCallBack(json){
 	var genderList =$.parseJSON(json);
-	var $testGender = $('#testGender');
 	var $testGender = $('#testGender');
 	$testGender.find('option').remove(); 
 	$.each(genderList,function(index, key) 

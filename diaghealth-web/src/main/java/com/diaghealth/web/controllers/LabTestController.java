@@ -132,14 +132,15 @@ public class LabTestController {
 	}
 	
 	@RequestMapping(value = "/labTests/getLabTestObject", method = RequestMethod.POST)
-	public @ResponseBody String getLabTestObject(@RequestParam(value="testType", required=false) String testType, HttpServletRequest httpServletRequest, ModelAndView mv) throws ApplicationException {
+	public @ResponseBody String getLabTestObject(@RequestParam(value="testType", required=false) String testType, @RequestParam(value="userGender", required=false) String gender,
+			HttpServletRequest httpServletRequest, ModelAndView mv) throws ApplicationException {
 		
 		
 		Set<LabTestTreeNode> children = labTestDetailsService.getSubGroupTests(testType);
 		Set<String> testTypeList = new HashSet<String>();
 		if(children != null){
 			for(LabTestTreeNode child: children){
-				if(child instanceof LabTestDetails){
+				if(child instanceof LabTestDetails && LabTestTreeUtils.isSameGender((LabTestDetails)child, gender)){
 					testTypeList.add(((LabTestDetails) child).getName());
 				}
 			}
@@ -169,7 +170,7 @@ public class LabTestController {
 			return "";
 		}*/
 	}
-	
+		
 	@RequestMapping(value = "/labTests/getLabTestGender", method = RequestMethod.POST)
 	public @ResponseBody String getTestGender(@RequestParam(value="name", required=false) String testType, 
 			HttpServletRequest httpServletRequest, ModelAndView mv) throws ApplicationException {
@@ -195,14 +196,17 @@ public class LabTestController {
 	public @ResponseBody String getTestDetails(@RequestParam(value="name", required=false) String testName, 
 			@RequestParam(value="gender", required=false) String testGender, 
 			HttpServletRequest httpServletRequest, ModelAndView mv) throws ApplicationException {
-	
-		Set<LabTestDetails> tests = labTestDetailsService.findIfExists(testName, testGender);	
-		for(LabTestDetails test: tests){
-			//to prevent infinite loop of jason when it tries to encode all the parents/children too
-			test.setParent(null);
-			test.setChildren(null);
-		}
 		try{
+			if(StringUtils.isEmpty(testName))
+				return new ObjectMapper().writeValueAsString("");
+		
+			Set<LabTestDetails> tests = labTestDetailsService.findIfExists(testName, testGender);	
+			for(LabTestDetails test: tests){
+				//to prevent infinite loop of jason when it tries to encode all the parents/children too
+				test.setParent(null);
+				test.setChildren(null);
+			}
+			
 			String jsonMap = new ObjectMapper().writeValueAsString(tests);
 			return jsonMap;
 		} catch (Exception e){

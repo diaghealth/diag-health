@@ -81,7 +81,7 @@ public class UpdateDetailsController {
 			}
 		}
 		
-		if(loggedInUser.getDateOfBirth() == null){
+		if(changedInfo.getDateOfBirth() == null){
 			result.reject("dateofBirth.error", "Incorrect date of birth format");
 		}
 		

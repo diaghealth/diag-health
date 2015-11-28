@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.util.StringUtils;
 
+import com.diaghealth.nodes.labtest.LabTestDetails;
 import com.diaghealth.nodes.labtest.LabTestTreeNode;
 
 public class LabTestTreeUtils {
@@ -40,4 +41,21 @@ public class LabTestTreeUtils {
 		}
 		return foundNode;
 	}
+	
+	public static boolean isSameGender(LabTestDetails child, String gender){
+		if(child.getUserGender() == null || (child.getUserGender() == UserGender.NA) ||
+				StringUtils.isEmpty(gender) || gender.equals(UserGender.NA.name()) ||
+				child.getUserGender().name().equals(gender))
+			return true;
+		
+		return false;
+	}
+	
+	public static boolean isSameGender(LabTestDetails child, UserGender gender){
+		if(gender != null){
+			return isSameGender(child, gender.name());
+		}
+		return true;
+	}
+	
 }

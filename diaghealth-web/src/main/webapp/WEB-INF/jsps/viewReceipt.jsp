@@ -11,6 +11,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 <!-- <script src="js/print.js"></script> -->
+<script src="js/datePicker.js"></script>
 <script src="js/printReport.js"></script>
 </head>
 <body>
@@ -30,6 +31,17 @@ ${receiptView.receipt.receiptId}
 <h3>
 ${receiptView.receipt.subject.userType}: ${receiptView.receipt.subject.firstname}
 </h3>
+
+<!-- Date of Birth -->
+<h3>
+Age: ${receiptView.receipt.subject.age}
+</h3>
+<h3>
+Gender: <label id="userGenderHeader">${receiptView.receipt.subject.userGender}</label>
+</h3>
+<h3>
+
+</h3>
 </c:if>
 <!--  Current Lab -->
 <c:if test="${not empty receiptView.currentLab.firstname}">
@@ -47,6 +59,13 @@ ${user.userType}: ${user.firstname}
 </h3>
 </c:if>
 </c:forEach>
+<h3>
+Date: 
+<c:choose>
+<c:when test="${not empty receiptView.receipt.dateCreated}">${receiptView.receipt.dateCreated}</c:when>
+<c:otherwise>$.datepicker.formatDate('dd-MM-yy', new Date())</c:otherwise>
+</c:choose>
+</h3>
 </div> <!-- receiptUserDetails div -->
 <h3>
 <%-- <c:if test="${not empty receiptView.receipt.doctorName}">
@@ -56,7 +75,8 @@ Doctor: ${receiptView.receipt.doctorName}
 </h3>
 <c:if test="${not empty receiptView.receipt.validTill}"><h3>Valid Till : ${receiptView.receipt.validTill}</h3></c:if>
 <c:if test="${not empty receiptView.receipt.dateCreated}"><h3>Date Created : ${receiptView.receipt.dateCreated}</h3></c:if>
-</div> <!-- receiptUserDetails div -->
+
+</div> <!-- receiptDetails div -->
 
 <c:choose>
 <c:when test="${not empty showTestList}">
@@ -65,7 +85,8 @@ Doctor: ${receiptView.receipt.doctorName}
 
 <p></p>
 <input type="submit" name="commit" value="Save" class="button">
-<button type="button" id="printReport" class="button">Print Report</button>
+<!-- <button type="button" id="printReport" class="button">Print Report</button> -->
+<button type="submit" id="printReport" class="button">Print Report</button>
 <button type="button" id="printPriceReceipt" class="button">Print Receipt</button>
 </c:when>
 <c:otherwise>

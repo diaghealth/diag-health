@@ -2,6 +2,7 @@ package com.diaghealth.services;
 
 import static com.diaghealth.utils.LabTestTreeUtils.MAX_SUB_GROUPS;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -16,6 +17,7 @@ import com.diaghealth.repository.LabTestDetailsRepo;
 import com.diaghealth.repository.LabTestPriceRepo;
 import com.diaghealth.repository.LabTestTreeNodeRepo;
 import com.diaghealth.utils.LabTestTreeUtils;
+import com.diaghealth.utils.UserGender;
 
 @Component
 public class LabTestDetailsService {
@@ -52,7 +54,17 @@ public class LabTestDetailsService {
 	}
 	
 	public Set<LabTestDetails> findIfExists(String testName, String testGender){
-		return labTestDetailsRepo.findByTypeNameGender(testName.toUpperCase(), testGender.toString());
+		 Set<LabTestDetails> tests = labTestDetailsRepo.findByTypeName(testName.toUpperCase());
+		 Iterator<LabTestDetails> i = tests.iterator();
+		 
+		 while(i.hasNext()){
+			 LabTestDetails test = i.next();
+			 UserGender gender = test.getUserGender();
+			 if(!LabTestTreeUtils.isSameGender(test, gender))
+				 i.remove();
+		 }
+		//return labTestDetailsRepo.findByTypeNameGender(testName.toUpperCase(), testGender.toString());
+		 return tests;
 	}
 	
 	public void deleteTest(LabTestDetails test){

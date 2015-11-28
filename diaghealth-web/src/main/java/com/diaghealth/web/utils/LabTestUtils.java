@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.diaghealth.nodes.labtest.LabTestAvailablePrice;
 import com.diaghealth.nodes.labtest.LabTestDetails;
 import com.diaghealth.nodes.labtest.LabTestTreeNode;
+import com.diaghealth.utils.UserGender;
 
 
 public class LabTestUtils {

@@ -108,13 +108,14 @@ userDetails = function(){
 		  element += $( this ).html();
 		  element += "<br>";
 	});
+	//element += "<h3>Date: " + $.datepicker.formatDate('dd-MM-yy', new Date()) + "</h3";
 	return element;
 };
 
 reportContent = function() {
 	var element = "";
 	element += userDetails();
-	element += "<br><table border=1 width=100%><tr><th>Test Name</th><th>Result</th><th>Range</th><th>Date</th></tr>";
+	element += "<br><table border=1 width=100%><tr><th>Test Name</th><th>Result</th><th>Range</th><th>Comments</th></tr>";
 	$( "#displayTestsTable > tbody > tr").each(function() {
 		
 		if(!($('td:eq(' + receiptColumn.NAME + ') input', this).val() === undefined)){
@@ -132,7 +133,7 @@ reportContent = function() {
 				"<td>" +  $('td:eq(' + receiptColumn.LOWERREF + ') input', this).val() + " - " +  $('td:eq(' + receiptColumn.UPPERREF + ') input', this).val() + " " +
 				$('td:eq(' + receiptColumn.UNIT + ') input', this).val() + "</td>" + // lower - upper unit
 				
-				"<td>" +  $('td:eq(' + receiptColumn.DATE + ') input', this).val() + "</td>" + //date
+				"<td>" +  $('td:eq(' + receiptColumn.COMMENTS + ') input', this).val() + "</td>" + //date
 				"</tr>");
 		}
 	});
