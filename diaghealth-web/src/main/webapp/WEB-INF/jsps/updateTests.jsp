@@ -14,6 +14,7 @@
 <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>  -->
 <script src="js/jquery.js"></script>
 <script src="js/jquery-ui.js"></script>
+<script src="js/baseTestDropDownPopulator.js"></script>
 <script src="js/addTestRow.js"></script>
 <link rel="stylesheet" type="text/css" href="css/commonTable.css"> 
 <style>
@@ -51,7 +52,8 @@ function deleteRow(obj){
 <!-- -------------------------Display Table starts-------------------------- -->
 
 <table id="displayTestsTable">
-<tr><th>Test Type</th><th>Sub Group1</th><th>Sub Group2</th><th>Sub Group3</th><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
+<tr><th>Test Type</th><th>Sub Group1</th><th>Sub Group2</th><th>Sub Group3</th><th>Test Name</th><th>Gender</th>
+<th>Age Lower</th><th>Age Upper</th><th>Price</th><th>Discount %</th>
 <c:if test="${not empty buildResult}">
 <th>Result</th>
 </c:if>
@@ -90,6 +92,12 @@ function deleteRow(obj){
 			<input name='testList[${status.index}].userGender' readonly='readonly' value='${test.userGender}' class='gender'/>
 		</td>
 		<td>
+			<input name='testList[${status.index}].ageLower' readonly='readonly' value='${test.ageLower}' class='ageLower'/>
+		</td>
+		<td>
+			<input name='testList[${status.index}].ageUpper' readonly='readonly' value='${test.ageUpper}' class='ageUpper'/>
+		</td>
+		<td>
 			<input name='testList[${status.index}].price' value='${test.price}' class='price'/>
 		</td>
 		<td>
@@ -111,16 +119,16 @@ function deleteRow(obj){
 		</c:when>	
 		</c:choose>	
 		<td>
-			<input name='testList[${status.index}].refLower' value='${test.refLower}' class='refLower'/>
+			<input name='testList[${status.index}].refLower' readonly='readonly' value='${test.refLower}' class='refLower'/>
 		</td>
 		<td>
-			<input name='testList[${status.index}].refUpper' value='${test.refUpper}' class='refUpper'/>
+			<input name='testList[${status.index}].refUpper' readonly='readonly' value='${test.refUpper}' class='refUpper'/>
 		</td>
 		<td>
-			<input name='testList[${status.index}].unit' value='${test.unit}' class='unit'/>
+			<input name='testList[${status.index}].unit' readonly='readonly' value='${test.unit}' class='unit'/>
 		</td>	
 		<td>
-			<input name='testList[${status.index}].comments' value='${test.comments}' class='unit'/>
+			<input name='testList[${status.index}].comments' readonly='readonly' value='${test.comments}' class='unit'/>
 		</td>	
 		<td>
 			<fmt:formatDate value="${test.dateCreated}" var="dateString" pattern="dd-MMM-yyyy HH:mm" />
@@ -145,7 +153,8 @@ function deleteRow(obj){
 <h2> Add Tests</h2>
 
 <table id="addNewTestPriceReportTable">
-<tr><th>Test Type</th><th>Sub Group1</th><th>Sub Group2</th><th>Sub Group3</th><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
+<tr><th>Test Type</th><th>Sub Group1</th><th>Sub Group2</th><th>Sub Group3</th><th>Test Name</th><th>Gender</th>
+<th>Age Range</th><th>Price</th><th>Discount %</th>
 <c:if test="${not empty buildResult}">
 <th>Result</th>
 </c:if>
@@ -175,6 +184,9 @@ function deleteRow(obj){
 					</select>
 </td>
 <td><select id="testGender" size="1">
+					</select>
+</td>
+<td><select id="testAgeRange" size="1">
 					</select>
 </td>
 <td><input size="30" type="text" id="testPrice" name="price" value=""/></td>
@@ -212,7 +224,8 @@ function deleteRow(obj){
 <h2> Add Tests</h2>
 
 <table id="addNewTestPriceReportTable">
-<tr><th>Test Type</th><th>Sub Group1</th><th>Sub Group2</th><th>Sub Group3</th><th>Test Name</th><th>Gender</th><th>Price</th><th>Discount %</th>
+<tr><th>Test Type</th><th>Sub Group1</th><th>Sub Group2</th><th>Sub Group3</th><th>Test Name</th><th>Gender</th>
+<th>Age Lower</th><th>Age Upper</th><th>Price</th><th>Discount %</th>
 <c:if test="${not empty buildResult}">
 <th>Result</th>
 </c:if>
@@ -231,6 +244,8 @@ function deleteRow(obj){
        </c:forEach>
 </select>
 </td>
+<td><input size="30" type="text" id="testAgeLowerNew" name="ageLower" value=""/></td>
+<td><input size="30" type="text" id="testAgeUpperNew" name="ageUpper" value=""/></td>
 <td><input size="30" type="text" id="testPriceNew" name="price" value=""/></td>
 <td><input size="30" type="text" id="testDiscountNew" name="discountPercent" value="0.0"/></td>
 <%-- <c:choose>
@@ -265,5 +280,10 @@ function deleteRow(obj){
 <p></p>
 <input type="submit" class="button" name="commit" value="Save">
 </form:form>
+<h5>
+* Note: For Ages in months input as e.g.
+3 months = 0.25, 6 months = 0.5, 9 months = 0.75, 12 months = 1 year
+15 months = 1.25, 18 months = 1.5, 21 months = 1.75 and so on
+</h5>
 </body>
 </html>

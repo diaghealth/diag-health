@@ -50,22 +50,39 @@ public class LabTestDetailsService {
 	}
 	
 	public Set<LabTestDetails> findIfExists(LabTestDetails test){
-		return findIfExists(test.getName().toUpperCase(), test.getUserGender().toString());
+		return findIfExists(test.getName().toUpperCase(), test.getUserGender().toString(), test.getAgeLower(), test.getAgeUpper());
 	}
 	
-	public Set<LabTestDetails> findIfExists(String testName, String testGender){
+	public Set<LabTestDetails> findIfExists(String testName, String testGender, 
+												double lowerAge, double upperAge){
 		 Set<LabTestDetails> tests = labTestDetailsRepo.findByTypeName(testName.toUpperCase());
 		 Iterator<LabTestDetails> i = tests.iterator();
 		 
 		 while(i.hasNext()){
 			 LabTestDetails test = i.next();
 			 UserGender gender = test.getUserGender();
-			 if(!LabTestTreeUtils.isSameGender(test, gender))
+			 if(!LabTestTreeUtils.isSameGender(test, gender) || !LabTestTreeUtils.isSameAgeGroup(test, lowerAge, upperAge))
 				 i.remove();
 		 }
 		//return labTestDetailsRepo.findByTypeNameGender(testName.toUpperCase(), testGender.toString());
 		 return tests;
 	}
+	
+	public Set<LabTestDetails> findIfExists(String testName, String testGender){
+		Set<LabTestDetails> tests = labTestDetailsRepo.findByTypeName(testName.toUpperCase());
+		Iterator<LabTestDetails> i = tests.iterator();
+		
+		while(i.hasNext()){
+			LabTestDetails test = i.next();
+			UserGender gender = test.getUserGender();
+			if(!LabTestTreeUtils.isSameGender(test, gender))
+				i.remove();
+		}
+		//return labTestDetailsRepo.findByTypeNameGender(testName.toUpperCase(), testGender.toString());
+		return tests;
+	}
+	
+	
 	
 	public void deleteTest(LabTestDetails test){
 		labTestDetailsRepo.delete(test);

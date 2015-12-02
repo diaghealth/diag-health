@@ -31,6 +31,8 @@ public class LabTestDetails  extends LabTestTreeNode {
 	protected float refLower;
 	protected float refUpper;
 	protected UserGender userGender;
+	protected double ageLower;
+	protected double ageUpper;
 	protected String unit;
 	protected String comments;
 	@Transient
@@ -88,33 +90,7 @@ public class LabTestDetails  extends LabTestTreeNode {
 	public void setUserGender(UserGender gender) {
 		this.userGender = gender;
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result
-				+ ((userGender == null) ? 0 : userGender.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		LabTestDetails other = (LabTestDetails) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (userGender != other.userGender)
-			return false;
-		return true;
-	}
+	
 	@Override
 	public String toString() {
 		return "LabTestDetails [name=" + name + ", refLower=" + refLower
@@ -150,6 +126,56 @@ public class LabTestDetails  extends LabTestTreeNode {
 	
 	public void saveAncestors(){
 		
+	}
+	public double getAgeLower() {
+		return ageLower;
+	}
+	public void setAgeLower(double ageLower) {
+		this.ageLower = ageLower;
+	}
+	public double getAgeUpper() {
+		return ageUpper;
+	}
+	public void setAgeUpper(double ageUpper) {
+		this.ageUpper = ageUpper;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		long temp;
+		temp = Double.doubleToLongBits(ageLower);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(ageUpper);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((userGender == null) ? 0 : userGender.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LabTestDetails other = (LabTestDetails) obj;
+		if (Double.doubleToLongBits(ageLower) != Double
+				.doubleToLongBits(other.ageLower))
+			return false;
+		if (Double.doubleToLongBits(ageUpper) != Double
+				.doubleToLongBits(other.ageUpper))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (userGender != other.userGender)
+			return false;
+		return true;
 	}
 
 }

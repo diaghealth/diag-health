@@ -47,16 +47,24 @@ $(document).ready( function() {
 		$("#endRow").before(data);
 	});
 	
+	var gender = $('#userGenderHeader').html();
+	if(!(gender === undefined)){
+		setIsReceiptTestEntryPage(true);
+		var age = $('#userAgeHeader').html();
+		setUserAge(age);
+	}
+	
 	
 	$("#testType").change(onChange);
 	$("#subGroup1").change(subGroup1Change);
 	$("#subGroup2").change(subGroup2Change);
 	$("#subGroup3").change(subGroup3Change);
-	$("#testName").change(setGender);
-	$('#testGender').change(setTestDetails);	
+	$("#testName").change(setGender);	
+	$('#testGender').change(setAgeRange);	
+	$("#testAgeRange").change(setTestDetails);
 });
 
-function subGroup1Change(){
+/*function subGroup1Change(){
 	subGroupChange('testType', 'subGroup1', 'subGroup2');
 }
 
@@ -66,7 +74,7 @@ function subGroup2Change(){
 
 function subGroup3Change(){
 	subGroupChange('subGroup2','subGroup3', 'testType')
-}
+}*/
 
 function addNewTestPrice(){
 	var opt = $("#testName").find('option:selected').val();
@@ -143,7 +151,14 @@ function generateTestPriceRow(testName){
 			"<td><input name='testList[" + testCount + "].ancestorGroupNames[2]' readonly='readonly' value='" + $('#subGroup2').val()+ "'/></td>" + 
 			"<td><input name='testList[" + testCount + "].ancestorGroupNames[3]' readonly='readonly' value='" + $('#subGroup3').val()+ "'/></td>" + */
 	data = data + "<td><input name='testList[" + testCount + "].name' readonly='readonly' value='" + testName + "'/></td>" +
-			"<td><input name='testList[" + testCount + "].userGender' readonly='readonly' value='" +$('#testGender').val() + "'/></td>" +
+			"<td><input name='testList[" + testCount + "].userGender' readonly='readonly' value='" +$('#testGender').val() + "'/></td>";
+	
+	//Min Max Age Values
+	var minMaxAge = getMinMaxAgeValues($('#testAgeRange').val());
+	data = data + "<td><input name='testList[" + testCount + "].ageLower' readonly='readonly' value='" + minMaxAge[0] + "'/></td>" +
+				"<td><input name='testList[" + testCount + "].ageUpper' readonly='readonly' value='" + minMaxAge[1]+ "'/></td>";
+	
+	data = data +
 			"<td><input name='testList[" + testCount + "].price' value='" + $('#testPrice').val()+ "'/></td>" +
 			"<td><input name='testList[" + testCount + "].discountPercent' value='" + $('#testDiscount').val()+ "'/></td>" +
 			"<td><input name='testList[" + testCount + "].refLower' readonly='readonly' value='" + $('#testRefLower').val()+ "' class='refLower'/></td>" +
@@ -174,6 +189,8 @@ function addNewTestPriceReportNew(){
 			"<td><input name='testList[" + testCount + "].ancestorGroupNames[3]' readonly='readonly' value='" + $('#subGroup3New').val()+ "'/></td>" + 
 			"<td><input name='testList[" + testCount + "].name' readonly='readonly' value='" +$('#testNameNew').val() + "'/></td>" +
 			"<td><input name='testList[" + testCount + "].userGender' readonly='readonly' value='" +$('#testGenderNew').val() + "'/></td>" +
+			"<td><input name='testList[" + testCount + "].ageLower' readonly='readonly' value='" +$('#testAgeLower').val() + "'/></td>" +
+			"<td><input name='testList[" + testCount + "].ageUpper' readonly='readonly' value='" +$('#testAgeUpper').val() + "'/></td>" +
 			"<td><input name='testList[" + testCount + "].price' value='" + $('#testPriceNew').val()+ "'/></td>" +
 			"<td><input name='testList[" + testCount + "].discountPercent' value='" + $('#testDiscountNew').val()+ "'/></td>" +
 			"<td><input name='testList[" + testCount + "].refLower' readonly='readonly' value='" + $('#testRefLowerNew').val()+ "' class='refLower'/></td>" +
@@ -186,7 +203,7 @@ function addNewTestPriceReportNew(){
 	$("#endRow").before(data);
 }
 
-function onChange(){
+/*function onChange(){
 	var opt = $("#testType").find('option:selected').val();
 	var $testName = $('#testName');
 	
@@ -201,7 +218,7 @@ function onChange(){
 				 //alert("Data: " + data + "\nStatus: " + status);
 			  	setSubType(json, 'subGroup1');
 		    },
-		  /*dataType: dataType,*/
+		  dataType: dataType,
 		  async:false,
 		  timeout: 60000
 		});
@@ -212,10 +229,10 @@ function onChange(){
 function subGroupChange(prevGroup, selectedGroup, populateGroup){
 	var opt = $('#' + selectedGroup).find('option:selected').val();
 	var gender = $('#userGenderHeader').html();
-	/*var gender = null;
+	var gender = null;
 	if(!(genderDiv === undefined)){
 		gender = genderDiv[0].innerHTML;
-	}*/
+	}
 
 	if(opt == ''){
 		var prevOpt = $('#' + prevGroup).find('option:selected').val();
@@ -230,7 +247,7 @@ function subGroupChange(prevGroup, selectedGroup, populateGroup){
 					 //alert("Data: " + data + "\nStatus: " + status);
 				  setTests(json);
 			    },
-			  /*dataType: dataType,*/
+			  dataType: dataType,
 			  async:false,
 			  timeout: 60000
 			});
@@ -248,7 +265,7 @@ function subGroupChange(prevGroup, selectedGroup, populateGroup){
 					 //alert("Data: " + data + "\nStatus: " + status);
 				  setSubType(json, populateGroup);
 			    },
-			  /*dataType: dataType,*/
+			  dataType: dataType,
 			  async:false,
 			  timeout: 60000
 			});
@@ -331,20 +348,11 @@ function setGender(){
 					 //alert("Data: " + data + "\nStatus: " + status);
 				  setGenderCallBack(json);
 			    },
-			  /*dataType: dataType,*/
 			  async:false,
 			  timeout: 60000
 			});
 		setTestDetails();
 	}
-	/*$.each(testHashMap[opt][testName],function(index, value) 
-	{
-		if(!(value.userGender === undefined || value.userGender == null))
-			$testGender.append("<option value='" + value.userGender + "'>" + value.userGender + "</option>");
-		else {			 
-			$testGender.append("<option value='NA'>NA</option>");
-		}
-	});*/
 	setPriceDiscountReport();
 }
 
@@ -377,7 +385,6 @@ function setTestDetails(){
 					 //alert("Data: " + data + "\nStatus: " + status);
 				  setTestDetailsCallBack(json);
 			    },
-			  /*dataType: dataType,*/
 			  async:false,
 			  timeout: 60000
 			});
@@ -411,19 +418,8 @@ function setPriceDiscountReport(){
 	var gender = $("#testGender")[0].selectedIndex;
 	if(gender == -1)
 		gender = 0;
-	/*if(!(testHashMap[opt][name][gender].price === undefined))
-		$("#testPrice").val(testHashMap[opt][name][gender].price);
-	if(!(testHashMap[opt][name][gender].discountPercent === undefined))
-		$("#testDiscount").val(testHashMap[opt][name][gender].discountPercent);
-	if(!(testHashMap[opt][name][gender].refLower === undefined))
-		$("#testRefLower").val(testHashMap[opt][name][gender].refLower);
-	if(!(testHashMap[opt][name][gender].refUpper === undefined))
-		$("#testRefUpper").val(testHashMap[opt][name][gender].refUpper);
-	if(!(testHashMap[opt][name][gender].unit === undefined))
-		$("#testUnit").val(testHashMap[opt][name][gender].unit);
-	if(!(testHashMap[opt][name][gender].comments === undefined))
-		$("#testComments").val(testHashMap[opt][name][gender].comments);*/
-}
+}*/
+
 
 
 

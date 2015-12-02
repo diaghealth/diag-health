@@ -13,7 +13,7 @@ public class LabTestTreeUtils {
 	public static String STR_HEAD = "HEAD";
 	public static String STR_HEAD_APPEND = STR_HEAD + "-";
 	public static final int MAX_SUB_GROUPS = 4;
-	
+	public static final int MAX_AGE = 100;
 	public static LabTestTreeNode findNodeInTree(LabTestTreeNode head, String toFind){
 		LabTestTreeNode foundNode = null;
 		Boolean found = false;
@@ -56,6 +56,14 @@ public class LabTestTreeUtils {
 			return isSameGender(child, gender.name());
 		}
 		return true;
+	}
+	
+	public static boolean isSameAgeGroup(LabTestDetails child, double ageLower, double ageUpper){
+		if(ageUpper == 0)
+			ageUpper = MAX_AGE;
+		if(child.getAgeLower() == ageLower && child.getAgeUpper() == ageUpper)
+			return true;
+		return false;
 	}
 	
 }

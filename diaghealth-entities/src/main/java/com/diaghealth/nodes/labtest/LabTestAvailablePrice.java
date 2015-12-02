@@ -81,38 +81,13 @@ public class LabTestAvailablePrice extends LabTestDetails {
 	public void setUserGender(UserGender gender) {
 		this.userGender = gender;
 	}*/
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result
-				+ ((userGender == null) ? 0 : userGender.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		LabTestAvailablePrice other = (LabTestAvailablePrice) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (userGender != other.userGender)
-			return false;
-		return true;
-	}
+	
 	@Override
 	public String toString() {
-		return "LabTestAvailablePrice [name=" + name + ", price=" + price
-				+ ", resultValue=" + resultValue + ", refLower=" + refLower
-				+ ", refUpper=" + refUpper + ", userGender=" + userGender
-				+ ", unit=" + unit + ", comments=" + comments + "]";
+		return "LabTestAvailablePrice [price=" + price + ", discountPercent="
+				+ discountPercent + ", resultValue=" + resultValue + ", type="
+				+ type + ", name=" + name + ", userGender=" + userGender
+				+ ", ageLower=" + ageLower + ", ageUpper=" + ageUpper
+				+ ", unit=" + unit + "]";
 	}
 }

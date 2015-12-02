@@ -34,7 +34,7 @@ ${receiptView.receipt.subject.userType}: ${receiptView.receipt.subject.firstname
 
 <!-- Date of Birth -->
 <h3>
-Age: ${receiptView.receipt.subject.age}
+Age: <label id="userAgeHeader">${receiptView.receipt.subject.age}</label>
 </h3>
 <h3>
 Gender: <label id="userGenderHeader">${receiptView.receipt.subject.userGender}</label>

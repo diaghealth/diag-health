@@ -92,18 +92,31 @@
 				  <form:errors path="phoneNumber" cssClass="error" />
 				</tr>
 				<tr>
+					
+				</tr>
+				<tr>
 				  <td class="labelField" width="33%">Email</td>
 				  <td width="67%"><form:input path="email" name="email" type="text" size="30" /></td>
 				  <form:errors path="email" cssClass="error" />
 				</tr>
 				<tr>
-					<td class="labelField" width="33%">Date of Birth (DD/MM/YYYY) *</td>
+				  <td class="labelField" width="33%">Enter either Date of Birth OR Age</td>
+				</tr>
+				<tr>
+					<td class="labelField" width="33%">Date of Birth (DD/MM/YYYY)</td>
 					<td width="67%">
 					<div class="date">
 					<form:input type="text" path="dateOfBirth" name="dateOfBirth" size="30"/>
 					</div>
 					</td>	
 					<form:errors path="dateOfBirth" cssClass="error" />
+				</tr>
+				<tr>
+					<td class="labelField" width="33%">Age</td>
+					<td width="67%">
+					<form:input type="text" path="age" name="age" size="30"/>
+					</td>	
+					<form:errors path="age" cssClass="error" />
 				</tr>
 				<tr>
 				  <td class="labelField" >Address Line 1</td>

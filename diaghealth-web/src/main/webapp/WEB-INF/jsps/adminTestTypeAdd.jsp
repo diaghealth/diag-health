@@ -21,6 +21,8 @@
 <th>Reference Lower</th>
 <th>Reference Upper</th>
 <th>Gender</th>
+<th>Age Lower</th>
+<th>Age Upper</th>
 <th>Unit</th>
 <th>Comments</th>
 </tr>
@@ -35,6 +37,8 @@
 	<td>${test.refLower}</td>
 	<td>${test.refUpper}</td>
 	<td>${test.userGender}</td>
+	<td>${test.ageLower}</td>
+	<td>${test.ageUpper}</td>
 	<td>${test.unit}</td>
 	<td>${test.comments}</td>
 	</tr>
@@ -53,6 +57,8 @@
 <th>Reference Lower</th>
 <th>Reference Upper</th>
 <th>Gender</th>
+<th>Age Lower</th>
+<th>Age Upper</th>
 <th>Unit</th>
 <th>Comments</th>
 </tr>
@@ -76,6 +82,8 @@
 		<option value="NA">NA</option>
 	</select> -->
 </td>
+<td><input type="text" name="ageLower"/></td>
+<td><input type="text" name="ageUpper"/></td>
 <td><input type="text" name="unit"/></td>
 <td><input type="text" name="comments"/></td>
 </tr>

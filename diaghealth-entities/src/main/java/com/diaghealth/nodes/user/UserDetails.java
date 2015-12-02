@@ -1,6 +1,7 @@
 package com.diaghealth.nodes.user;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -54,7 +55,7 @@ public class UserDetails extends BaseNode {
     @NotNull(message = "Please enter Valid Date Of Birth.")
     @DateTimeFormat(pattern = "DD/MM/YYYY")
 	private Date dateOfBirth;
-    
+        
 	@NotNull(message = "Please enter Valid Phone Number.")
 	@PhoneNumber
 	@Indexed(indexName = "searchByPhoneNumber")
@@ -320,8 +321,16 @@ public class UserDetails extends BaseNode {
 		return age;
 	}
 
-	public void setAge(int age) {
+	public void setAge(int age) {		
 		this.age = age;
+		if(dateOfBirth == null){
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.YEAR, cal.get(Calendar.YEAR) - age);
+			cal.set(Calendar.MONTH, Calendar.JANUARY);
+			cal.set(Calendar.DAY_OF_MONTH, 1);
+			dateOfBirth = cal.getTime();
+			//dateOfBirth = new Date(new Date().getYear() - age,1,1);
+		}
 	}
 	
 		

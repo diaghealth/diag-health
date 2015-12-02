@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -192,8 +193,8 @@ public class LabTestController {
 		}
 	}
 	
-	@RequestMapping(value = "/labTests/getLabTestDetails", method = RequestMethod.POST)
-	public @ResponseBody String getTestDetails(@RequestParam(value="name", required=false) String testName, 
+	@RequestMapping(value = "/labTests/getLabTestAgeRange", method = RequestMethod.POST)
+	public @ResponseBody String getTestAgeRange(@RequestParam(value="name", required=false) String testName, 
 			@RequestParam(value="gender", required=false) String testGender, 
 			HttpServletRequest httpServletRequest, ModelAndView mv) throws ApplicationException {
 		try{
@@ -201,8 +202,46 @@ public class LabTestController {
 				return new ObjectMapper().writeValueAsString("");
 		
 			Set<LabTestDetails> tests = labTestDetailsService.findIfExists(testName, testGender);	
+			Set<String> testRange = new HashSet<String>();
+			for(LabTestDetails test: tests){
+				if(test.getAgeLower() < test.getAgeUpper())
+				testRange.add(test.getAgeLower() + " - " + test.getAgeUpper());
+			}
+			
+			String jsonMap = new ObjectMapper().writeValueAsString(testRange);
+			return jsonMap;
+		} catch (Exception e){
+			logger.error(e.toString());
+			return "";
+		}
+	}
+	
+	private Double[] splitAgeRange(String ageRange){
+		Double ageMinMax[] = new Double[2];
+		StringTokenizer tokens = new StringTokenizer(ageRange, " -");
+		if(tokens.countTokens() == 2){
+			ageMinMax[0] = Double.parseDouble(tokens.nextToken());
+			ageMinMax[1] = Double.parseDouble(tokens.nextToken());			
+		}
+		return ageMinMax;
+	}
+	
+	@RequestMapping(value = "/labTests/getLabTestDetails", method = RequestMethod.POST)
+	public @ResponseBody String getTestDetails(@RequestParam(value="name", required=false) String testName, 
+			@RequestParam(value="gender", required=false) String testGender, 
+			@RequestParam(value="ageRange", required=false) String ageRange,
+			HttpServletRequest httpServletRequest, ModelAndView mv) throws ApplicationException {
+		try{
+			if(StringUtils.isEmpty(testName))
+				return new ObjectMapper().writeValueAsString("");
+					
+			Double[] ageRangeDouble = splitAgeRange(ageRange);
+			Set<LabTestDetails> tests = labTestDetailsService.findIfExists(testName, testGender, ageRangeDouble[0], ageRangeDouble[1]);
+			
 			for(LabTestDetails test: tests){
 				//to prevent infinite loop of jason when it tries to encode all the parents/children too
+				test.setAgeLower(ageRangeDouble[0]);
+				test.setAgeUpper(ageRangeDouble[1]);
 				test.setParent(null);
 				test.setChildren(null);
 			}
@@ -213,8 +252,7 @@ public class LabTestController {
 			logger.error(e.toString());
 			return "";
 		}
-	}
-		
+	}		
 	
 	@RequestMapping(value = "/saveTests", method = RequestMethod.POST)
 	public ModelAndView addTestsToExistingLabTests(@Valid @ModelAttribute("labTests") LabTestListViewDto labTests,
@@ -288,6 +326,10 @@ public class LabTestController {
 		
 		logger.debug("Saving tests for user: " + loggedInUser.getUsername() + " tests: " + saveList);
 		for(LabTestAvailablePrice toSave: saveList){
+			//Set Min Max Age
+			if(toSave.getAgeLower() == 0 && toSave.getAgeUpper() == 0){
+				toSave.setAgeUpper(100);
+			}
 			labTestDetailsService.saveAncestorTree(toSave, LabTestTreeUtils.STR_HEAD_APPEND + loggedInUser.getUsername());
 			//labTestDetailsService.save(toSave); //TODO check if required
 		}
